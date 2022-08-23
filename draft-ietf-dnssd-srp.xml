@@ -789,7 +789,8 @@
       <name>Delegation of 'service.arpa.'</name>
       <t>In order to be fully functional, the owner of the 'arpa.' zone must add a delegation of 'service.arpa.' in the '.arpa.'
 	zone <xref target="RFC3172"/>. This delegation should be set up as was done for 'home.arpa', as a result of the
-	specification in <xref target="RFC8375" section="7" sectionFormat="of"/>.</t>
+	specification in <xref target="RFC8375" section="7" sectionFormat="of"/>. This is currently the responsibility of the IAB
+	<xref target="IAB-ARPA"/></t>
     </section>
 
     <section>
@@ -943,6 +944,13 @@
           <title>Locally-Served DNS Zones Registry</title>
           <author/>
           <date month="July" year="2011"/>
+        </front>
+      </reference>
+      <reference anchor="IAB-ARPA" target="https://www.iab.org/documents/correspondence-reports-documents/2017-2/iab-statement-on-the-registration-of-special-use-names-in-the-arpa-domain/">
+        <front>
+          <title>Internet Architecture Board statement on the registration of special use names in the ARPA domain</title>
+          <author/>
+          <date month="March" year="2017"/>
         </front>
       </reference>
     </references>
