@@ -903,7 +903,8 @@
 	their thorough technical reviews. Thanks to Kangping and Abtin as well for testing the document by doing an independent
 	implementation. Thanks to Tamara Kemper for doing a nice developmental edit, Tim Wattenberg for doing a SRP requestor
 	proof-of-concept implementation at the Montreal Hackathon at IETF 102, and Tom Pusateri for reviewing during the hackathon
-	and afterwards.</t>
+	and afterwards. Thanks to Esko for a really thorough second last call review. Thanks also to Nathan Dyck, Gabriel
+	Montenegro, Kangping Dong, Martin Turon and Michael Cowan for their detailed second last call reviews.</t>
     </section>
   </middle>
 
