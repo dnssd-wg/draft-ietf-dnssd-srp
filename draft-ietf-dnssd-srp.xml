@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
-<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-13" ipr="trust200902"
+<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-14" ipr="trust200902"
      xmlns:xi="http://www.w3.org/2001/XInclude" version="3"
      scripts="Common,Latin" sortRefs="false"
      symRefs="true" tocDepth="4" tocInclude="true" xml:lang="en">
@@ -35,7 +35,7 @@
       </address>
     </author>
 
-    <date year='2022' month='April' day='24'/>
+    <date year='2022' month='July' day='11'/>
     <area>Internet</area>
     <workgroup>Internet Engineering Task Force</workgroup>
     <keyword>Multicast DNS</keyword>
@@ -317,7 +317,7 @@
 	      Description Instruction and each Service Description Instruction.  Each KEY record MUST contain the same public key.
 	      The update is signed using SIG(0), using the private key that corresponds to the public key in the KEY record.  The
 	      lifetimes of the records in the update is set using the EDNS(0) Update Lease option
-	      <xref target="I-D.sekar-dns-ul"/>.</t>
+	      <xref target="I-D.ietf-dnssd-update-lease"/>.</t>
             <t>
 	      The KEY record in Service Description updates MAY be omitted for brevity; if it is omitted, the SRP registrar MUST behave
 	      as if the same KEY record that is given for the Host Description is also given for each Service Description for which
@@ -656,7 +656,7 @@
 	<name>Cleaning up stale data</name>
 	<t>Because the DNS&nbhy;SD registration protocol is automatic, and not managed by humans,
           some additional bookkeeping is required.  When an update is constructed by the SRP requestor,
-          it MUST include an EDNS(0) Update Lease Option <xref target="I-D.sekar-dns-ul"/>.
+          it MUST include an EDNS(0) Update Lease Option <xref target="I-D.ietf-dnssd-update-lease"/>.
           The Update Lease Option contains two lease times: the Lease Time and the Key
           Lease Time.</t>
 
@@ -902,7 +902,7 @@
     <!-- <displayreference target="I-D.ietf-dnssd-hybrid" to="I-D.ietf-dnssd-hybrid"/> appears to not work in xml2rfc 2.6.2 -->
     <references>
       <name>Normative References</name>
-      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.sekar-dns-ul.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnssd-update-lease.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2132.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2136.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2539.xml" />
