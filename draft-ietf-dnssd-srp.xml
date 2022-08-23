@@ -145,23 +145,19 @@
 	<section>
 	  <name>Full-featured Hosts</name>
 	  <t>
-            Full-featured hosts are either configured manually with a registration domain, or use the
-            "dr._dns&nbhy;sd._udp.&lt;domain&gt;" query (<xref target="RFC6763" section="11" sectionFormat="comma"/>) to learn the default
-	    registration domain
-            from the network.  RFC6763 says to discover the registration domain using either ".local" or a network-supplied domain name
-            for &lt;domain&gt;.  Services using SRP MUST use the domain name received through the DHCPv4 Domain Name option
-            (<xref target="RFC2132" section="3.17" sectionFormat="comma"/>), if available, or the Neighbor Discovery DNS Search List option
-            <xref target="RFC8106"/>.  If the DNS Search List option contains more than one domain name, it MUST NOT be used.  If
-            neither option is available, the Service Registration protocol is not available on the local network.</t>
+            Full-featured hosts are either configured manually with a registration domain, or discover the default registration
+	    domain as described in <xref target="RFC6763" section="11" sectionFormat="of"/>.  If this process does not produce a
+	    default registration zone, the Service Registration protocol is not discoverable on the local network using this
+	    mechanism. Other discovery mechanisms are possible, but are out of scope for this document.</t>
 	  <t>
-            Manual configuration of the registration domain can be done either by querying the list of available registration zones
-            ("r._dns&nbhy;sd._udp") and allowing the user to select one from the UI, or by any other means appropriate to the particular
-            use case being addressed.  Full-featured devices construct the names of the SRV, TXT, and PTR records describing their
-            service(s) as subdomains of the chosen service registration domain.  For these names they then discover the zone apex of the
-            closest enclosing DNS zone using SOA queries <xref target="RFC8765"/>.  Having discovered the enclosing DNS
-            zone, they query for the "_dnssd&nbhy;srp._tcp.&lt;zone&gt;" SRV record to discover the server to which they should send DNS
-            updates.  Hosts that support SRP Updates using TLS use the "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" SRV record
-            instead.</t>
+            Manual configuration of the registration domain can be done either by querying the list of available registration
+            domains ("r._dns&nbhy;sd._udp") and allowing the user to select one from the UI, or by any other means appropriate to
+            the particular use case being addressed.  Full-featured devices construct the names of the SRV, TXT, and PTR records
+            describing their service(s) as subdomains of the chosen service registration domain.  For these names they then discover
+            the zone apex of the closest enclosing DNS zone using SOA queries <xref target="RFC8765"/>.  Having discovered the
+            enclosing DNS zone, they query for the "_dnssd&nbhy;srp._tcp.&lt;zone&gt;" SRV record to discover the server to which
+            they should send SRP updates.  Hosts that support SRP Updates using TLS use the
+            "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" SRV record instead.</t>
 	</section>
 	<section>
 	  <name>Constrained Hosts</name>
