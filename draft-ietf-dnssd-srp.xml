@@ -145,7 +145,7 @@
 	<section>
 	  <name>Full-featured Hosts</name>
 	  <t>
-            Full-featured hosts are either configured manually with a registration domain, or discover the default registration
+            Full-featured hosts either are configured manually with a registration domain, or discover the default registration
 	    domain as described in <xref target="RFC6763" section="11" sectionFormat="of"/>.  If this process does not produce a
 	    default registration zone, the Service Registration protocol is not discoverable on the local network using this
 	    mechanism. Other discovery mechanisms are possible, but are out of scope for this document.</t>
@@ -199,8 +199,10 @@
 	<section>
 	  <name>What to publish</name>
           <t>
-            We refer to the DNS Update message sent by servers using SRP as an SRP Update.  Three types of updates appear in an SRP
-            update: Service Discovery records, Service Description records, and Host Description records.
+            We refer to a DNS Update message that is constructed so as to conform to the constraints described in
+	    <xref target="server_behavior"/> as an SRP update. SRP Updates are sent by SRP requestors to SRP registrars.  Three
+	    types of updates appear in an SRP update: Service Discovery records, Service Description records, and Host Description
+	    records.
 	  </t>
           <ul spacing="compact">
             <li>
