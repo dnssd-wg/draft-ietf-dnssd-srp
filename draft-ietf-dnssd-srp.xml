@@ -446,17 +446,24 @@
 	    <name>Service Discovery Instruction</name>
             <t>An instruction is a Service Discovery Instruction if it contains</t>
             <ul spacing="compact">
-	      <li>exactly one "Add to an RRSet" or exactly one "Delete an RR from an RRSet"
-		(<xref target="RFC2136" section="2.5.1" sectionFormat="comma"/>) RR update,</li>
+	      <li>exactly one "Add to an RRSet" (<xref target="RFC2136" section="2.5.1" sectionFormat="comma"/>) or exactly one
+		"Delete an RR from an RRSet" (<xref target="RFC2136" section="2.5.4" sectionFormat="comma"/>) RR update,</li>
 	      <li>which updates a PTR RR,</li>
 	      <li>the target of which is a Service Instance Name</li>
-	      <li>for which name a Service Description Instruction is present in the SRP Update</li>
-	      <li>if the Service Discovery Instruction is an "Add to an RRSet" instruction, the Service Description Instruction does
-		not match if it does not contain an "Add to an RRset" update for the SRV RR describing that service.</li>
-	      <li>if the Service Discovery Instruction is a "Delete an RR from an RRSet" update, the Service Description
-		Instruction does not match if it contains an "Add to an RRset" update.</li>
-	      <li>Service Discovery Instructions do not contain any other add or delete updates.</li>
+	      <li><t>for which name a Service Description Instruction is present in the SRP Update, and:</t>
+		<ul spacing="compact">
+		  <li>if the RR Update is an "Add to an RRSet" instruction, that Service Description Instruction contains an "Add to
+		    an RRset" RR update for the SRV RR describing that service and no other "Delete from an RRset" instructions for
+		    that Service Instance Name; or</li>
+		  <li>if the RR Update is a "Delete an RR from an RRSet" instruction, that Service Description Instruction contains
+		    a "Delete from an RRset" RR update and no other "Add to an RRset" instructions for that Service Instance
+		    Name.</li></ul></li>
+	      <li>and contains no other add or delete RR updates for the same name as the PTR RR Update.</li>
             </ul>
+	    <t>
+	      Note that there can be more than one Service Discovery Instruction for the same name if the SRP requestor is advertising
+	      more than one service of the same type, or is changing the target of a PTR RR. For each such PTR RR add or remove, the
+	      above constraints must be met.</t>
 	  </section>
 
 	  <section anchor="servdesc">
