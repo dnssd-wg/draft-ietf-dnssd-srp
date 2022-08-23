@@ -180,7 +180,7 @@
 	  <t>
             The reason for these different variants is that low-power devices that typically use Constrained-Node Networks may have
             very limited battery storage.  The series of DNS lookups required to discover an SRP registrar and then communicate with
-            it will increase the power required to advertise a service; for low-power devices, the additional flexibility this
+            it will increase the energy required to advertise a service; for low-power devices, the additional flexibility this
             provides does not justify the additional use of energy.  It is also fairly typical of such networks that some network
             service information is obtained as part of the process of joining the network, and so this can be relied upon to provide
             nodes with the information they need.</t>
@@ -792,30 +792,6 @@
 	specification in <xref target="RFC8375" section="7" sectionFormat="of"/>.</t>
     </section>
 
-    <section anchor="subdomains">
-      <name>Subdomains of 'service.arpa.'</name>
-      <t>This document only makes use of the 'default.service.arpa' subdomain of 'service.arpa.' Other subdomains are reserved
-	for future use by DNS-SD or related work. The IANA is requested to create a registry, the "service.arpa Subdomain Registry".
-	This registry shall begin as the following table:
-      </t>
-      <table>
-	<thead>
-	  <tr>
-	    <th>Subdomain Name</th>
-	    <th>Description</th>
-	    <th>reference</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  <tr>
-	    <td>default</td>
-	    <td>Default domain for SRP updates</td>
-	    <td>[THIS DOCUMENT]</td>
-	  </tr>
-	</tbody>
-      </table>
-    </section>
-
     <section>
       <name>IANA Considerations</name>
       <section>
@@ -828,6 +804,31 @@
 	  the "Locally-Served DNS Zones" registry <xref target="LSDZ"/>.  The entry will be for the domain 'service.arpa.' with the
 	  description "DNS&nbhy;SD Service Registration Protocol Special-Use Domain", listing this document as the reference.</t>
       </section>
+
+      <section anchor="subdomains">
+	<name>Subdomains of 'service.arpa.'</name>
+	<t>This document only makes use of the 'default.service.arpa' subdomain of 'service.arpa.' Other subdomains are reserved
+	  for future use by DNS-SD or related work. The IANA is requested to create a registry, the "service.arpa Subdomain Registry".
+	  This registry shall begin as the following table:
+	</t>
+	<table>
+	  <thead>
+	    <tr>
+	      <th>Subdomain Name</th>
+	      <th>Description</th>
+	      <th>reference</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <tr>
+	      <td>default</td>
+	      <td>Default domain for SRP updates</td>
+	      <td>[THIS DOCUMENT]</td>
+	    </tr>
+	  </tbody>
+	</table>
+      </section>
+
       <section>
 	<name>'dnssd-srp' Service Name</name>
 	<t>IANA is also requested to add a new entry to the Service Names and Port Numbers registry for dnssd-srp with a transport
