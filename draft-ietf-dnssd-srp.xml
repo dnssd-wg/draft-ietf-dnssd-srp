@@ -116,7 +116,7 @@
         for publishing this information.  Once published, these services can be readily discovered by DNS&nbhy;SD clients using
         standard DNS lookups.</t>
       <t>
-        The <xref target="RFC6763" section="10" sectionFormat="comma">DNS&nbhy;SD specification</xref> (“Populating the DNS with
+        The DNS&nbhy;SD specification (<xref target="RFC6763" section="10" sectionFormat="comma"/>, “Populating the DNS with
         Information”), briefly discusses ways that servers can publish their information in the DNS namespace.  In the case of
         mDNS, it allows servers to publish their information on the local link, using names in the ".local" namespace, which makes
         their services directly discoverable by peers attached to that same local link.</t>
@@ -210,8 +210,8 @@
 	  </t>
           <ul spacing="compact">
             <li>
-              PTR RR for services, which that map from a generic service type (or subtype) name to a specific Service
-              Instance Name.</li>
+              PTR Resource Record (RR) for services, which map from a generic service type (or subtype) name to a specific
+              Service Instance Name.</li>
             <li>
 	      For any Service Instance Name (<xref target="RFC6763" section="4.1" sectionFormat="comma"/>), an SRV RR, one or more
 	      TXT RRs, and a KEY RR. In principle Service Description records can include other record types, with the same Service
@@ -256,10 +256,11 @@
             An SRP Update takes advantage of this: it is implemented as a single DNS Update message that contains a service's Service
             Discovery records, Service Description records, and Host Description records.</t>
           <t>
-            Updates done according to this specification are somewhat different than regular DNS Updates as defined in RFC2136.  The
-            RFC2136 update process can involve many update attempts: you might first attempt to add a name if it doesn't exist; if
-            that fails, then in a second message you might update the name if it does exist but matches certain preconditions.
-            Because the registration protocol uses a single transaction, some of this adaptability is lost.</t>
+            Updates done according to this specification are somewhat different than regular DNS Updates as defined in
+	    <xref target="RFC2136"/>.  The <xref target="RFC2136"/> update process can involve many update attempts: you might first
+	    attempt to add a name if it doesn't exist; if that fails, then in a second message you might update the name if it does
+	    exist but matches certain preconditions.  Because the registration protocol uses a single transaction, some of this
+	    adaptability is lost.</t>
           <t>
             In order to allow updates to happen in a single transaction, SRP Updates do not include update prerequisites.  The
             requirements specified in <xref target="server_behavior"/> are implicit in the processing of SRP Updates, and so there is
@@ -304,8 +305,9 @@
               First-Come First-Serve naming provides a limited degree of security: a server that registers its service using
               DNS&nbhy;SD Registration protocol is given ownership of a name for an extended period of time based on the key used to
               authenticate the DNS Update.  As long as the registration service remembers the name and the key used to register that
-              name, no other server can add or update the information associated with that.  FCFS naming is used to protect both the
-              Service Description and the Host Description.</t>
+              name, no other server can add or update the information associated with that.  If the server fails to renew its
+              service registration before the KEY lease (<xref target="I-D.ietf-dnssd-update-lease" section="4"/>), its name is no
+              longer protected.  FCFS naming is used to protect both the Service Description and the Host Description.</t>
 	  </section>
 	</section>
 
@@ -314,12 +316,12 @@
 	  <section>
 	    <name>Public/Private key pair generation and storage</name>
             <t>
-	      The requestor generates a public/private key pair.  This key pair MUST be stored in stable storage; if there is no
-	      writable stable storage on the SRP requestor, the SRP requestor MUST be pre-configured with a public/private key pair in
-	      read-only storage that can be used.  This key pair MUST be unique to the device. A device with rewritable storage
-	      should retain this key indefinitely.  When the device changes ownership, it may be appropriate to erase the old key
-	      and install a new one. Therefore, the SRP requestor on the device SHOULD provide a mechanism to overwrite the key, for
-	      example as the result of a "factory reset."</t>
+	      The requestor generates a public/private key pair (See <xref target="rsa"/>).  This key pair MUST be stored in stable
+	      storage; if there is no writable stable storage on the SRP requestor, the SRP requestor MUST be pre-configured with a
+	      public/private key pair in read-only storage that can be used.  This key pair MUST be unique to the device. A device
+	      with rewritable storage should retain this key indefinitely.  When the device changes ownership, it may be appropriate
+	      to erase the old key and install a new one. Therefore, the SRP requestor on the device SHOULD provide a mechanism to
+	      overwrite the key, for example as the result of a "factory reset."</t>
             <t>
 	      When sending DNS updates, the requestor includes a KEY record containing the public portion of the key in each Host
 	      Description Instruction and each Service Description Instruction.  Each KEY record MUST contain the same public key.
@@ -365,11 +367,12 @@
 	    <name>Compression in SRV records</name>
 	    <t>
 	      Although <xref target="RFC2782"/> requires that the target name in the SRV record not be compressed, an SRP requestor
-	      SHOULD compress the target in the SRV record. The motivation for <em>not</em> compressing in RFC2782 is not stated,
-	      but is assumed to be because a caching resolver that does not understand the format of the SRV record might store it
-	      as binary data and thus return an invalid pointer in response to a query. This does not apply in the case of SRP: an
-	      SRP registrar needs to understand SRV records in order to validate the SRP Update. Compression of the target potentially
-	      saves substantial space in the SRP Update.</t>
+	      SHOULD compress the target in the SRV record. The motivation for <em>not</em> compressing in <xref target="RFC2782"/>
+	      is not stated, but is assumed to be because a caching resolver that does not understand the format of the SRV record
+	      might store it as binary data and thus return an invalid pointer in response to a query. This does not apply in the
+	      case of SRP: an SRP registrar needs to understand SRV records in order to validate the SRP Update. Compression of the
+	      target potentially saves substantial space in the SRP Update. SRP registrars MUST support compression of SRV RR
+	      targets.</t>
           </section>
           <section anchor="remove">
 	    <name>Removing published services</name>
@@ -595,11 +598,11 @@
 	<section>
 	  <name>Optional Behavior</name>
           <t>
-	    The registrar MAY add a Reverse Mapping that corresponds to the Host Description.  This is not required because the
-	    Reverse Mapping serves no protocol function, but it may be useful for debugging, e.g. in annotating network packet
-	    traces or logs.  In order for the registrar to do a reverse mapping update, it must be authoritative for the zone that
-	    would need to be updated, or have credentials to do the update.  The SRP requestor MAY also do a reverse mapping update
-	    if it has credentials to do so.</t>
+	    The registrar MAY add a Reverse Mapping (<xref target="RFC1035" section="3.5"/>, <xref target="RFC3596" section="2.5"/>)
+	    that corresponds to the Host Description.  This is not required because the Reverse Mapping serves no protocol function,
+	    but it may be useful for debugging, e.g. in annotating network packet traces or logs.  In order for the registrar to do
+	    a reverse mapping update, it must be authoritative for the zone that would need to be updated, or have credentials to do
+	    the update.  The SRP requestor MAY also do a reverse mapping update if it has credentials to do so.</t>
           <t>
 	    The registrar MAY apply additional criteria when accepting updates.  In some networks, it may be possible to do
 	    out-of-band registration of keys, and only accept updates from pre-registered keys.  In this case, an update for a key
@@ -754,7 +757,7 @@
 	  a non-constrained SRP requestor to validate responses from the registrar, but this is not required,
 	  nor do we specify a mechanism for determining which key to use.</t>
       </section>
-      <section>
+      <section anchor="rsa">
 	<name>Required Signature Algorithm</name>
 	<t>
 	  For validation, SRP registrars MUST implement the ECDSAP256SHA256 signature algorithm.  SRP registrars SHOULD implement the
@@ -919,6 +922,7 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2782.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2931.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3172.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3596.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6763.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7858.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8106.xml"/>
