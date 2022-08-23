@@ -168,12 +168,12 @@
 	  <t>
             For devices designed for Constrained-Node Networks <xref target="RFC7228"/> some simplifications are available.  Instead of
             being configured with (or discovering) the service registration domain, the (proposed) special-use domain name (see
-            <xref target="RFC6761"/>) "default.service.arpa" is used.  The details of how SRP server(s) are discovered will be specific
+            <xref target="RFC6761"/>) "default.service.arpa" is used.  The details of how SRP registrar(s) are discovered will be specific
             to the constrained network, and therefore we do not suggest a specific mechanism here.</t>
 	  <t>
-            SRP clients on constrained networks are expected to receive from the network a list of SRP servers with which to register.
-            It is the responsibility of a Constrained-Node Network supporting SRP to provide one or more SRP server addresses.  It is
-            the responsibility of the SRP server supporting a Constrained-Node Network to handle the updates appropriately.  In some
+            SRP requestors on constrained networks are expected to receive from the network a list of SRP registrars with which to register.
+            It is the responsibility of a Constrained-Node Network supporting SRP to provide one or more SRP registrar addresses.  It is
+            the responsibility of the SRP registrar supporting a Constrained-Node Network to handle the updates appropriately.  In some
             network environments, updates may be accepted directly into a local "default.service.arpa" zone, which has only local
             visibility.  In other network environments, updates for names ending in "default.service.arpa" may be rewritten internally
             to names with broader visibility.</t>
