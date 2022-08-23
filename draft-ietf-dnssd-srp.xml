@@ -463,9 +463,10 @@
 	      <li>and contains no other add or delete RR updates for the same name as the PTR RR Update.</li>
             </ul>
 	    <t>
-	      Note that there can be more than one Service Discovery Instruction for the same name if the SRP requestor is advertising
-	      more than one service of the same type, or is changing the target of a PTR RR. For each such PTR RR add or remove, the
-	      above constraints must be met.</t>
+	      Note that there can be more than one Service Discovery Instruction for the same name if the SRP requestor is
+	      advertising more than one service of the same type, or is changing the target of a PTR RR. This is also true for SRP
+	      subtypes (<xref target="RFC6763" section="7.1"/>). For each such PTR RR add or remove, the above constraints must be
+	      met.</t>
 	  </section>
 
 	  <section anchor="servdesc">
@@ -513,9 +514,6 @@
 		exactly one "Add to an RRset" RR that adds a KEY RR that contains the public key corresponding to the private key
 		that was used to sign the message,</li>
 	      <li>
-		there is a Service Instance Name Instruction in the SRP Update for which the SRV RR that is added points to the
-		hostname being updated by this update.</li>
-	      <li>
 		Host Description Instructions do not modify any other resource records.</li>
             </ul>
 	    <t>
@@ -534,23 +532,12 @@
 	<section>
 	  <name>Valid SRP Update Requirements</name>
           <t>
-	    An SRP Update MUST include zero or more Service Discovery Instructions. For each Service Discovery Instruction, there
-	    MUST be at least one Service Description Instruction. Note that in the case of SRP subtypes (<xref target="RFC6763"
-	    section="7.1"/>), it's quite possible that two Service Discovery Instructions might reference the same Service
-	    Description Instruction. For each Service Description Instruction there MUST be at least one Service Discovery
-	    Instruction with its service instance name as the target of its PTR record. There MUST be exactly one Host Description
-	    Instruction.  Every Service Description Instruction must have that Host Description Instruction as the target of its SRV
-	    record. A DNS Update that does not meet these constraints is not an SRP Update.</t>
-	  <t>
-	    A DNS Update that contains any additional adds or deletes that cannot be identified as Service Discovery, Service
-	    Description or Host Description Instructions is not an SRP Update. A DNS update that contains any prerequisites is not
-	    an SRP Update.  Such messages should either be processed as regular RFC2136 updates, including access control checks and
-	    constraint checks, if supported, or else rejected with RCODE=REFUSED.</t>
-	  <t>
-	    In addition, in order for an update to be a valid SRP Update, the target of every Service Discovery Instruction MUST be
-	    a Service Description Instruction that is present in the SRP Update. There MUST NOT be any Service Description
-	    Instruction to which no Service Discovery Instruction points. The target of the SRV record in every Service Description
-	    Instruction MUST be the single Host Description Instruction.</t>
+	    An SRP Update MUST contain exactly one Host Description Instruction. In addition, there MUST NOT be any Service
+	    Description Instruction to which no Service Discovery Instruction points.  A DNS Update that contains any additional
+	    adds or deletes that cannot be identified as Service Discovery, Service Description or Host Description Instructions is
+	    not an SRP Update. A DNS update that contains any prerequisites is not an SRP Update.  An SRP registrar MAY either
+	    process such messages are either processed as regular RFC2136 updates, including access control checks and constraint
+	    checks, if supported, or MAY reject them with RCODE=REFUSED.</t>
           <t>
 	    If the definitions of each of these instructions are followed carefully and the update requirements are validated
 	    correctly, many DNS Updates that look very much like SRP Updates nevertheless will fail to validate.  For example, a DNS
