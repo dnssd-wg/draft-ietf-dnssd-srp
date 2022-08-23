@@ -68,9 +68,10 @@
         <xref target="RFC6763">DNS-Based Service Discovery</xref> is a component of Zero Configuration Networking
         <xref target="RFC6760"/> <xref target="ZC"/> <xref target="I-D.cheshire-dnssd-roadmap"/>.</t>
       <t>
-        This document describes an enhancement to <xref target="RFC6763">DNS-Based Service Discovery</xref> that allows servers to
-	register the services they offer using the DNS protocol rather than using <xref target="RFC6762">Multicast DNS</xref>
-        (mDNS).  There is already a large installed base of DNS&nbhy;SD clients that can discover services using the DNS protocol.</t>
+        This document describes an enhancement to <xref target="RFC6763">DNS-Based Service Discovery</xref> (DNS&nbhy;SD) that
+	allows servers to register the services they offer using the DNS protocol rather than using <xref target="RFC6762">Multicast
+	DNS</xref> (mDNS).  There is already a large installed base of DNS&nbhy;SD clients that can discover services using the DNS
+	protocol.</t>
       <t>
         This document is intended for three audiences: implementors of software that provides services that should be advertised
         using DNS&nbhy;SD, implementors of DNS servers that will be used in contexts where DNS&nbhy;SD registration is needed, and
