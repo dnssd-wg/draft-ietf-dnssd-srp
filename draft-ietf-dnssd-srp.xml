@@ -306,8 +306,8 @@
               DNS&nbhy;SD Registration protocol is given ownership of a name for an extended period of time based on the key used to
               authenticate the DNS Update.  As long as the registration service remembers the name and the key used to register that
               name, no other server can add or update the information associated with that.  If the server fails to renew its
-              service registration before the KEY lease (<xref target="I-D.ietf-dnssd-update-lease" section="4"/>), its name is no
-              longer protected.  FCFS naming is used to protect both the Service Description and the Host Description.</t>
+              service registration before the KEY lease (<xref target="I-D.ietf-dnssd-update-lease" section="4"/>) expires, its name
+              is no longer protected.  FCFS naming is used to protect both the Service Description and the Host Description.</t>
 	  </section>
 	</section>
 
