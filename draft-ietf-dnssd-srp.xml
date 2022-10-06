@@ -591,9 +591,16 @@
 	<section>
 	  <name>SRP Update response</name>
           <t>
-	    The status that is returned depends on the result of processing the update, and can be either NoError or ServFail: all
+	    The status that is returned depends on the result of processing the update, and can be either NoError, ServFail, Refused or YXDomain: all
 	    other possible outcomes should already have been accounted for when applying the constraints that qualify the update
-	    as an SRP Update.</t>
+	    as an SRP Update. The meanings of these responses are explained in <xref target="RFC2136" section="2.2"/>.</t>
+	  <t>
+	    In the case of a response other than NoError, <xref target="RFC2136" section="3.8"/> specifies that the server is permitted
+            to respond either with no RRs or to copy the RRs sent by the client into the response. The SRP Requestor MUST NOT attempt
+	    to validate any RRs that are included in the response. It is possible that a future SRP extension may include per-RR
+	    indications as to why the update failed, but at present this is not specified, so if a client were to attempt to validate
+            the RRs in the response, it might reject such a response, since it would contain RRs, but probably a set of RRs
+	    identical to what was sent in the SRP Update.</t>
 	</section>
 	<section>
 	  <name>Optional Behavior</name>
