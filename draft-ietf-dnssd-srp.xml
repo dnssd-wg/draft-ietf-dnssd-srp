@@ -134,6 +134,15 @@
     </section>
 
     <section>
+      <name>Conventions and Terminology Used in This Document</name>
+      <t>
+	The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+	"MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"/>
+        <xref target="RFC8174"/> when, and only when, they appear in all capitals, as shown here.
+      </t>
+    </section>
+
+    <section>
       <name>Service Registration Protocol</name>
       <t>
         Services that implement SRP use DNS Update <xref target="RFC2136"/> <xref target="RFC3007"/> to publish service information
@@ -599,7 +608,7 @@
             to respond either with no RRs or to copy the RRs sent by the client into the response. The SRP Requestor MUST NOT attempt
 	    to validate any RRs that are included in the response. It is possible that a future SRP extension may include per-RR
 	    indications as to why the update failed, but at present this is not specified, so if a client were to attempt to validate
-            the RRs in the response, it might reject such a response, since it would contain RRs, but probably a set of RRs
+            the RRs in the response, it might reject such a response, since it would contain RRs, but probably not a set of RRs
 	    identical to what was sent in the SRP Update.</t>
 	</section>
 	<section>
@@ -936,6 +945,7 @@
       <name>Normative References</name>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnssd-update-lease.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml" />
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2136.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2181.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2539.xml" />
@@ -946,30 +956,10 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6763.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7858.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8126.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8375.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8624.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8765.xml" />
-      <reference anchor="SUDN" target="https://www.iana.org/assignments/special-use-domain-names/special-use-domain-names.xhtml">
-        <front>
-          <title>Special-Use Domain Names Registry</title>
-          <author/>
-          <date month="July" year="2012"/>
-        </front>
-      </reference>
-      <reference anchor="LSDZ" target="https://www.iana.org/assignments/locally-served-dns-zones/locally-served-dns-zones.xhtml">
-        <front>
-          <title>Locally-Served DNS Zones Registry</title>
-          <author/>
-          <date month="July" year="2011"/>
-        </front>
-      </reference>
-      <reference anchor="IAB-ARPA" target="https://www.iab.org/documents/correspondence-reports-documents/2017-2/iab-statement-on-the-registration-of-special-use-names-in-the-arpa-domain/">
-        <front>
-          <title>Internet Architecture Board statement on the registration of special use names in the ARPA domain</title>
-          <author/>
-          <date month="March" year="2017"/>
-        </front>
-      </reference>
     </references>
 
     <references>
@@ -987,6 +977,30 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8945.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.cheshire-dnssd-roadmap.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnssd-advertising-proxy.xml"/>
+
+      <reference anchor="SUDN" target="https://www.iana.org/assignments/special-use-domain-names/special-use-domain-names.xhtml">
+        <front>
+          <title>Special-Use Domain Names Registry</title>
+          <author/>
+          <date month="July" year="2012"/>
+        </front>
+      </reference>
+
+      <reference anchor="LSDZ" target="https://www.iana.org/assignments/locally-served-dns-zones/locally-served-dns-zones.xhtml">
+        <front>
+          <title>Locally-Served DNS Zones Registry</title>
+          <author/>
+          <date month="July" year="2011"/>
+        </front>
+      </reference>
+
+      <reference anchor="IAB-ARPA" target="https://www.iab.org/documents/correspondence-reports-documents/2017-2/iab-statement-on-the-registration-of-special-use-names-in-the-arpa-domain/">
+        <front>
+          <title>Internet Architecture Board statement on the registration of special use names in the ARPA domain</title>
+          <author/>
+          <date month="March" year="2017"/>
+        </front>
+      </reference>
 
       <reference anchor="ZC">
         <front>
