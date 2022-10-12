@@ -599,7 +599,7 @@
             to respond either with no RRs or to copy the RRs sent by the client into the response. The SRP Requestor MUST NOT attempt
 	    to validate any RRs that are included in the response. It is possible that a future SRP extension may include per-RR
 	    indications as to why the update failed, but at present this is not specified, so if a client were to attempt to validate
-            the RRs in the response, it might reject such a response, since it would contain RRs, but probably a set of RRs
+            the RRs in the response, it might reject such a response, since it would contain RRs, but probably not a set of RRs
 	    identical to what was sent in the SRP Update.</t>
 	</section>
 	<section>
