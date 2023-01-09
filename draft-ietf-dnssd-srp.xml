@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
-<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-17" ipr="trust200902"
+<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-18" ipr="trust200902"
      xmlns:xi="http://www.w3.org/2001/XInclude" version="3"
      scripts="Common,Latin" sortRefs="false" consensus="true"
      symRefs="true" tocDepth="4" tocInclude="true" xml:lang="en">
@@ -35,7 +35,7 @@
       </address>
     </author>
 
-    <date year='2022' month='October' day='12'/>
+    <date year='2023' month='January' day='9'/>
     <area>Internet</area>
     <workgroup>Internet Engineering Task Force</workgroup>
     <keyword>Multicast DNS</keyword>
@@ -801,6 +801,35 @@
       </t>
     </section>
 
+    <section>
+      <name>Special-Use Domain Name Considerations for service.arpa</name>
+      <t>
+	<xref target="RFC6761" section="6.1" sectionFormat="of"/> provides detailed information for handling of locally-served
+	domains, of which 'service.arpa.' is an example. The considerations described in this section of RFC6761 apply identically
+	to 'default.service.arpa.', with the following additional considerations:</t>
+      <section>
+	<name>Considerations for Users</name>
+	<t>
+	  The current proposed use for service.arpa does not require special knowledge on the part of the user. While the
+	  'default.service.arpa.' subdomain is used as a generic name for registration, users are not expected to see this
+	  name in user interfaces. In the event that it does show up in a user interface, it is just a domain name, and
+	  requires no special treatment by the user. Unlike with 'home.arpa.', users are not expected to see this name
+	  in user interfaces, although it's certainly possible that they might. If they do, they are not expected to
+	  treat it specially.</t>
+      </section>
+      <section>
+	<name>Considerations for Application Software</name>
+	<t>
+	  Application software does not need to handle subdomains of 'service.arpa' specially.  'service.arpa' should not be treated
+	  as more trustworthy than any other insecure DNS domain, simply because it is locally-served (or for any other reason). It
+	  is not possible to register a PKI certificate for a subdomain of 'service.arpa.' because it is a locally-served domain
+	  name. So no such subdomain can be considered as uniquely identifying a particular host, as would be required for such a
+	  PKI cert to be issued. Should a subdomain of 'service.arpa.' be returned by an API or entered in an input field of an
+	  application, PKI authentication of the endpoint being identified by the name will not be possible. Alternative methods
+	  and practices for authenticating such endpoints are out of scope for this document.</t>
+      </section>
+    </section>
+
     <section anchor="delegation">
       <name>Delegation of 'service.arpa.'</name>
       <t>In order to be fully functional, the owner of the 'arpa.' zone must add a delegation of 'service.arpa.' in the '.arpa.'
@@ -827,7 +856,7 @@
 	<t>This document only makes use of the 'default.service.arpa' subdomain of 'service.arpa.' Other subdomains are reserved
 	  for future use by DNS-SD or related work. The IANA is requested to create a registry, the "service.arpa Subdomain Registry".
           The IETF shall have change control for this registry. New entries may be added either as a result of Standards Action
-	  <xref target="RFC8126" section="4.9"/> or with IESG approval <xref target="RFC 8126" section=4.10"/>, provided that a
+	  <xref target="RFC8126" section="4.9"/> or with IESG approval <xref target="RFC8126" section="4.10"/>, provided that a
 	  specification exists <xref target="RFC8126" section="4.6"/>.
 	</t>
         <t>
@@ -857,17 +886,41 @@
       </section>
 
       <section>
+	<name>Service Name registrations</name>
+	<t>IANA is requested to add two new entries to the Service Names and Port Numbers registry. The following sections
+	  contain tables with the fields required by <xref target="RFC6335" section="8.1.1" sectionFormat="of"/>.</t>
+      </section>
+      <section>
 	<name>'dnssd-srp' Service Name</name>
-	<t>IANA is also requested to add a new entry to the Service Names and Port Numbers registry for dnssd-srp with a transport
-	  type of tcp.  No port number is to be assigned.  The reference should be to this document, and the Assignee and Contact
-	  information should reference the authors of this document.  The Description should be "DNS-SD Service Registration."</t>
+	<table>
+	  <thead><tr><td>Field Name</td><td>Value</td></tr></thead>
+	  <tbody>
+	    <tr><td>  Service Name       </td><td>  dnssd-srp                         </td></tr>
+	    <tr><td>  Transport Protocol </td><td>  TCP                               </td></tr>
+	    <tr><td>  Assignee           </td><td>  IESG &lt;iesg@ietf.org&gt;        </td></tr>
+	    <tr><td>  Contact            </td><td>  IETF Chair &lt;chair@ietf.org&gt; </td></tr>
+	    <tr><td>  Description        </td><td>  DNS-SD Service Registration       </td></tr>
+	    <tr><td>  Reference          </td><td>  this document                     </td></tr>
+	    <tr><td>  Port Number        </td><td>  None                              </td></tr>
+	    <tr><td>  Service Code       </td><td>  None                              </td></tr>
+	  </tbody>
+	</table>
       </section>
       <section>
 	<name>'dnssd-srp-tls' Service Name</name>
-	<t>IANA is also requested to add a new entry to the Service Names and Port Numbers registry for dnssd-srp-tls with a
-	  transport type of tcp.  No port number is to be assigned.  The reference should be to this document, and the Assignee and
-	  Contact information should reference the authors of this document.  The Description should be "DNS-SD Service Registration
-	  (TLS).</t>
+	<table>
+	  <thead><tr><td>Field Name</td><td>Value</td></tr></thead>
+	  <tbody>
+	    <tr><td>  Service Name       </td><td>  dnssd-srp-tls                     </td></tr>
+	    <tr><td>  Transport Protocol </td><td>  TCP                               </td></tr>
+	    <tr><td>  Assignee           </td><td>  IESG                              </td></tr>
+	    <tr><td>  Contact            </td><td>  IETF Chair                        </td></tr>
+	    <tr><td>  Description        </td><td>  DNS-SD Service Registration (TLS) </td></tr>
+	    <tr><td>  Reference          </td><td>  this document                     </td></tr>
+	    <tr><td>  Port Number        </td><td>  None                              </td></tr>
+	    <tr><td>  Service Code       </td><td>  None                              </td></tr>
+	  </tbody>
+	</table>
       </section>
       <section>
 	<name>Anycast Address</name>
@@ -967,6 +1020,7 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2131.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2827.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3007.xml" />
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6335.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6760.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6761.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6762.xml" />
