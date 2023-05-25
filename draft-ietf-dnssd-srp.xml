@@ -48,8 +48,8 @@
         The Service Registration Protocol for DNS-Based Service Discovery uses the standard DNS Update mechanism to enable DNS-Based
         Service Discovery using only unicast packets.  This makes it possible to deploy DNS Service Discovery without multicast,
         which greatly improves scalability and improves performance on networks where multicast service is not an optimal choice,
-        particularly 802.11 (Wi&nbhy;Fi) and 802.15.4 (IoT) networks.  DNS&nbhy;SD Service registration uses public keys and SIG(0)
-        to allow services to defend their registrations against attack.
+        particularly IEEE 802.11 (Wi&nbhy;Fi) and IEEE 802.15.4 (IoT) networks.  DNS&nbhy;SD Service registration uses public keys and SIG(0)
+        to allow services to defend their registrations.
 
       </t>
     </abstract>
@@ -61,7 +61,7 @@
       </t>
       <t>
         Discussion of this document takes place on the
-        DNSSD Working Group mailing list (<eref target="mailto:dnssd@ietf.org"/>),
+        DNS-SD Working Group mailing list (<eref target="mailto:dnssd@ietf.org"/>),
         which is archived at <eref target="https://mailarchive.ietf.org/arch/browse/dnssd/"/>.
         Subscribe at <eref target="https://www.ietf.org/mailman/listinfo/dnssd/"/>.
       </t>
@@ -82,17 +82,17 @@
         This document describes an enhancement to <xref target="RFC6763">DNS-Based Service Discovery</xref> (DNS&nbhy;SD) that
 	allows servers to register the services they offer using the DNS protocol rather than using <xref target="RFC6762">Multicast
 	DNS</xref> (mDNS).  There is already a large installed base of DNS&nbhy;SD clients that can discover services using the DNS
-	protocol.</t>
+	protocol (e.g. Android, Windows, Linux, Apple).</t>
       <t>
         This document is intended for three audiences: implementors of software that provides services that should be advertised
         using DNS&nbhy;SD, implementors of DNS servers that will be used in contexts where DNS&nbhy;SD registration is needed, and
-        administrators of networks where DNS&nbhy;SD service is required.  The document is intended to provide sufficient
+        administrators of networks where DNS&nbhy;SD service is required.  The document is expected to provide sufficient
         information to allow interoperable implementation of the registration protocol.</t>
       <t>
         DNS-Based Service Discovery (DNS&nbhy;SD) allows services to advertise the fact that they provide service, and to provide
         the information required to access that service.  DNS&nbhy;SD clients can then discover the set of services of a particular
         type that are available.  They can then select a service from among those that are available and obtain the information
-        required to use it.  Although DNS-SD using the DNS protocol (as opposed to mDNS) can be more efficient and versatile, it is
+        required to use it.  Although DNS Service Discovery (DNS-SD) using the DNS protocol (as opposed to mDNS) can be more efficient and versatile, it is
         not common in practice, because of the difficulties associated with updating authoritative DNS services with service
         information.</t>
 
@@ -104,7 +104,7 @@
 	round trips with different conditional predicates to complete the update process.</t>
 
       <t>
-	The SRP protocol adds a set of default heuristics for processing DNS updates that eliminates the need for DNS update
+	The Service Registration Protocol (SRP) adds a set of default heuristics for processing DNS updates that eliminates the need for DNS update
 	conditional predicates: instead, the SRP registrar (a DNS server that supports SRP updates) has a set of default predicates
 	that are applied to the update, and the update either succeeds entirely, or fails in a way that allows the requestor to know
 	what went wrong and construct a new update.</t>
@@ -123,7 +123,7 @@
 	lease, so that another requestor cannot claim the name, even though the registration has expired.</t>
 
       <t>
-        The Service Registration Protocol for DNS&nbhy;SD (SRP), described in this document, provides a reasonably secure mechanism
+        The Service Registration Protocol for DNS&nbhy;SD (SRP), specified in this document, provides a reasonably secure mechanism
         for publishing this information.  Once published, these services can be readily discovered by DNS&nbhy;SD clients using
         standard DNS lookups.</t>
       <t>
@@ -134,7 +134,7 @@
       <t>
         RFC6763 also allows clients to discover services using <xref target="RFC1035">the DNS protocol</xref>.  This can be done by
         having a system administrator manually configure service information in the DNS, but manually populating DNS authoritative
-        server databases is costly and potentially error-prone, and requires a knowledgable network administrator.  Consequently,
+        server databases is costly and potentially error-prone, and requires a knowledgeable network administrator.  Consequently,
         although all DNS&nbhy;SD client implementations of which we are aware support DNS&nbhy;SD using DNS queries, in practice it
         is used much less frequently than mDNS.</t>
       <t>
@@ -179,6 +179,11 @@
             discovered the enclosing DNS zone, they query for the "_dnssd&nbhy;srp._tcp.&lt;zone&gt;" SRV record to discover the
             server to which they should send SRP updates.  Hosts that support SRP Updates using TLS use the
             "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" SRV record instead.</t>
+	  <t>
+	    Examples of full-featured hosts include devices such as home computers, laptops, powered peripherals with network
+	    connections such as printers, home routers, and even battery-operated devices such as mobile phones that have
+	    long battery lives.
+	  </t>
 	</section>
 	<section>
 	  <name>Constrained Hosts</name>
@@ -205,10 +210,12 @@
             service information is obtained as part of the process of joining the network, and so this can be relied upon to provide
             nodes with the information they need.</t>
 	  <t>
-            Networks that are not constrained networks can have more complicated topologies at the Internet layer. Nodes connected
-            to such networks can be assumed to be able to do DNSSD service registration domain discovery. Such networks are
+            Networks that are not constrained networks can have more complicated topologies at the IP layer. Nodes connected
+            to such networks can be assumed to be able to do DNS-SD service registration domain discovery. Such networks are
             generally able to provide registration domain discovery and routing.  This creates the possibility of off-network
-	    spoofing. To prevent such spoofing, TCP is required for such networks.</t>
+	    spoofing, where a device from a foreign network registers a service on the local network in order to attack devices
+	    on the local network. To prevent such spoofing, TCP is required for such networks.
+	  </t>
 	</section>
       </section>
       <section>
@@ -223,7 +230,7 @@
           <t>
             SRP Updates are sent by SRP requestors to SRP registrars.  Three types of instructions appear in an SRP update: Service
 	    Discovery instructions, Service Description instructions, and Host Description instructions. These instructions are made
-	    up of DNS Update adds and removes. The types of records that are updated and removed in each of these instructions, as
+	    up of DNS Update RRs that are either adds or deletes. The types of records that are added and removed in each of these instructions, as
 	    well as the constraints that apply to them, are described in <xref target="server_behavior"/>.  An SRP Update is a DNS
 	    Update message that is constructed so as to meet the constraints described in that section. The following is a brief
 	    overview of what is included in a typical SRP Update:
@@ -251,15 +258,16 @@
             the KEY RR, which is defined in <xref target="RFC2539"/>. These RFCs should be considered the definitive source for
             information about what to publish; the reason for summarizing this here is to provide the reader with enough information
             about what will be published that the service registration process can be understood at a high level without first
-            learning the full details of DNS&nbhy;SD.  Also, the "Service Instance Name" is an important aspect of first-come,
-            first-serve naming, which we describe later on in this document.</t>
+            learning the full details of DNS&nbhy;SD.  Also, the "Service Instance Name" is an important aspect of FCFS
+            naming, which we describe later on in this document.</t>
 	</section>
 
 	<section>
 	  <name>Where to publish it</name>
           <t>
             Multicast DNS uses a single namespace, ".local", which is valid on the local link.  This convenience is not available for
-            DNS&nbhy;SD using the DNS protocol: services must exist in some specific unicast namespace.</t>
+            DNS&nbhy;SD using the DNS protocol: services must exist in some specific DNS namespace that is chosen either by the
+	    network operator, or automatically.</t>
           <t>
             As described above, full-featured devices are responsible for knowing in what domain they should register their services.
             Devices made for Constrained-Node Networks register in the (proposed) special use domain name <xref target="RFC6761"/>
@@ -287,7 +295,7 @@
             no need for the SRP requestor to put in any explicit prerequisites.</t>
 
           <section>
-	    <name>How DNS&nbhy;SD Service Registration differs from standard RFC2136 DNS Update</name>
+	    <name>How the DNS&nbhy;SD Service Registration process differs from DNS Update as specified in RFC2136</name>
             <t>
               DNS&nbhy;SD Service Registration is based on standard RFC2136 DNS Update, with some differences:</t>
             <ul spacing="compact">
@@ -340,7 +348,7 @@
 	      storage; if there is no writable stable storage on the SRP requestor, the SRP requestor MUST be pre-configured with a
 	      public/private key pair in read-only storage that can be used.  This key pair MUST be unique to the device. A device
 	      with rewritable storage should retain this key indefinitely.  When the device changes ownership, it may be appropriate
-	      to erase the old key and install a new one. Therefore, the SRP requestor on the device SHOULD provide a mechanism to
+	      to erase the old key pair and install a new one. Therefore, the SRP requestor on the device SHOULD provide a mechanism to
 	      overwrite the key, for example as the result of a "factory reset."</t>
             <t>
 	      When sending DNS updates, the requestor includes a KEY record containing the public portion of the key in each Host
@@ -359,7 +367,7 @@
 	      Both Host Description RR adds and Service Description RR adds can have names that result in name conflicts.
 	      Service Discovery record adds cannot have name conflicts. If any Host Description or Service Description record
 	      is found by the registrar to have a conflict with an existing name, the registrar will respond to the SRP Update
-	      with a YXDomain rcode. In this case, the requestor MUST either abandon the service registration attempt, or
+	      with a YXDomain RCODE. In this case, the requestor MUST either abandon the service registration attempt, or
 	      else choose a new name.</t>
 	    <t>
 	      There is no specific requirement for how this is done; typically, however, the requestor will append a number to the
@@ -455,7 +463,7 @@
       <section anchor="server_behavior">
 	<name>Validation and Processing of SRP Updates</name>
         <section anchor="add_validation">
-	  <name>Validation of Adds and Deletes</name>
+	  <name>Validation of DNS Update Add and Delete RRs</name>
           <t>
 	    The SRP registrar first validates that the DNS Update is a syntactically and semantically valid DNS Update according to
 	    the rules specified in RFC2136.</t>
@@ -494,7 +502,7 @@
 	    <t>
 	      Note that there can be more than one Service Discovery Instruction for the same name if the SRP requestor is
 	      advertising more than one service of the same type, or is changing the target of a PTR RR. This is also true for SRP
-	      subtypes (<xref target="RFC6763" section="7.1"/>). For each such PTR RR add or remove, the above constraints must be
+	      subtypes (<xref target="RFC6763" section="7.1"/>). For each such PTR RR add or delete, the above constraints must be
 	      met.</t>
 	  </section>
 
@@ -731,7 +739,7 @@
           possibility of misunderstandings.</t>
 
 	<t>SRP registrars MUST reject updates that do not include an
-          EDNS(0) Update Lease option.  Dual-use servers MAY accept updates that don't include
+          EDNS(0) Update Lease option.  DNS authoritative servers that allow both SRP and non-SRP DNS updates MAY accept updates that don't include
           leases, but SHOULD differentiate between SRP Updates and
           other updates, and MUST reject updates that would otherwise be SRP Updates
           if they do not include leases.</t>
@@ -798,7 +806,7 @@
     <section>
       <name>Privacy Considerations</name>
       <t>
-	Because DNSSD SRP Updates can be sent off-link, the privacy implications of SRP are different than for multicast DNS
+	Because DNS-SD SRP Updates can be sent off-link, the privacy implications of SRP are different than for multicast DNS
 	responses.  Host implementations that are using TCP SHOULD also use TLS if available.  Registrar implementations MUST offer
 	TLS support.  The use of TLS with DNS is described in <xref target="RFC7858"/>.
       </t>
@@ -942,7 +950,8 @@
 	<name>Anycast Address</name>
 	<t>IANA is requested to allocate an IPv6 Anycast address from the IPv6 Special-Purpose Address Registry, similar to the Port
 	  Control Protocol anycast address, 2001:1::1. The value TBD should be replaced with the actual allocation in the table that
-	  follows. The values for the registry are:</t>
+	  follows. The purpose of this allocation is to provide a fixed anycast address that can be commonly used as a destination for
+	  SRP updates when no SRP server is explicitly configured. The values for the registry are:</t>
 	<table>
 	  <thead>
 	    <tr><td>Attribute</td>                    <td>value</td></tr>
