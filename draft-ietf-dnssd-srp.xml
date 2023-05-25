@@ -230,10 +230,10 @@
           <t>
             SRP Updates are sent by SRP requestors to SRP registrars.  Three types of instructions appear in an SRP update: Service
 	    Discovery instructions, Service Description instructions, and Host Description instructions. These instructions are made
-	    up of DNS Update RRs that are either adds or deletes. The types of records that are added and removed in each of these instructions, as
-	    well as the constraints that apply to them, are described in <xref target="server_behavior"/>.  An SRP Update is a DNS
-	    Update message that is constructed so as to meet the constraints described in that section. The following is a brief
-	    overview of what is included in a typical SRP Update:
+	    up of DNS Update RRs that are either adds or deletes. The types of records that are added, updated and removed in each
+	    of these instructions, as well as the constraints that apply to them, are described in <xref target="server_behavior"/>.
+	    An SRP Update is a DNS Update message that is constructed so as to meet the constraints described in that section. The
+	    following is a brief overview of what is included in a typical SRP Update:
 	  </t>
           <ul spacing="compact">
             <li>
@@ -700,7 +700,7 @@
           to be valid.  The Key Lease time represents the time after the update during
           which the KEY record should be assumed to be valid.</t>
 
-	<t>The reasoning behind the different lease times is discussed in the section on first-come, first-served naming
+	<t>The reasoning behind the different lease times is discussed in the section on FCFS naming
           (<xref target="fcfs"/>).  SRP registrars may be configured with limits for these values.  A default limit of two hours for
           the Lease and 14 days for the SIG(0) KEY are currently thought to be good choices.  Constrained devices with limited
           battery that wake infrequently are likely to request longer leases; registrars that support such devices may need to set
@@ -758,7 +758,7 @@
       <section>
 	<name>Source Validation</name>
 	<t>SRP Updates have no authorization semantics other than
-	  first-come, first-served.   This means that if an attacker from outside of the administrative
+	  FCFS.   This means that if an attacker from outside of the administrative
 	  domain of the registrar knows the registrar's IP address, it can in principle send updates to the registrar
 	  that will be processed successfully.   Registrars should therefore be configured to reject updates
 	  from source addresses outside of the administrative domain of the registrar.</t>
