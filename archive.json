@@ -1,0 +1,670 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2023-04-16T00:36:37.349444+00:00",
+  "repo": "dnssd-wg/draft-ietf-dnssd-srp",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 14,
+      "id": "I_kwDOH1-V8s5TrQY9",
+      "title": "Missing RFC 2119 / 8174 boilerplate",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/issues/14",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I noticed this was missing during my shepherd review. Please add the necessary boilerplate.",
+      "createdAt": "2022-10-11T00:37:38Z",
+      "updatedAt": "2022-10-12T14:56:12Z",
+      "closedAt": "2022-10-12T14:56:12Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Fixed by #19",
+          "createdAt": "2022-10-12T14:56:12Z",
+          "updatedAt": "2022-10-12T14:56:12Z"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOH1-V8s5TrUBv",
+      "title": "Make some references informative",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/issues/15",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As is tradition over here at IETF, I must ask you to change the following normative references to informative. Please forgive me as I channel the spirits of our forefathers and their great wisdom captured in RFC 3986 and 4897.\r\n\r\n* SUDN\r\n* LSDZ\r\n* IAB-ARPA\r\n\r\nThe first two are just pointers to the current URL of the IANA registry, and as such do not need to be normative. The third can be made informative since we already have a normative reference to RFC 3172.",
+      "createdAt": "2022-10-11T01:03:01Z",
+      "updatedAt": "2022-10-12T14:56:31Z",
+      "closedAt": "2022-10-12T14:56:31Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Fixed by #18",
+          "createdAt": "2022-10-12T14:56:31Z",
+          "updatedAt": "2022-10-12T14:56:31Z"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "I_kwDOH1-V8s5TrWaB",
+      "title": "New registry needs registration procedures",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/issues/16",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I noticed this during my shepherd review. Section [8.2](https://www.ietf.org/archive/id/draft-ietf-dnssd-srp-16.html#section-8.2) creates a new registry but is lacking sufficient information for IANA to create the registry. In particular, the registration procedure is missing. Please refer to RFC 8126 for guidance.",
+      "createdAt": "2022-10-11T01:18:32Z",
+      "updatedAt": "2022-10-12T14:56:53Z",
+      "closedAt": "2022-10-12T14:56:53Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Fixed by #17",
+          "createdAt": "2022-10-12T14:56:53Z",
+          "updatedAt": "2022-10-12T14:56:53Z"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOH1-V8s5V1Fa2",
+      "title": "IANA early review",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/issues/21",
+      "state": "CLOSED",
+      "author": "DavidSchinazi",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "On 2022-11-04, IANA performed an early review of this document and mentioned the following:\r\n\r\n> For the .arpa registration, please include the subsection requested in https://datatracker.ietf.org/doc/html/rfc6761#section-5.\r\n>\r\n> For the service name registrations, please include the template provided in https://datatracker.ietf.org/doc/html/rfc6335#section-8.1.1. Note that the assignee must be the IESG (although the IETF is generally preferred for other registries), and the contact must be the IETF Chair.\r\n",
+      "createdAt": "2022-11-08T11:10:18Z",
+      "updatedAt": "2023-02-01T22:19:48Z",
+      "closedAt": "2023-02-01T22:19:48Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Fixed via 687a19ff805900a36f98ebb0a6997cff1f1cb951",
+          "createdAt": "2023-02-01T22:19:48Z",
+          "updatedAt": "2023-02-01T22:19:48Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOH1-V8s49mbgR",
+      "title": "Change SRP server/SRP client to SRP registrar/SRP requestor",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/1",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Update terminology to change SRP server to SRP registrar and SRP client to SRP requestor, to be consistent with RFC2136 (and also because it makes more sense). Terminology around service/server is also updated, now that server never refers to a registrar.",
+      "createdAt": "2022-08-23T00:05:59Z",
+      "updatedAt": "2022-08-23T00:06:49Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "72c5326b0e549eae3b3300f1eb9804b4ed394417",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "requestor-mass-change",
+      "headRefOid": "c861ca61bbe78481dbc1b404c678bf12d320710f",
+      "closedAt": "2022-08-23T00:06:49Z",
+      "mergedAt": "2022-08-23T00:06:49Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "43a6a15906436330804bb533582a3573bae81dfd"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOH1-V8s49mcOP",
+      "title": "Missed one set of registrar changes",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/2",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is part of the previous pull request, but I missed it because it was interleaved with some unrelated changes.",
+      "createdAt": "2022-08-23T00:11:23Z",
+      "updatedAt": "2022-08-23T00:11:29Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "43a6a15906436330804bb533582a3573bae81dfd",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "second-registrar-change",
+      "headRefOid": "88d4a4b9f94e658970c1bcafc8df68af93f02eb7",
+      "closedAt": "2022-08-23T00:11:29Z",
+      "mergedAt": "2022-08-23T00:11:29Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "a8d9a97fba3da46379f1b9177abbd96432c9fd58"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOH1-V8s49mc-H",
+      "title": "Fix description of registration domain discovery",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/3",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The text describing the behavior of full-featured hosts specified behavior that conflicted with the behavior specified in RFC6763 not because a change was needed, but because I just misunderstood how it worked. This change updates that text to simply refer to the relevant section in RFC6763. In addition, the term \"zone\" was used where \"domain\" should have been used, and the term \"DNS Update\" was used to refer to something that should only ever be an SRP update, so these errors are also corrected.",
+      "createdAt": "2022-08-23T00:17:08Z",
+      "updatedAt": "2022-08-23T00:17:14Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "a8d9a97fba3da46379f1b9177abbd96432c9fd58",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "registration-domain-discovery",
+      "headRefOid": "575682aa66c0a4e9a5e3c5a183e32c9bf03d6707",
+      "closedAt": "2022-08-23T00:17:14Z",
+      "mergedAt": "2022-08-23T00:17:14Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "21cdd56f3a72f9d4e7590808212eae086558f42a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOH1-V8s49mdh7",
+      "title": "Clarify the Service Discovery Instruction text per Esko's last call comments.",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/4",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Update Service Discovery Instruction text to address Esko Dijk's last call comments. This fixes a bogus reference, removes a confusing double negative, and splits the text hierarchically in a way that hopefully makes more sense.",
+      "createdAt": "2022-08-23T00:21:15Z",
+      "updatedAt": "2022-08-23T00:21:25Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "21cdd56f3a72f9d4e7590808212eae086558f42a",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "service-description-update",
+      "headRefOid": "e88775985b4f1fdfa1e61229bd0098f42866e020",
+      "closedAt": "2022-08-23T00:21:25Z",
+      "mergedAt": "2022-08-23T00:21:25Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "f9ca76cac96dcdb77a90bf0534a3198be2b655f3"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOH1-V8s49mfp1",
+      "title": "Remove address scoping from the list of host instruction constraints.",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/5",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The set of constraints for the host description includes a constrain that A and AAAA records must be of sufficient scope. This is asking a bit much of the SRP server, which may or may not be able to make this determination. There may also be cases where an SRP registration with an address of less than global scope is useful. Consequently, this constraint is removed, and text added to talk about how servers should deal with addresses of less-than-global scope.",
+      "createdAt": "2022-08-23T00:36:11Z",
+      "updatedAt": "2022-08-23T00:36:18Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "f9ca76cac96dcdb77a90bf0534a3198be2b655f3",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "scoping-to-advice",
+      "headRefOid": "6260889cf8c8b35ec542816de1b92d75ad9a436f",
+      "closedAt": "2022-08-23T00:36:18Z",
+      "mergedAt": "2022-08-23T00:36:18Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "c17af5ee0004fda03d52d25958b00304a4f2c736"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOH1-V8s49mf80",
+      "title": "Changes for -14 draft",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/6",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Update the draft number, date, and change draft-sekar-ul to draft-ietf-dnssd-update-lease.",
+      "createdAt": "2022-08-23T00:38:17Z",
+      "updatedAt": "2022-08-23T00:38:29Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "c17af5ee0004fda03d52d25958b00304a4f2c736",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "srp-14",
+      "headRefOid": "8241c88f53f2aeb6be7fe5acd01073bf27386bd8",
+      "closedAt": "2022-08-23T00:38:29Z",
+      "mergedAt": "2022-08-23T00:38:29Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "30e7844b58a435d856444b850cb20a7839f14a0f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOH1-V8s49miDJ",
+      "title": "Change per https://mailarchive.ietf.org/arch/msg/dnssd/rBowKoidApFw0_E6-xGEpxEXn7Y/",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/7",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I had a brief chat with Qiaoyu and the change here is the result of that discussion, including a minor editorial fix that makes a compound sentence a little more comprehensible (I hope).",
+      "createdAt": "2022-08-23T00:55:01Z",
+      "updatedAt": "2022-08-23T00:55:46Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "30e7844b58a435d856444b850cb20a7839f14a0f",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "qiaoyu-20220822-01",
+      "headRefOid": "2a3341e56a693b7bab57a7915e46ab4870ec08ef",
+      "closedAt": "2022-08-23T00:55:46Z",
+      "mergedAt": "2022-08-23T00:55:46Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "6331e1198fe268a7a0eea15143dff07dc458be1f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOH1-V8s49muLQ",
+      "title": "Update based on Esko Dijk's comments in https://mailarchive.ietf.org/arch/msg/dnssd/01voO6MkMBBvxeInncR6e-3u1bM/",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/8",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This update removes the constraint in the section titled \"Host Description Instruction\" that the Host Description instruction must be pointed to by at least one Service Description instruction. It also removes some duplicate constraints from the section titled \"Valid SRP Update requirements\" and moves the mention of subtypes to the \"Service Discovery Instruction\" section.",
+      "createdAt": "2022-08-23T02:25:19Z",
+      "updatedAt": "2022-08-23T02:25:41Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "6331e1198fe268a7a0eea15143dff07dc458be1f",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "Esko-20220822-01",
+      "headRefOid": "db40b39d242ffe27ee6c1d17342fbfd0d4240545",
+      "closedAt": "2022-08-23T02:25:41Z",
+      "mergedAt": "2022-08-23T02:25:41Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "cb911f273c4b72b03333a59211e44ab081740869"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOH1-V8s49mw3s",
+      "title": "Per Gabriel's message, https://mailarchive.ietf.org/arch/msg/dnssd/vIw1adhPeuV8oV7tnnev3LT5d4A/",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/9",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Add a definition for DNS-SD.",
+      "createdAt": "2022-08-23T02:42:07Z",
+      "updatedAt": "2022-08-23T02:42:22Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "cb911f273c4b72b03333a59211e44ab081740869",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "Gabriel-20220822-01",
+      "headRefOid": "b16a3cdc3e96c79361630dfd455a9bc6e8d64a43",
+      "closedAt": "2022-08-23T02:42:22Z",
+      "mergedAt": "2022-08-23T02:42:22Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "d0b645001c8ab124151a7f2ab57d97227368bb4f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOH1-V8s49nCMS",
+      "title": "Esko's main review, https://mailarchive.ietf.org/arch/msg/dnssd/1nutTeV8dgpzwcSzA3ZhAaKzVyE/",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/10",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes a multitude of issues that Esko raised. The details of these fixes are included in my reply to Esko, which can be found here:\r\n\r\nhttps://mailarchive.ietf.org/arch/msg/dnssd/OYjhJPv_5dmUoqlsCvC5qoE8gcA/\r\n",
+      "createdAt": "2022-08-23T04:46:59Z",
+      "updatedAt": "2022-08-23T04:48:24Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "d0b645001c8ab124151a7f2ab57d97227368bb4f",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "Esko-20220822-02",
+      "headRefOid": "6795f64bb62b9f79fe0e3c9964b4628d9f4fe132",
+      "closedAt": "2022-08-23T04:48:24Z",
+      "mergedAt": "2022-08-23T04:48:24Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "014742f3c8c4513347e9a89b790556b2063fd161"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOH1-V8s49nF89",
+      "title": "Updates per Martin, https://mailarchive.ietf.org/arch/msg/dnssd/Oraz25WFKpY6oDaO175rPxpB194/",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/11",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Add a bunch of references, and some editorial tweaks.",
+      "createdAt": "2022-08-23T05:12:38Z",
+      "updatedAt": "2022-08-23T05:20:58Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "014742f3c8c4513347e9a89b790556b2063fd161",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "Martin-20220822-01",
+      "headRefOid": "d1244476720f08b2126c0db3e8de10529f27b704",
+      "closedAt": "2022-08-23T05:20:57Z",
+      "mergedAt": "2022-08-23T05:20:57Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "8a2bf65cca0b8fb380df63ca2ace911412171d1c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOH1-V8s49pyt5",
+      "title": "Per Esko, https://mailarchive.ietf.org/arch/msg/dnssd/5kQvZ1nDG8COllIxShoUYiBlGFo/",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/12",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Move the IANA considerations for service.arpa into the IANA considerations section. power -> energy",
+      "createdAt": "2022-08-23T15:39:29Z",
+      "updatedAt": "2022-08-23T15:39:38Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "60a58fb7b02fff21b3c8a37e7f92508e7365a600",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "Esko-20220823-01",
+      "headRefOid": "6e5dd0c6fba58b0d86b68a94ce82ba4884a22d69",
+      "closedAt": "2022-08-23T15:39:38Z",
+      "mergedAt": "2022-08-23T15:39:38Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "2367a5700aed9826499dc7955a7411ce37e169e5"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOH1-V8s49p581",
+      "title": "Per Gabriel, https://mailarchive.ietf.org/arch/msg/dnssd/1dK0ZI5wLSxRmd5Gsu5RwS6jZbU/",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/13",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Add a reference to the IAB statement on the registration of special use names in the ARPA domain.",
+      "createdAt": "2022-08-23T16:05:14Z",
+      "updatedAt": "2022-08-23T16:05:23Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "2367a5700aed9826499dc7955a7411ce37e169e5",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "Gabriel-20220823-01",
+      "headRefOid": "97fa82ed9cf9d8c6d34c0fc7f66ab5a46d9fc145",
+      "closedAt": "2022-08-23T16:05:23Z",
+      "mergedAt": "2022-08-23T16:05:23Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "ef47f914e05c630ba37fecd752ff9fdeff71db54"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 17,
+      "id": "PR_kwDOH1-V8s5Aph_4",
+      "title": "Update IANA considerations per David Schinazi.",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/17",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "David Schinazi pointed out:\r\n\r\n> I noticed this during my shepherd review. Section [8.2](https://www.ietf.org/archive/id/draft-ietf-dnssd-srp-16.html#section-8.2) creates a new registry but is lacking sufficient information for IANA to create the registry. In particular, the registration procedure is missing. Please refer to RFC 8126 for guidance.\r\n\r\nThis PR implements David's suggestion.",
+      "createdAt": "2022-10-12T12:34:46Z",
+      "updatedAt": "2022-10-12T14:49:39Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "dc001ad725043f84281d02f138ef96e853412cac",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "iana-consid-schinazi",
+      "headRefOid": "0a69a217351be42eb93a243a44b5b578b50f04dd",
+      "closedAt": "2022-10-12T14:49:39Z",
+      "mergedAt": "2022-10-12T14:49:39Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "82b4c0673ac21e2070afbfd21b59bc3da50153be"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH1-V8s5D51Jy",
+          "commit": {
+            "abbreviatedOid": "27f5f23"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-12T14:44:09Z",
+          "updatedAt": "2022-10-12T14:44:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOH1-V8s5Apk7i",
+      "title": "Make some normative references informative, per David Schinazi.",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/18",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "David Schinazi wrote:\r\n\r\n> As is tradition over here at IETF, I must ask you to change the following normative references to informative. Please forgive me as I channel the spirits of our forefathers and their great wisdom captured in RFC 3986 and 4897.\r\n> \r\n> - SUDN\r\n> - LSDZ\r\n> - IAB-ARPA\r\n> \r\n> The first two are just pointers to the current URL of the IANA registry, and as such do not need to be normative. The third can be made informative since we already have a normative reference to RFC 3172.",
+      "createdAt": "2022-10-12T12:44:03Z",
+      "updatedAt": "2022-10-12T14:46:46Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "f5baf94e05a4937d2ce012d29ddee5c2179719c2",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "norm-inform-schinazi",
+      "headRefOid": "c14b8163b4f4e107d9f91b8979f693a7579c093f",
+      "closedAt": "2022-10-12T14:46:46Z",
+      "mergedAt": "2022-10-12T14:46:46Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "6d060864b90cd9f34847294d55e30f2f0da05046"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH1-V8s5D51ek",
+          "commit": {
+            "abbreviatedOid": "c14b816"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-12T14:44:54Z",
+          "updatedAt": "2022-10-12T14:44:54Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOH1-V8s5ApoiN",
+      "title": "Add RFC2119/8174 boilerplate",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/19",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "David Schinazi wrote:\r\n> I noticed this was missing during my shepherd review. Please add the necessary boilerplate.",
+      "createdAt": "2022-10-12T12:55:36Z",
+      "updatedAt": "2022-10-12T14:47:07Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "f5baf94e05a4937d2ce012d29ddee5c2179719c2",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "RFC8119-schinazi",
+      "headRefOid": "b82e68f645ad999192d2ae5e3117d81fd66cb366",
+      "closedAt": "2022-10-12T14:47:07Z",
+      "mergedAt": "2022-10-12T14:47:07Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "dc001ad725043f84281d02f138ef96e853412cac"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH1-V8s5D511G",
+          "commit": {
+            "abbreviatedOid": "b82e68f"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-12T14:45:45Z",
+          "updatedAt": "2022-10-12T14:45:45Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOH1-V8s5Apwoj",
+      "title": "Per Esko, add a 'not' where one was omitted.",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/pull/20",
+      "state": "MERGED",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-10-12T13:20:53Z",
+      "updatedAt": "2022-10-12T13:21:05Z",
+      "baseRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "baseRefName": "main",
+      "baseRefOid": "f5baf94e05a4937d2ce012d29ddee5c2179719c2",
+      "headRepository": "dnssd-wg/draft-ietf-dnssd-srp",
+      "headRefName": "not-esko",
+      "headRefOid": "abc59cfbe1e6ea6fef09b76754027c40c60cee07",
+      "closedAt": "2022-10-12T13:21:05Z",
+      "mergedAt": "2022-10-12T13:21:05Z",
+      "mergedBy": "Abhayakara",
+      "mergeCommit": {
+        "oid": "a632ee6fbaf0b21049abd16034ffa35a01866b4e"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
