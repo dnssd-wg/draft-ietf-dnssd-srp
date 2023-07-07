@@ -2223,8 +2223,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
  Hosts that implement TLS support SHOULD NOT fall back to TCP; since registrars are required to support
  TLS, it is entirely up to the host implementation whether to use it.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">
- Public keys can be used as identifiers to track hosts. SRP registrars MAY elect not to return KEY records
- for queries for SRP registrations.<a href="#section-7-3" class="pilcrow">¶</a></p>
+ Public keys can be used as identifiers to track hosts. SRP registrars MAY elect not to return KEY records for queries for
+ SRP registrations. To avoid DNSSEC validation failures, an SRP server that refuses to return a KEY record MUST NOT store the
+ KEY record in the zone itself. Because the key record isn't in the zone, the nonexistance of the KEY record can be
+ validated. If the zone is not signed, the server MAY instead return a negative non-error response (either NXDOMAIN or
+ no data).<a href="#section-7-3" class="pilcrow">¶</a></p>
 </section>
 <section id="section-8">
       <h2 id="name-domain-name-reservation-con">
