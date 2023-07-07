@@ -113,21 +113,26 @@ Table of Contents
      6.3.  Required Signature Algorithm
    7.  Privacy Considerations
    8.  Domain Name Reservation Considerations
-     8.1.  Considerations for Users
-     8.2.  Considerations for Application Software
-   9.  Delegation of 'service.arpa.'
-   10. IANA Considerations
-     10.1.  Registration and Delegation of 'service.arpa' as a
+   9.  Users
+   10. Application Software
+     10.1.  Name Resolution APIs and Libraries
+     10.2.  Caching DNS Servers
+     10.3.  Authoritative DNS Servers
+     10.4.  DNS Server Operators
+     10.5.  DNS Registries/Registrars
+   11. Delegation of 'service.arpa.'
+   12. IANA Considerations
+     12.1.  Registration and Delegation of 'service.arpa' as a
             Special-Use Domain Name
-     10.2.  Subdomains of 'service.arpa.'
-     10.3.  Service Name registrations
-     10.4.  'dnssd-srp' Service Name
-     10.5.  'dnssd-srp-tls' Service Name
-     10.6.  Anycast Address
-   11. Implementation Status
-   12. Acknowledgments
-   13. Normative References
-   14. Informative References
+     12.2.  Subdomains of 'service.arpa.'
+     12.3.  Service Name registrations
+     12.4.  'dnssd-srp' Service Name
+     12.5.  'dnssd-srp-tls' Service Name
+     12.6.  Anycast Address
+   13. Implementation Status
+   14. Acknowledgments
+   15. Normative References
+   16. Informative References
    Appendix A.  Testing using standard RFC2136-compliant DNS servers
    Appendix B.  How to allow SRP requestors to update standard
            RFC2136-compliant servers
@@ -1056,23 +1061,16 @@ Table of Contents
 
 8.  Domain Name Reservation Considerations
 
-   [Note to the RFC Editor: please remove this and the following
-   paragraph prior to publication.]
+   This section specifies considerations for systems involved in domain
+   name resolution when resolving queries for names ending with
+   '.service.arpa.'.  Each item in this section addresses some aspect of
+   the DNS or the process of resolving domain names that would be
+   affected by this special-use allocation.  Detailed explanations of
+   these items can be found in Section 5 of [RFC6761].
 
-   [Note to IANA: this section documents the domain name reservation
-   considerations as required by RFC6761.  If you combine the contents
-   of this section with the contents of the same section of RFC8375 as
-   proposed below, you should have a complete set of considerations.
-   The text is not duplicated here for the sake of brevity.]
+9.  Users
 
-   Section 4 of [RFC8375] provides detailed information for handling of
-   locally-served domains, of which 'service.arpa.' is an example.  The
-   considerations described in this section of RFC8375 apply identically
-   to 'service.arpa.', with the following additional considerations:
-
-8.1.  Considerations for Users
-
-   The current proposed use for service.arpa does not require special
+   The current proposed use for 'service.arpa' does not require special
    knowledge on the part of the user.  While the 'default.service.arpa.'
    subdomain is used as a generic name for registration, users are not
    expected to see this name in user interfaces.  In the event that it
@@ -1082,7 +1080,7 @@ Table of Contents
    it's certainly possible that they might.  If they do, they are not
    expected to treat it specially.
 
-8.2.  Considerations for Application Software
+10.  Application Software
 
    Application software does not need to handle subdomains of
    'service.arpa' specially.  'service.arpa' should not be treated as
@@ -1097,7 +1095,101 @@ Table of Contents
    by the name will not be possible.  Alternative methods and practices
    for authenticating such endpoints are out of scope for this document.
 
-9.  Delegation of 'service.arpa.'
+10.1.  Name Resolution APIs and Libraries
+
+   Name resolution APIs and libraries MUST NOT recognize names that end
+   in '.service.arpa.' as special and MUST NOT treat them as having
+   special significance, except that it may be necessary that such APIs
+   not bypass the locally configured recursive resolvers.
+
+   One or more IP addresses for recursive DNS servers will usually be
+   supplied to the client through router advertisements or DHCP.  For an
+   administrative domain that uses subdomains of 'service.arpa.', such
+   as a homenet, the recursive resolvers provided by that domain will be
+   able to answer queries for subdomains of 'service.arpa.'; other
+   resolvers will not, or they will provide answers that are not correct
+   within that administrative domain.
+
+   A host that is configured to use a resolver other than one that has
+   been provided by the local network may be unable to resolve, or may
+   receive incorrect results for, subdomains of 'service.arpa.'.  In
+   order to avoid this, it is permissible that hosts use the resolvers
+   that are locally provided for resolving 'service.arpa.', even when
+   they are configured to use other resolvers.
+
+10.2.  Caching DNS Servers
+
+   There are three considerations for caching DNS servers that follow
+   this specification:
+
+   1.  Recursive resolvers at sites using 'service.arpa.'  MUST
+       transparently support DNSSEC queries: queries for DNSSEC records
+       and queries with the DNSSEC OK (DO) bit set (see Section 3.2.1 of
+       [RFC4035]).  While validation is not required, it is strongly
+       encouraged: a caching recursive resolver that does not validate
+       answers that can be validated may cache invalid data.  This, in
+       turn, will prevent validating stub resolvers from successfully
+       validating answers.
+
+   2.  Unless configured otherwise, recursive resolvers and DNS proxies
+       MUST behave as described in Section 3 of the Locally Served Zones
+       document [RFC6303].  That is, queries for 'service.arpa.' and
+       subdomains of 'service.arpa.'  MUST NOT be forwarded, with one
+       important exception: a query for a DS record with the DO bit set
+       MUST return the correct answer for that question, including
+       correct information in the authority section that proves that the
+       record is nonexistent.
+
+       So, for example, a query for the NS record for 'service.arpa.'
+       MUST NOT result in that query being forwarded to an upstream
+       cache nor to the authoritative DNS server for '.arpa.'.  However,
+       as necessary to provide accurate authority information, a query
+       for the DS record MUST result in forwarding whatever queries are
+       necessary; typically, this will just be a query for the DS
+       record, since the necessary authority information will be
+       included in the authority section of the response if the DO bit
+       is set.
+
+   3.  In addition to the behavior specified above, recursive resolvers
+       that can be used in a homenet MUST be configurable to forward
+       queries for 'service.arpa.' and subdomains of 'service.arpa.' to
+       an authoritative server for 'service.arpa.'.  This server will
+       provide authoritative data for 'service.arpa.' within a
+       particular homenet.  The special handling for DS records for the
+       'service.arpa.' delegation is still required.
+
+       It is permissible to combine the recursive resolver function for
+       general DNS lookups with an authoritative resolver for
+       'service.arpa.'; in this case, rather than forwarding queries for
+       subdomains of 'service.arpa.' to an authoritative server, the
+       resolver answers them authoritatively.  The behavior with respect
+       to forwarding queries specifically for 'service.arpa.' remains
+       the same.
+
+10.3.  Authoritative DNS Servers
+
+   No special processing of 'service.arpa.' is required for
+   authoritative DNS server implementations.  It is possible that an
+   authoritative DNS server might attempt to check the authoritative
+   servers for 'service.arpa.' for a delegation beneath that name before
+   answering authoritatively for such a delegated name.  In such a case,
+   because the name always has only local significance, there will be no
+   such delegation in the 'service.arpa.' zone, and so the server would
+   refuse to answer authoritatively for such a zone.  A server that
+   implements this sort of check MUST be configurable so that either it
+   does not do this check for the 'service.arpa.' domain or it ignores
+   the results of the check.
+
+10.4.  DNS Server Operators
+
+10.5.  DNS Registries/Registrars
+
+   'service.arpa.' is a subdomain of the 'arpa' top-level domain, which
+   is operated by IANA under the authority of the Internet Architecture
+   Board according to the rules established in [RFC3172].  There are no
+   other registrars for '.arpa'.
+
+11.  Delegation of 'service.arpa.'
 
    In order to be fully functional, the owner of the 'arpa.' zone must
    add a delegation of 'service.arpa.' in the '.arpa.' zone [RFC3172].
@@ -1105,15 +1197,15 @@ Table of Contents
    result of the specification in Section 7 of [RFC8375].  This is
    currently the responsibility of the IAB [IAB-ARPA]
 
-10.  IANA Considerations
+12.  IANA Considerations
 
-10.1.  Registration and Delegation of 'service.arpa' as a Special-Use
+12.1.  Registration and Delegation of 'service.arpa' as a Special-Use
        Domain Name
 
    IANA is requested to record the domain name 'service.arpa.' in the
    Special-Use Domain Names registry [SUDN].  IANA is requested, with
    the approval of IAB, to implement the delegation requested in
-   Section 9.
+   Section 11.
 
    IANA is further requested to add a new entry to the "Transport-
    Independent Locally-Served Zones" subregistry of the the "Locally-
@@ -1121,18 +1213,18 @@ Table of Contents
    'service.arpa.' with the description "DNS-SD Service Registration
    Protocol Special-Use Domain", listing this document as the reference.
 
-10.2.  Subdomains of 'service.arpa.'
+12.2.  Subdomains of 'service.arpa.'
 
    This document only makes use of the 'default.service.arpa' subdomain
    of 'service.arpa.'  Other subdomains are reserved for future use by
    DNS-SD or related work.  The IANA is requested to create a registry,
-   the "service.arpa Subdomain Registry".  The IETF shall have change
+   the "service.arpa Subdomain" registry.  The IETF shall have change
    control for this registry.  New entries may be added either as a
    result of Standards Action Section 4.9 of [RFC8126] or with IESG
    approval Section 4.10 of [RFC8126], provided that a specification
    exists Section 4.6 of [RFC8126].
 
-   The IANA shall group the "service.arpa Subdomain Registry" with the
+   The IANA shall group the "service.arpa Subdomain" registry with the
    "Locally-Served DNS Zones" registry.  The registry shall be a table
    with three columns: the subdomain name (expressed as a fully-
    qualified domain name), a brief description of how it is used, and a
@@ -1149,13 +1241,13 @@ Table of Contents
 
                                   Table 1
 
-10.3.  Service Name registrations
+12.3.  Service Name registrations
 
    IANA is requested to add two new entries to the Service Names and
    Port Numbers registry.  The following sections contain tables with
    the fields required by Section 8.1.1 of [RFC6335].
 
-10.4.  'dnssd-srp' Service Name
+12.4.  'dnssd-srp' Service Name
 
            +--------------------+-----------------------------+
            | Field Name         | Value                       |
@@ -1179,7 +1271,7 @@ Table of Contents
 
                                  Table 2
 
-10.5.  'dnssd-srp-tls' Service Name
+12.5.  'dnssd-srp-tls' Service Name
 
         +--------------------+-----------------------------------+
         | Field Name         | Value                             |
@@ -1203,7 +1295,7 @@ Table of Contents
 
                                  Table 3
 
-10.6.  Anycast Address
+12.6.  Anycast Address
 
    IANA is requested to allocate an IPv6 Anycast address from the IPv6
    Special-Purpose Address Registry, similar to the Port Control
@@ -1240,7 +1332,7 @@ Table of Contents
 
                                  Table 4
 
-11.  Implementation Status
+13.  Implementation Status
 
    [Note to the RFC Editor: please remove this section prior to
    publication.]
@@ -1279,7 +1371,7 @@ Table of Contents
    Advertising Proxy [AP].  Both are included in the mDNSResponder open
    source project mentioned above.
 
-12.  Acknowledgments
+14.  Acknowledgments
 
    Thanks to Toke Høiland-Jørgensen, Jonathan Hui, Esko Dijk, Kangping
    Dong and Abtin Keshavarzian for their thorough technical reviews.
@@ -1293,7 +1385,7 @@ Table of Contents
    Dong, Martin Turon and Michael Cowan for their detailed second last
    call reviews.
 
-13.  Normative References
+15.  Normative References
 
    [I-D.ietf-dnssd-update-lease]
               Cheshire, S. and T. Lemon, "An EDNS(0) option to negotiate
@@ -1374,7 +1466,7 @@ Table of Contents
               RFC 8765, DOI 10.17487/RFC8765, June 2020,
               <https://www.rfc-editor.org/info/rfc8765>.
 
-14.  Informative References
+16.  Informative References
 
    [RFC2131]  Droms, R., "Dynamic Host Configuration Protocol",
               RFC 2131, DOI 10.17487/RFC2131, March 1997,
