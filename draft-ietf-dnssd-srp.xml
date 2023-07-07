@@ -48,8 +48,8 @@
         The Service Registration Protocol for DNS-Based Service Discovery uses the standard DNS Update mechanism to enable DNS-Based
         Service Discovery using only unicast packets.  This makes it possible to deploy DNS Service Discovery without multicast,
         which greatly improves scalability and improves performance on networks where multicast service is not an optimal choice,
-        particularly IEEE 802.11 (Wi&nbhy;Fi) and IEEE 802.15.4 (IoT) networks.  DNS&nbhy;SD Service registration uses public keys and SIG(0)
-        to allow services to defend their registrations.
+        particularly IEEE 802.11 (Wi&nbhy;Fi) and IEEE 802.15.4 networks.  DNS&nbhy;SD Service registration
+        uses public keys and SIG(0) to allow services to defend their registrations.
 
       </t>
     </abstract>
@@ -318,7 +318,7 @@
 	<section>
 	  <name>How to secure it</name>
           <t>
-            Traditional DNS update is secured using the TSIG protocol, <xref target="RFC8945"/>, which uses a secret key
+            Traditional DNS update is secured using Secret Key Transaction Signatures, <xref target="RFC8945"/>, which uses a secret key
             shared between the DNS Update requestor (which issues the update) and the server (which authenticates
             it).  This model does not work for automatic service registration.</t>
           <t>
@@ -363,11 +363,11 @@
 	  <section>
 	    <name>Name Conflict Handling</name>
 	    <t>
-	      Both Host Description RR adds and Service Description RR adds can have names that result in name conflicts.
-	      Service Discovery record adds cannot have name conflicts. If any Host Description or Service Description record
-	      is found by the registrar to have a conflict with an existing name, the registrar will respond to the SRP Update
-	      with a YXDomain RCODE. In this case, the requestor MUST either abandon the service registration attempt, or
-	      else choose a new name.</t>
+	      Both Host Description RR adds and Service Description RR adds can have names that result in name conflicts.  Service
+	      Discovery record adds cannot have name conflicts. If any Host Description or Service Description record is found by
+	      the registrar to have a conflict with an existing name, the registrar will respond to the SRP Update with a YXDomain
+	      RCODE (<xref target="RFC2136" section="2.2" sectionFormat="of"/>). In this case, the requestor MUST either abandon the
+	      service registration attempt, or else choose a new name.</t>
 	    <t>
 	      There is no specific requirement for how this is done; typically, however, the requestor will append a number to the
 	      preferred name. This number could be sequentially increasing, or could be chosen randomly. One existing implementation
@@ -465,7 +465,7 @@
 	  <name>Validation of DNS Update Add and Delete RRs</name>
           <t>
 	    The SRP registrar first validates that the DNS Update is a syntactically and semantically valid DNS Update according to
-	    the rules specified in RFC2136.</t>
+	    the rules specified in <xref target="RFC2136"/>.</t>
           <t>
 	    SRP Updates consist of a set of <em>instructions</em> that together add or remove one or more services. Each instruction
 	    consists of some combination of delete updates and add updates. When an instruction contains a delete and an add, the
@@ -652,7 +652,7 @@
 	    implementations do not normally provide a way to enforce a constraint of this type.</t>
           <t>
 	    The registrar could also have a dictionary of names or name patterns that are not permitted.  If such a list is used,
-	    updates for Service Instance Names that match entries in the dictionary are rejected with Refused.</t>
+	    updates for Service Instance Names that match entries in the dictionary are rejected with a Refused RCODE.</t>
 	</section>
       </section>
     </section>
@@ -764,7 +764,7 @@
 
 	<t>For TCP updates, the initial SYN-SYN+ACK handshake prevents updates being forged by an off-network attacker.  In order to
 	  ensure that this handshake happens, SRP registrars relying on three-way-handshake validation MUST NOT accept TCP Fast Open
-	  payloads.  If the network infrastructure allows it, an SRP registrar MAY accept TCP Fast Open payloads if all such packets
+	  <xref target="RFC7413"/> payloads.  If the network infrastructure allows it, an SRP registrar MAY accept TCP Fast Open payloads if all such packets
 	  are validated along the path, and the network is able to reject this type of spoofing at all ingress points.</t>
 
 	<t>For UDP updates from constrained devices, spoofing would have to be prevented with appropriate source address filtration
@@ -1126,6 +1126,7 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6762.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7084.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7228.xml" />
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7413.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8415.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8766.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8945.xml" />
