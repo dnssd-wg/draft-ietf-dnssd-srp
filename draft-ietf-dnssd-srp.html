@@ -13,8 +13,8 @@
         The Service Registration Protocol for DNS-Based Service Discovery uses the standard DNS Update mechanism to enable DNS-Based
         Service Discovery using only unicast packets.  This makes it possible to deploy DNS Service Discovery without multicast,
         which greatly improves scalability and improves performance on networks where multicast service is not an optimal choice,
-        particularly IEEE 802.11 (Wi‑Fi) and IEEE 802.15.4 (IoT) networks.  DNS‑SD Service registration uses public keys and SIG(0)
-        to allow services to defend their registrations.
+        particularly IEEE 802.11 (Wi‑Fi) and IEEE 802.15.4 networks.  DNS‑SD Service registration
+        uses public keys and SIG(0) to allow services to defend their registrations.
 
        
     " name="description">
@@ -1101,8 +1101,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
         The Service Registration Protocol for DNS-Based Service Discovery uses the standard DNS Update mechanism to enable DNS-Based
         Service Discovery using only unicast packets.  This makes it possible to deploy DNS Service Discovery without multicast,
         which greatly improves scalability and improves performance on networks where multicast service is not an optimal choice,
-        particularly IEEE 802.11 (Wi‑Fi) and IEEE 802.15.4 (IoT) networks.  DNS‑SD Service registration uses public keys and SIG(0)
-        to allow services to defend their registrations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+        particularly IEEE 802.11 (Wi‑Fi) and IEEE 802.15.4 networks.  DNS‑SD Service registration
+        uses public keys and SIG(0) to allow services to defend their registrations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1646,7 +1646,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-how-to-secure-it" class="section-name selfRef">How to secure it</a>
           </h4>
 <p id="section-3.2.4-1">
-            Traditional DNS update is secured using the TSIG protocol, <span>[<a href="#RFC8945" class="cite xref">RFC8945</a>]</span>, which uses a secret key
+            Traditional DNS update is secured using Secret Key Transaction Signatures, <span>[<a href="#RFC8945" class="cite xref">RFC8945</a>]</span>, which uses a secret key
             shared between the DNS Update requestor (which issues the update) and the server (which authenticates
             it).  This model does not work for automatic service registration.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-2">
@@ -1699,11 +1699,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#section-3.2.5.2" class="section-number selfRef">3.2.5.2. </a><a href="#name-name-conflict-handling" class="section-name selfRef">Name Conflict Handling</a>
             </h5>
 <p id="section-3.2.5.2-1">
-       Both Host Description RR adds and Service Description RR adds can have names that result in name conflicts.
-       Service Discovery record adds cannot have name conflicts. If any Host Description or Service Description record
-       is found by the registrar to have a conflict with an existing name, the registrar will respond to the SRP Update
-       with a YXDomain RCODE. In this case, the requestor MUST either abandon the service registration attempt, or
-       else choose a new name.<a href="#section-3.2.5.2-1" class="pilcrow">¶</a></p>
+       Both Host Description RR adds and Service Description RR adds can have names that result in name conflicts.  Service
+       Discovery record adds cannot have name conflicts. If any Host Description or Service Description record is found by
+       the registrar to have a conflict with an existing name, the registrar will respond to the SRP Update with a YXDomain
+       RCODE (<span><a href="https://rfc-editor.org/rfc/rfc2136#section-2.2" class="relref">Section 2.2</a> of [<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>). In this case, the requestor MUST either abandon the
+       service registration attempt, or else choose a new name.<a href="#section-3.2.5.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.5.2-2">
        There is no specific requirement for how this is done; typically, however, the requestor will append a number to the
        preferred name. This number could be sequentially increasing, or could be chosen randomly. One existing implementation
@@ -1738,8 +1738,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
        is not stated, but is assumed to be because a caching resolver that does not understand the format of the SRV record
        might store it as binary data and thus return an invalid pointer in response to a query. This does not apply in the
        case of SRP: an SRP registrar needs to understand SRV records in order to validate the SRP Update. Compression of the
-       target potentially saves substantial space in the SRP Update. SRP registrars MUST support compression of SRV RR
-       targets.<a href="#section-3.2.5.4-1" class="pilcrow">¶</a></p>
+       target can save space in the SRP Update, so we want clients to be able to assume that the SRP server will handle
+       this. Therefore SRP registrars MUST support compression of SRV RR targets.<a href="#section-3.2.5.4-1" class="pilcrow">¶</a></p>
 </section>
 <div id="remove">
 <section id="section-3.2.5.5">
@@ -1815,7 +1815,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
           </h4>
 <p id="section-3.3.1-1">
      The SRP registrar first validates that the DNS Update is a syntactically and semantically valid DNS Update according to
-     the rules specified in RFC2136.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+     the rules specified in <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-2">
      SRP Updates consist of a set of <em>instructions</em> that together add or remove one or more services. Each instruction
      consists of some combination of delete updates and add updates. When an instruction contains a delete and an add, the
@@ -2042,7 +2042,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
      implementations do not normally provide a way to enforce a constraint of this type.<a href="#section-3.3.6-4" class="pilcrow">¶</a></p>
 <p id="section-3.3.6-5">
      The registrar could also have a dictionary of names or name patterns that are not permitted.  If such a list is used,
-     updates for Service Instance Names that match entries in the dictionary are rejected with Refused.<a href="#section-3.3.6-5" class="pilcrow">¶</a></p>
+     updates for Service Instance Names that match entries in the dictionary are rejected with a Refused RCODE.<a href="#section-3.3.6-5" class="pilcrow">¶</a></p>
 </section>
 </section>
 </div>
@@ -2154,7 +2154,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
    from source addresses outside of the administrative domain of the registrar.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">For TCP updates, the initial SYN-SYN+ACK handshake prevents updates being forged by an off-network attacker.  In order to
    ensure that this handshake happens, SRP registrars relying on three-way-handshake validation MUST NOT accept TCP Fast Open
-   payloads.  If the network infrastructure allows it, an SRP registrar MAY accept TCP Fast Open payloads if all such packets
+   <span>[<a href="#RFC7413" class="cite xref">RFC7413</a>]</span> payloads.  If the network infrastructure allows it, an SRP registrar MAY accept TCP Fast Open payloads if all such packets
    are validated along the path, and the network is able to reject this type of spoofing at all ingress points.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.1-3">For UDP updates from constrained devices, spoofing would have to be prevented with appropriate source address filtration
    on routers <span>[<a href="#RFC2827" class="cite xref">RFC2827</a>]</span>. This would ordinarily be accomplished by measures such as are described in
@@ -2717,6 +2717,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dt id="RFC7228">[RFC7228]</dt>
       <dd>
 <span class="refAuthor">Bormann, C.</span>, <span class="refAuthor">Ersue, M.</span>, and <span class="refAuthor">A. Keranen</span>, <span class="refTitle">"Terminology for Constrained-Node Networks"</span>, <span class="seriesInfo">RFC 7228</span>, <span class="seriesInfo">DOI 10.17487/RFC7228</span>, <time datetime="2014-05" class="refDate">May 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7228">https://www.rfc-editor.org/info/rfc7228</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7413">[RFC7413]</dt>
+      <dd>
+<span class="refAuthor">Cheng, Y.</span>, <span class="refAuthor">Chu, J.</span>, <span class="refAuthor">Radhakrishnan, S.</span>, and <span class="refAuthor">A. Jain</span>, <span class="refTitle">"TCP Fast Open"</span>, <span class="seriesInfo">RFC 7413</span>, <span class="seriesInfo">DOI 10.17487/RFC7413</span>, <time datetime="2014-12" class="refDate">December 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7413">https://www.rfc-editor.org/info/rfc7413</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8415">[RFC8415]</dt>
       <dd>

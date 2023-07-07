@@ -19,9 +19,9 @@ Abstract
    deploy DNS Service Discovery without multicast, which greatly
    improves scalability and improves performance on networks where
    multicast service is not an optimal choice, particularly IEEE 802.11
-   (Wi-Fi) and IEEE 802.15.4 (IoT) networks.  DNS-SD Service
-   registration uses public keys and SIG(0) to allow services to defend
-   their registrations.
+   (Wi-Fi) and IEEE 802.15.4 networks.  DNS-SD Service registration uses
+   public keys and SIG(0) to allow services to defend their
+   registrations.
 
 About This Document
 
@@ -436,10 +436,11 @@ Table of Contents
 
 3.2.4.  How to secure it
 
-   Traditional DNS update is secured using the TSIG protocol, [RFC8945],
-   which uses a secret key shared between the DNS Update requestor
-   (which issues the update) and the server (which authenticates it).
-   This model does not work for automatic service registration.
+   Traditional DNS update is secured using Secret Key Transaction
+   Signatures, [RFC8945], which uses a secret key shared between the DNS
+   Update requestor (which issues the update) and the server (which
+   authenticates it).  This model does not work for automatic service
+   registration.
 
    The goal of securing the DNS-SD Registration Protocol is to provide
    the best possible security given the constraint that service
@@ -497,8 +498,9 @@ Table of Contents
    adds cannot have name conflicts.  If any Host Description or Service
    Description record is found by the registrar to have a conflict with
    an existing name, the registrar will respond to the SRP Update with a
-   YXDomain RCODE.  In this case, the requestor MUST either abandon the
-   service registration attempt, or else choose a new name.
+   YXDomain RCODE (Section 2.2 of [RFC2136]).  In this case, the
+   requestor MUST either abandon the service registration attempt, or
+   else choose a new name.
 
    There is no specific requirement for how this is done; typically,
    however, the requestor will append a number to the preferred name.
@@ -539,7 +541,8 @@ Table of Contents
    and thus return an invalid pointer in response to a query.  This does
    not apply in the case of SRP: an SRP registrar needs to understand
    SRV records in order to validate the SRP Update.  Compression of the
-   target potentially saves substantial space in the SRP Update.  SRP
+   target can save space in the SRP Update, so we want clients to be
+   able to assume that the SRP server will handle this.  Therefore SRP
    registrars MUST support compression of SRV RR targets.
 
 3.2.5.5.  Removing published services
@@ -615,7 +618,7 @@ Table of Contents
 
    The SRP registrar first validates that the DNS Update is a
    syntactically and semantically valid DNS Update according to the
-   rules specified in RFC2136.
+   rules specified in [RFC2136].
 
    SRP Updates consist of a set of _instructions_ that together add or
    remove one or more services.  Each instruction consists of some
@@ -842,7 +845,7 @@ Table of Contents
    The registrar could also have a dictionary of names or name patterns
    that are not permitted.  If such a list is used, updates for Service
    Instance Names that match entries in the dictionary are rejected with
-   Refused.
+   a Refused RCODE.
 
 4.  TTL Consistency
 
@@ -974,11 +977,11 @@ Table of Contents
    For TCP updates, the initial SYN-SYN+ACK handshake prevents updates
    being forged by an off-network attacker.  In order to ensure that
    this handshake happens, SRP registrars relying on three-way-handshake
-   validation MUST NOT accept TCP Fast Open payloads.  If the network
-   infrastructure allows it, an SRP registrar MAY accept TCP Fast Open
-   payloads if all such packets are validated along the path, and the
-   network is able to reject this type of spoofing at all ingress
-   points.
+   validation MUST NOT accept TCP Fast Open [RFC7413] payloads.  If the
+   network infrastructure allows it, an SRP registrar MAY accept TCP
+   Fast Open payloads if all such packets are validated along the path,
+   and the network is able to reject this type of spoofing at all
+   ingress points.
 
    For UDP updates from constrained devices, spoofing would have to be
    prevented with appropriate source address filtration on routers
@@ -1510,6 +1513,10 @@ Table of Contents
               Constrained-Node Networks", RFC 7228,
               DOI 10.17487/RFC7228, May 2014,
               <https://www.rfc-editor.org/info/rfc7228>.
+
+   [RFC7413]  Cheng, Y., Chu, J., Radhakrishnan, S., and A. Jain, "TCP
+              Fast Open", RFC 7413, DOI 10.17487/RFC7413, December 2014,
+              <https://www.rfc-editor.org/info/rfc7413>.
 
    [RFC8415]  Mrugalski, T., Siodelski, M., Volz, B., Yourtchenko, A.,
               Richardson, M., Jiang, S., Lemon, T., and T. Winters,
