@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
-<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-latest" ipr="trust200902"
+<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-21" ipr="trust200902"
      xmlns:xi="http://www.w3.org/2001/XInclude" version="3"
      scripts="Common,Latin" sortRefs="false" consensus="true"
      symRefs="true" tocDepth="4" tocInclude="true" xml:lang="en">
@@ -35,7 +35,7 @@
       </address>
     </author>
 
-    <date/>
+    <date>July 7, 2023</date>
     <area>Internet</area>
     <workgroup>Internet Engineering Task Force</workgroup>
     <keyword>Multicast DNS</keyword>
@@ -843,35 +843,34 @@
 	ending with '.service.arpa.'.  Each item in this section addresses some aspect of the DNS or the process of resolving domain
 	names that would be affected by this special-use allocation.  Detailed explanations of these items can be found in Section 5
 	of [RFC6761].</t>
-    </section>
-    <section>
-      <name>Users</name>
-      <t>The current proposed use for 'service.arpa' does not require special knowledge on the part of the user. While the
-	'default.service.arpa.' subdomain is used as a generic name for registration, users are not expected to see this
-	name in user interfaces. In the event that it does show up in a user interface, it is just a domain name, and
-	requires no special treatment by the user. Unlike with 'home.arpa.', users are not expected to see this name
-	in user interfaces, although it's certainly possible that they might. If they do, they are not expected to
-	treat it specially.</t>
-    </section>
-    <section>
-      <name>Application Software</name>
-      <t>
-	Application software does not need to handle subdomains of 'service.arpa' specially.  'service.arpa' should not be treated
-	as more trustworthy than any other insecure DNS domain, simply because it is locally-served (or for any other reason). It
-	is not possible to register a PKI certificate for a subdomain of 'service.arpa.' because it is a locally-served domain
-	name. So no such subdomain can be considered as uniquely identifying a particular host, as would be required for such a
-	PKI cert to be issued. Should a subdomain of 'service.arpa.' be returned by an API or entered in an input field of an
-	application, PKI authentication of the endpoint being identified by the name will not be possible. Alternative methods
-	and practices for authenticating such endpoints are out of scope for this document.</t>
+      <section>
+	<name>Users</name>
+	<t>The current proposed use for 'service.arpa' does not require special knowledge on the part of the user. While the
+	  'default.service.arpa.' subdomain is used as a generic name for registration, users are not expected to see this name in
+	  user interfaces. In the event that it does show up in a user interface, it is just a domain name, and requires no special
+	  treatment by the user. Users are not expected to see this name in user interfaces, although it's certainly possible that
+	  they might. If they do, they are not expected to treat it specially.</t>
+      </section>
+      <section>
+	<name>Application Software</name>
+	<t>
+	  Application software does not need to handle subdomains of 'service.arpa' specially.  'service.arpa' should not be treated
+	  as more trustworthy than any other insecure DNS domain, simply because it is locally-served (or for any other reason). It
+	  is not possible to register a PKI certificate for a subdomain of 'service.arpa.' because it is a locally-served domain
+	  name. So no such subdomain can be considered as uniquely identifying a particular host, as would be required for such a
+	  PKI cert to be issued. Should a subdomain of 'service.arpa.' be returned by an API or entered in an input field of an
+	  application, PKI authentication of the endpoint being identified by the name will not be possible. Alternative methods
+	  and practices for authenticating such endpoints are out of scope for this document.</t>
+      </section>
       <section>
 	<name>Name Resolution APIs and Libraries</name>
 	<t>Name resolution APIs and libraries MUST NOT recognize names that end in '.service.arpa.' as special and MUST NOT treat
 	  them as having special significance, except that it may be necessary that such APIs not bypass the locally configured
 	  recursive resolvers.</t>
 	<t>One or more IP addresses for recursive DNS servers will usually be supplied to the client through router advertisements
-	  or DHCP.  For an administrative domain that uses subdomains of 'service.arpa.', such as a homenet, the recursive
-	  resolvers provided by that domain will be able to answer queries for subdomains of 'service.arpa.'; other resolvers will
-	  not, or they will provide answers that are not correct within that administrative domain.</t>
+	  or DHCP.  For an administrative domain that uses subdomains of 'service.arpa.', the recursive resolvers provided by that
+	  domain will be able to answer queries for subdomains of 'service.arpa.'; other (non-local) resolvers will not, or they
+	  will provide answers that are not correct within that administrative domain.</t>
 	<t>A host that is configured to use a resolver other than one that has been provided by the local network may be unable to
 	  resolve, or may receive incorrect results for, subdomains of 'service.arpa.'.  In order to avoid this, it is permissible
 	  that hosts use the resolvers that are locally provided for resolving 'service.arpa.', even when they are configured to
@@ -899,17 +898,6 @@
 	      typically, this will just be a query for the DS record, since the necessary authority information will be included
 	      in the authority section of the response if the DO bit is set.</t>
 	  </li>
-	  <li>
-	    <t>In addition to the behavior specified above, recursive resolvers that can be used in a homenet MUST be configurable
-	      to forward queries for 'service.arpa.' and subdomains of 'service.arpa.' to an authoritative server for 'service.arpa.'.
-	      This server will provide authoritative data for 'service.arpa.'  within a particular homenet.  The special handling for
-	      DS records for the 'service.arpa.' delegation is still required.</t>
-
-            <t>It is permissible to combine the recursive resolver function for general DNS lookups with an authoritative resolver
-	      for 'service.arpa.'; in this case, rather than forwarding queries for subdomains of 'service.arpa.' to an authoritative
-	      server, the resolver answers them authoritatively.  The behavior with respect to forwarding queries specifically for
-	      'service.arpa.'  remains the same.</t>
-	  </li>
 	</ol>
       </section>
       <section>
@@ -923,6 +911,9 @@
       </section>
       <section>
 	<name>DNS Server Operators</name>
+	<t>DNS server operators MAY configure an authoritative server for 'service.arpa.' for use with SRP.  The operator for the
+	  DNS servers authoritative for 'service.arpa.' in the global DNS will configure any such servers as described in
+	  <xref target="delegation"/>.</t>
       </section>
       <section>
 	<name>DNS Registries/Registrars</name>
@@ -1088,7 +1079,8 @@
 	implementation. Thanks to Tamara Kemper for doing a nice developmental edit, Tim Wattenberg for doing a SRP requestor
 	proof-of-concept implementation at the Montreal Hackathon at IETF 102, and Tom Pusateri for reviewing during the hackathon
 	and afterwards. Thanks to Esko for a really thorough second last call review. Thanks also to Nathan Dyck, Gabriel
-	Montenegro, Kangping Dong, Martin Turon and Michael Cowan for their detailed second last call reviews.</t>
+	Montenegro, Kangping Dong, Martin Turon, and Michael Cowan for their detailed second last call reviews. Thanks to
+	Patrik Fältström, Dhruv Dhody, David Dong and Joey Salazar for their respective directorate reviews.</t>
     </section>
   </middle>
 
