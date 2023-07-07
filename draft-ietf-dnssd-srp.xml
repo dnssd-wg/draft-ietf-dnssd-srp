@@ -398,8 +398,8 @@
 	      is not stated, but is assumed to be because a caching resolver that does not understand the format of the SRV record
 	      might store it as binary data and thus return an invalid pointer in response to a query. This does not apply in the
 	      case of SRP: an SRP registrar needs to understand SRV records in order to validate the SRP Update. Compression of the
-	      target potentially saves substantial space in the SRP Update. SRP registrars MUST support compression of SRV RR
-	      targets.</t>
+	      target can save space in the SRP Update, so we want clients to be able to assume that the SRP server will handle
+	      this. Therefore SRP registrars MUST support compression of SRV RR targets.</t>
           </section>
           <section anchor="remove">
 	    <name>Removing published services</name>
