@@ -324,8 +324,7 @@
           <t>
             The goal of securing the DNS&nbhy;SD Registration Protocol is to provide the best possible security given the constraint
             that service registration has to be automatic.  It is possible to layer more operational security on top of what we
-            describe here, but what we describe here is an improvement over the security of mDNS.  The goal is not to provide the
-            level of security of a network managed by a skilled operator.</t>
+            describe here, but FCFS naming is already an improvement over the security of mDNS.</t>
 
           <section anchor="fcfs">
 	    <name>First-Come First-Served Naming</name>
@@ -573,7 +572,7 @@
 	    Description Instruction to which no Service Discovery Instruction points.  A DNS Update that contains any additional
 	    adds or deletes that cannot be identified as Service Discovery, Service Description or Host Description Instructions is
 	    not an SRP Update. A DNS update that contains any prerequisites is not an SRP Update.  An SRP registrar MAY either
-	    process such messages are either processed as regular RFC2136 updates, including access control checks and constraint
+	    process such messages as regular RFC2136 updates, including access control checks and constraint
 	    checks, if supported, or MAY reject them with Refused RCODE.</t>
           <t>
 	    If the definitions of each of these instructions are followed carefully and the update requirements are validated
@@ -783,7 +782,22 @@
 	  different key, could be used to override a promise made by the SRP registrar to an SRP requestor, by replacing all or part of
 	  the service registration information with information provided by an authenticated DNS update requestor.  An implementation
 	  that allows both kinds of updates should not allow DNS Update requestors that are using different authentication and
-	  authorization credentials to to update records added by SRP requestors.</t>
+	  authorization credentials to update records added by SRP requestors.</t>
+
+	<t>It is possible to set up SRP updates for a zone that is used for non-DNSSD services. For example, imagine that you set
+	  up SRP service for example.com. SRP hosts can now register names like "www" or "mail" or "smtp" in this domain. In addition,
+	  SRP updates using FCFS naming can insert names that are obscene or offensive into the zone. There is no simple solution to
+	  these problems. We have two recommendations to address this problem, however:</t>
+	<ul spacing="compact">
+	  <li>Do not provide SRP service in organization-level zones. Use subdomains of the organizational domain for DNS service
+	    discovery.  This does not prevent registering names as mentioned above, but does ensure that genuinely important names
+	    are not accidentally reserved for SRP clients. So for example, the zone "dnssd.example.com" could be used instead of
+	    "example.com" for SRP updates. Because of the way that DNS browsing domains are discovered, there is no need for the
+	    DNSSD discovery zone that is updated by SRP to have a user-friendly or important-sounding name.</li>
+	  <li>Configure a dictionary of names that are prohibited. Dictionaries of common obscene and offensive names are no doubt
+	    available, and can be augmented with a list of typical "special" names like "www", "mail", "smtp" and so on. Lists of
+	    names are generally available, or can be constructed manually.</li>
+	</ul>
       </section>
       <section>
 	<name>SRP Registrar Authentication</name>
