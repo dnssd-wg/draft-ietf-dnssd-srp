@@ -829,8 +829,11 @@
 	TLS, it is entirely up to the host implementation whether to use it.
       </t>
       <t>
-	Public keys can be used as identifiers to track hosts. SRP registrars MAY elect not to return KEY records
-	for queries for SRP registrations.
+	Public keys can be used as identifiers to track hosts. SRP registrars MAY elect not to return KEY records for queries for
+	SRP registrations. To avoid DNSSEC validation failures, an SRP server that refuses to return a KEY record MUST NOT store the
+	KEY record in the zone itself. Because the key record isn't in the zone, the nonexistance of the KEY record can be
+	validated. If the zone is not signed, the server MAY instead return a negative non-error response (either NXDOMAIN or
+	no data).
       </t>
     </section>
 
