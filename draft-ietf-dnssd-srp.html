@@ -18,24 +18,24 @@
 
        
     " name="description">
-<meta content="xml2rfc 3.17.1" name="generator">
+<meta content="xml2rfc 3.17.4" name="generator">
 <meta content="Multicast DNS" name="keyword">
 <meta content="DNS-Based Service Discovery" name="keyword">
 <meta content="DNS Update" name="keyword">
 <meta content="SIG(0)" name="keyword">
 <meta content="draft-ietf-dnssd-srp-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.17.1
-    Python 3.11.3
-    appdirs 1.4.4
+  xml2rfc 3.17.4
+    Python 3.11.4
     ConfigArgParse 1.5.3
-    google-i18n-address 2.5.2
+    google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.2
+    platformdirs 3.8.0
     pycountry 22.3.5
     PyYAML 6.0
-    requests 2.30.0
+    requests 2.31.0
     setuptools 67.7.2
     six 1.16.0
     wcwidth 0.2.6
@@ -620,6 +620,7 @@ sub, sup {
   clear: left;
   float: left;
   text-align: right;
+  margin-right: 1ch;
 }
 #identifiers dd {
   margin: 0;
@@ -1058,11 +1059,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Service Registration Protocol</td>
-<td class="right">May 2023</td>
+<td class="right">July 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Lemon &amp; Cheshire</td>
-<td class="center">Expires 26 November 2023</td>
+<td class="center">Expires 8 January 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1073,12 +1074,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="workgroup">Internet Engineering Task Force</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-05-25" class="published">25 May 2023</time>
+<time datetime="2023-07-07" class="published">7 July 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-11-26">26 November 2023</time></dd>
+<dd class="expires"><time datetime="2024-01-08">8 January 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1138,7 +1139,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 November 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 January 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1636,8 +1637,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-3.2.4-2">
             The goal of securing the DNS‑SD Registration Protocol is to provide the best possible security given the constraint
             that service registration has to be automatic.  It is possible to layer more operational security on top of what we
-            describe here, but what we describe here is an improvement over the security of mDNS.  The goal is not to provide the
-            level of security of a network managed by a skilled operator.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
+            describe here, but FCFS naming is already an improvement over the security of mDNS.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
 <div id="fcfs">
 <section id="section-3.2.4.1">
             <h5 id="name-first-come-first-served-nam">
@@ -1941,7 +1941,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
      Description Instruction to which no Service Discovery Instruction points.  A DNS Update that contains any additional
      adds or deletes that cannot be identified as Service Discovery, Service Description or Host Description Instructions is
      not an SRP Update. A DNS update that contains any prerequisites is not an SRP Update.  An SRP registrar MAY either
-     process such messages are either processed as regular RFC2136 updates, including access control checks and constraint
+     process such messages as regular RFC2136 updates, including access control checks and constraint
      checks, if supported, or MAY reject them with Refused RCODE.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.2-2">
      If the definitions of each of these instructions are followed carefully and the update requirements are validated
@@ -2154,7 +2154,23 @@ svg :is([fill="white"], [fill^="#fff"]) {
    different key, could be used to override a promise made by the SRP registrar to an SRP requestor, by replacing all or part of
    the service registration information with information provided by an authenticated DNS update requestor.  An implementation
    that allows both kinds of updates should not allow DNS Update requestors that are using different authentication and
-   authorization credentials to to update records added by SRP requestors.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+   authorization credentials to update records added by SRP requestors.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1-6">It is possible to set up SRP updates for a zone that is used for non-DNSSD services. For example, imagine that you set
+   up SRP service for example.com. SRP hosts can now register names like "www" or "mail" or "smtp" in this domain. In addition,
+   SRP updates using FCFS naming can insert names that are obscene or offensive into the zone. There is no simple solution to
+   these problems. We have two recommendations to address this problem, however:<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-6.1-7.1">Do not provide SRP service in organization-level zones. Use subdomains of the organizational domain for DNS service
+     discovery.  This does not prevent registering names as mentioned above, but does ensure that genuinely important names
+     are not accidentally reserved for SRP clients. So for example, the zone "dnssd.example.com" could be used instead of
+     "example.com" for SRP updates. Because of the way that DNS browsing domains are discovered, there is no need for the
+     DNSSD discovery zone that is updated by SRP to have a user-friendly or important-sounding name.<a href="#section-6.1-7.1" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6.1-7.2">Configure a dictionary of names that are prohibited. Dictionaries of common obscene and offensive names are no doubt
+     available, and can be augmented with a list of typical "special" names like "www", "mail", "smtp" and so on. Lists of
+     names are generally available, or can be constructed manually.<a href="#section-6.1-7.2" class="pilcrow">¶</a>
+</li>
+        </ul>
 </section>
 <section id="section-6.2">
         <h3 id="name-srp-registrar-authenticatio">
@@ -2203,7 +2219,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-8-2">[Note to IANA: this section documents the domain name reservation considerations as required by
          RFC6761. If you combine the contents of this section with the contents of the same section of
          RFC8375 as proposed below, you should have a complete set of considerations. The text is not duplicated
-         here for the sake of brevity.<a href="#section-8-2" class="pilcrow">¶</a></p>
+         here for the sake of brevity.]<a href="#section-8-2" class="pilcrow">¶</a></p>
 <p id="section-8-3">
  <span><a href="https://rfc-editor.org/rfc/rfc8375#section-4" class="relref">Section 4</a> of [<a href="#RFC8375" class="cite xref">RFC8375</a>]</span> provides detailed information for handling of locally-served
  domains, of which 'service.arpa.' is an example. The considerations described in this section of RFC8375 apply identically

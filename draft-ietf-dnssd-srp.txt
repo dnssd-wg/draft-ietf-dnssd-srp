@@ -5,7 +5,7 @@
 Internet Engineering Task Force                                 T. Lemon
 Internet-Draft                                               S. Cheshire
 Intended status: Standards Track                              Apple Inc.
-Expires: 26 November 2023                                    25 May 2023
+Expires: 8 January 2024                                      7 July 2023
 
 
      Service Registration Protocol for DNS-Based Service Discovery
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 November 2023.
+   This Internet-Draft will expire on 8 January 2024.
 
 Copyright Notice
 
@@ -439,10 +439,8 @@ Table of Contents
    The goal of securing the DNS-SD Registration Protocol is to provide
    the best possible security given the constraint that service
    registration has to be automatic.  It is possible to layer more
-   operational security on top of what we describe here, but what we
-   describe here is an improvement over the security of mDNS.  The goal
-   is not to provide the level of security of a network managed by a
-   skilled operator.
+   operational security on top of what we describe here, but FCFS naming
+   is already an improvement over the security of mDNS.
 
 3.2.4.1.  First-Come First-Served Naming
 
@@ -727,9 +725,9 @@ Table of Contents
    Service Discovery, Service Description or Host Description
    Instructions is not an SRP Update.  A DNS update that contains any
    prerequisites is not an SRP Update.  An SRP registrar MAY either
-   process such messages are either processed as regular RFC2136
-   updates, including access control checks and constraint checks, if
-   supported, or MAY reject them with Refused RCODE.
+   process such messages as regular RFC2136 updates, including access
+   control checks and constraint checks, if supported, or MAY reject
+   them with Refused RCODE.
 
    If the definitions of each of these instructions are followed
    carefully and the update requirements are validated correctly, many
@@ -996,8 +994,31 @@ Table of Contents
    information with information provided by an authenticated DNS update
    requestor.  An implementation that allows both kinds of updates
    should not allow DNS Update requestors that are using different
-   authentication and authorization credentials to to update records
-   added by SRP requestors.
+   authentication and authorization credentials to update records added
+   by SRP requestors.
+
+   It is possible to set up SRP updates for a zone that is used for non-
+   DNSSD services.  For example, imagine that you set up SRP service for
+   example.com.  SRP hosts can now register names like "www" or "mail"
+   or "smtp" in this domain.  In addition, SRP updates using FCFS naming
+   can insert names that are obscene or offensive into the zone.  There
+   is no simple solution to these problems.  We have two recommendations
+   to address this problem, however:
+
+   *  Do not provide SRP service in organization-level zones.  Use
+      subdomains of the organizational domain for DNS service discovery.
+      This does not prevent registering names as mentioned above, but
+      does ensure that genuinely important names are not accidentally
+      reserved for SRP clients.  So for example, the zone
+      "dnssd.example.com" could be used instead of "example.com" for SRP
+      updates.  Because of the way that DNS browsing domains are
+      discovered, there is no need for the DNSSD discovery zone that is
+      updated by SRP to have a user-friendly or important-sounding name.
+   *  Configure a dictionary of names that are prohibited.  Dictionaries
+      of common obscene and offensive names are no doubt available, and
+      can be augmented with a list of typical "special" names like
+      "www", "mail", "smtp" and so on.  Lists of names are generally
+      available, or can be constructed manually.
 
 6.2.  SRP Registrar Authentication
 
@@ -1042,7 +1063,7 @@ Table of Contents
    considerations as required by RFC6761.  If you combine the contents
    of this section with the contents of the same section of RFC8375 as
    proposed below, you should have a complete set of considerations.
-   The text is not duplicated here for the sake of brevity.
+   The text is not duplicated here for the sake of brevity.]
 
    Section 4 of [RFC8375] provides detailed information for handling of
    locally-served domains, of which 'service.arpa.' is an example.  The
