@@ -826,7 +826,7 @@
       <t>[Note to IANA: this section documents the domain name reservation considerations as required by
          RFC6761. If you combine the contents of this section with the contents of the same section of
          RFC8375 as proposed below, you should have a complete set of considerations. The text is not duplicated
-         here for the sake of brevity.</t>
+         here for the sake of brevity.]</t>
       <t>
 	<xref target="RFC8375" section="4" sectionFormat="of"/> provides detailed information for handling of locally-served
 	domains, of which 'service.arpa.' is an example. The considerations described in this section of RFC8375 apply identically
