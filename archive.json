@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-04-16T00:36:37.349444+00:00",
+  "timestamp": "2023-07-13T00:45:46.055880+00:00",
   "repo": "dnssd-wg/draft-ietf-dnssd-srp",
   "labels": [
     {
@@ -145,6 +145,22 @@
           "updatedAt": "2023-02-01T22:19:48Z"
         }
       ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOH1-V8s5rOIG2",
+      "title": "If the IESG says to do it, address the comments in the DNSDIR review.",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/issues/22",
+      "state": "OPEN",
+      "author": "Abhayakara",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "https://mailarchive.ietf.org/arch/msg/dnssd/VHb6V-GogIW5OeFZsvxrjnw7Q1k/",
+      "createdAt": "2023-07-11T12:47:03Z",
+      "updatedAt": "2023-07-11T12:47:03Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
