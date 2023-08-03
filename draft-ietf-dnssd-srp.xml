@@ -315,7 +315,7 @@
           </section>
 	</section>
 
-	<section>
+	<section anchor="how-to-secure">
 	  <name>How to secure it</name>
           <t>
             Traditional DNS update is secured using Secret Key Transaction Signatures, <xref target="RFC8945"/>, which uses a secret key
@@ -771,6 +771,9 @@
 	  on routers <xref target="RFC2827"/>. This would ordinarily be accomplished by measures such as are described in
 	  <xref target="RFC7084" section="4.5" sectionFormat="of"/></t>
 
+      </section>
+      <section>
+	<name>Other DNS updates</name>
 	<t>Note that these rules only apply to the validation of SRP Updates.
 	  A server that accepts updates from SRP
 	  requestors may also accept other DNS updates, and those DNS updates may be validated
@@ -783,7 +786,9 @@
 	  the service registration information with information provided by an authenticated DNS update requestor.  An implementation
 	  that allows both kinds of updates should not allow DNS Update requestors that are using different authentication and
 	  authorization credentials to update records added by SRP requestors.</t>
-
+      </section>
+      <section>
+	<name>Risks of allowing arbitrary names to be registered in SRP updates</name>
 	<t>It is possible to set up SRP updates for a zone that is used for non-DNSSD services. For example, imagine that you set
 	  up SRP service for example.com. SRP hosts can now register names like "www" or "mail" or "smtp" in this domain. In addition,
 	  SRP updates using FCFS naming can insert names that are obscene or offensive into the zone. There is no simple solution to
@@ -798,6 +803,18 @@
 	    available, and can be augmented with a list of typical "special" names like "www", "mail", "smtp" and so on. Lists of
 	    names are generally available, or can be constructed manually.</li>
 	</ul>
+      </section>
+      <section>
+	<name>Security of local service discovery</name>
+	<t>Local links can be protected by managed services such as RA Guard <xref target="RFC6105"/>, but multicast services like
+	  DHCP <xref target="RFC21321"/>, DHCPv6 <xref target="RFC8415"/> and IPv6 Neighbor Discovery <xref target="RFC4861"/> are
+	  most commonly unauthenticated and can't be controlled on unmanaged networks, such as home networks and small-office
+	  networks where no network management staff are present. In such situations, an SRP service is actually more limited in
+	  terms of security risks. This is discussed in more detail in <xref target="how-to-secure"/>. The fundamental protection
+	  for networks of this type is the user's choice of what devices to add to the network. Work is being done in other
+	  working groups and standards bodies to improve the state of the art for network on-boarding and device isolation (e.g.,
+	  <xref target="RFC8520"/> provides a means for constraining what behaviors are allowed for a device in an automatic way),
+	  but such work is out of scope for this document.</t>
       </section>
       <section>
 	<name>SRP Registrar Authentication</name>
@@ -1115,6 +1132,8 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2131.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2827.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3007.xml" />
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4861.xml" />
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6105.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6335.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6760.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6761.xml" />
@@ -1123,6 +1142,7 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7228.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7413.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8415.xml" />
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8520.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8766.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8945.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.cheshire-dnssd-roadmap.xml"/>
