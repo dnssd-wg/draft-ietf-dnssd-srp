@@ -769,8 +769,10 @@
 
 	<t>For UDP updates from constrained devices, spoofing would have to be prevented with appropriate source address filtration
 	  on routers <xref target="RFC2827"/>. This would ordinarily be accomplished by measures such as are described in
-	  <xref target="RFC7084" section="4.5" sectionFormat="of"/></t>
-
+	  <xref target="RFC7084" section="4.5" sectionFormat="of"/>. For example, a stub router <xref target="draft-ietf-snac-simple"/>
+	  for a constrained network might only accept UDP updates from source addresses known to be on-link on that stub network, and might
+	  further validate that the UDP update was actually received on the stub network interface and not the interface connected to
+	  the adjacent infrastructure link.</t>
       </section>
       <section>
 	<name>Other DNS updates</name>
