@@ -117,6 +117,31 @@
 	choose a new name.</t>
 
       <t>
+	It is important to understand that "authenticate" here just means that we can tell that an update came from the same source
+	as the original registration. We have not established trust. This has important implications for what we can and can't do
+	with data the client sends us. You will notice as you read this document that we only support adding a very restricted set
+	of records, and the content of those records is further constrained.</t>
+
+      <t>
+	The reason for this is precisely that we have not established trust. So we can only publish information that we feel safe in
+	publishing even though we do not have any basis for trusting the requestor. We reason that mDNS <xref target="RFC6762"/>
+	allows arbitrary hosts on a single IP link to advertise services <xref target="RFC6763"/>, relying on whatever service is
+	advertised to provide authentication.</t>
+
+      <t>
+	This is considered reasonably safe because it requires physical presence on the network in order to advertise. An off-network
+	mDNS attack is simply not possible. Our goal with this specification is to impose similar constraints. Because of this you will
+	see in <xref target="add_validation"/> that a very restricted set of records with a very restricted set of relationships are
+	allowed. You will also see in <xref target="source_validation"/> that we give advice on how to prevent off-network attacks.</t>
+
+      <t>
+	This leads us to the disappointing observation that this protocol is not a mechanism for adding arbitrary information to
+	DNS zones. We have not evaluated the security properties of adding, for example, an SOA record, an MX record, or a CNAME
+	record, and so these are forbidden. A future protocol specification might include analyses for other records, and extend
+	the set of records that can be registered here. Or it might require establishment of trust, and add an authorization model
+	to the authentication model we now have. But this is work for a future document.</t>
+
+      <t>
 	Finally, SRP adds the concept of a 'lease,' similar to leases in Dynamic Host Configuration Protocol
 	<xref target="RFC8415"/>.  The SRP registration itself has a lease which may be on the order of an hour; if the requestor
 	does not renew the lease before it has elapsed, the registration is removed.  The claim on the name can have a longer
@@ -761,7 +786,7 @@
 
     <section>
       <name>Security Considerations</name>
-      <section>
+      <section anchor="source_validation">
 	<name>Source Validation</name>
 	<t>SRP Updates have no authorization semantics other than
 	  FCFS.   This means that if an attacker from outside of the administrative
@@ -908,16 +933,16 @@
 	  follow this specification:</t>
 	<ol>
 	  <li>Recursive resolvers at sites using 'service.arpa.'  MUST transparently support DNSSEC queries: queries for DNSSEC
-            records and queries with the DNSSEC OK (DO) bit set (see Section 3.2.1 of [RFC4035]).  While validation is not
-            required, it is strongly encouraged: a caching recursive resolver that does not validate answers that can be validated
-            may cache invalid data.  This, in turn, will prevent validating stub resolvers from successfully validating
-            answers.</li>
+            records and queries with the DNSSEC OK (DO) bit set (<xref target="RFC4035" section="3.2.1" sectionFormat="of"/>).  While
+            validation is not required, it is strongly encouraged: a caching recursive resolver that does not validate answers that
+            can be validated may cache invalid data.  This, in turn, will prevent validating stub resolvers from successfully
+            validating answers.</li>
 	  <li>
-	    <t>Unless configured otherwise, recursive resolvers and DNS proxies MUST behave as described in Section 3 of the
-	      Locally Served Zones document [RFC6303].  That is, queries for 'service.arpa.' and subdomains of 'service.arpa.'  MUST NOT
-	      be forwarded, with one important exception: a query for a DS record with the DO bit set MUST return the correct
-	      answer for that question, including correct information in the authority section that proves that the record is
-	      nonexistent.</t>
+	    <t>Unless configured otherwise, recursive resolvers and DNS proxies MUST behave as described in Locally Served Zones,
+	      <xref target="RFC6303" section="3" sectionFormat="of"/>.  That is, queries for 'service.arpa.' and subdomains of
+	      'service.arpa.'  MUST NOT be forwarded, with one important exception: a query for a DS record with the DO bit set MUST
+	      return the correct answer for that question, including correct information in the authority section that proves that
+	      the record is nonexistent.</t>
             <t>So, for example, a query for the NS record for 'service.arpa.'  MUST NOT result in that query being forwarded to an
 	      upstream cache nor to the authoritative DNS server for '.arpa.'.  However, as necessary to provide accurate
 	      authority information, a query for the DS record MUST result in forwarding whatever queries are necessary;
@@ -1127,6 +1152,8 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2931.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3172.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3596.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6303.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6763.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7858.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8126.xml"/>
