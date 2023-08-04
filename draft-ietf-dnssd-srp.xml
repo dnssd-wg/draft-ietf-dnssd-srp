@@ -352,12 +352,10 @@
 	      to erase the old key pair and install a new one. Therefore, the SRP requestor on the device SHOULD provide a mechanism to
 	      overwrite the key, for example as the result of a "factory reset."</t>
 	    <t>
-	      Note that this is a fairly lax key management policy. We do not attempt to dictate a more stringent policy here because
-	      the only thing the key authorises its holder to do is add or remove services on the name associated with the key. An
-	      attacker could get much the same effect simply by generating a new key and waiting for the device's service registration
-	      to expire. However, if this key is used for other purposes, this key management policy probably wouldn't be appropriate.
-	      The key management policy used for the key should address all of the keys uses; however, we can only speculate on how
-	      the key might be used outside of this context, so specifying policies for such uses is out of scope for this document.</t>
+	      The policy described here for managing keys assumes that the keys are only used for SRP. If a key that is used for SRP
+	      is also used for other purposes, the policy described here is likely to be insufficient. The policy stated here should
+	      not be applied in such a situation: a policy appropriate to the full set of uses for the key must be chosen. Specifying
+	      such a policy is out of scope for this document.</t>
             <t>
 	      When sending DNS updates, the requestor includes a KEY record containing the public portion of the key in each Host
 	      Description Instruction and each Service Description Instruction.  Each KEY record MUST contain the same public key.
