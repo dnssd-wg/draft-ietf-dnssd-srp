@@ -126,7 +126,7 @@
 	The reason for this is precisely that we have not established trust. So we can only publish information that we feel safe in
 	publishing even though we do not have any basis for trusting the requestor. We reason that mDNS <xref target="RFC6762"/>
 	allows arbitrary hosts on a single IP link to advertise services <xref target="RFC6763"/>, relying on whatever service is
-	advertised to provide authentication.</t>
+	advertised to provide authentication as a part of its protocol rather than in the service advertisement.</t>
 
       <t>
 	This is considered reasonably safe because it requires physical presence on the network in order to advertise. An off-network
@@ -373,7 +373,7 @@
 	      The requestor generates a public/private key pair (See <xref target="rsa"/>).  This key pair MUST be stored in stable
 	      storage; if there is no writable stable storage on the SRP requestor, the SRP requestor MUST be pre-configured with a
 	      public/private key pair in read-only storage that can be used.  This key pair MUST be unique to the device. A device
-	      with rewritable storage should retain this key indefinitely.  When the device changes ownership, it may be appropriate
+	      with rewritable storage SHOULD retain this key indefinitely.  When the device changes ownership, it may be appropriate
 	      for the former owner to erase the old key pair, which would then require the new owner to install a new
 	      one. Therefore, the SRP requestor on the device SHOULD provide a mechanism to erase the key, for example as the
 	      result of a "factory reset," and to generate a new key.</t>
@@ -847,13 +847,13 @@
 	<name>Security of local service discovery</name>
 	<t>Local links can be protected by managed services such as RA Guard <xref target="RFC6105"/>, but multicast services like
 	  DHCP <xref target="RFC21321"/>, DHCPv6 <xref target="RFC8415"/> and IPv6 Neighbor Discovery <xref target="RFC4861"/> are
-	  most commonly unauthenticated and can't be controlled on unmanaged networks, such as home networks and small-office
-	  networks where no network management staff are present. In such situations, an SRP service is actually more limited in
-	  terms of security risks. This is discussed in more detail in <xref target="how-to-secure"/>. The fundamental protection
-	  for networks of this type is the user's choice of what devices to add to the network. Work is being done in other
-	  working groups and standards bodies to improve the state of the art for network on-boarding and device isolation (e.g.,
-	  <xref target="RFC8520"/> provides a means for constraining what behaviors are allowed for a device in an automatic way),
-	  but such work is out of scope for this document.</t>
+	  in most cases not authenticated and can't be controlled on unmanaged networks, such as home networks and small-office
+	  networks where no network management staff are present. In such situations, because of FCFS naming, an SRP service has
+	  comparatively fewer potential security exposures. This is discussed in more detail in <xref target="how-to-secure"/>.</t>
+	<t>The fundamental protection for networks of this type is the user's choice of what devices to add to the network. Work is
+	  being done in other working groups and standards bodies to improve the state of the art for network on-boarding and device
+	  isolation (e.g., <xref target="RFC8520"/> provides a means for constraining what behaviors are allowed for a device in an
+	  automatic way), but such work is out of scope for this document.</t>
       </section>
       <section>
 	<name>SRP Registrar Authentication</name>
@@ -861,6 +861,10 @@
 	  SRP requestors.   In principle, a KEY RR could be used by
 	  a non-constrained SRP requestor to validate responses from the registrar, but this is not required,
 	  nor do we specify a mechanism for determining which key to use.</t>
+	<t>In addition, for DNS-over-TLS connections, out-of-band key pinning as described in
+	  <xref target="RFC7858" section="4.2" sectionFormat="comma"/> could be used for authentication of the SRP registrar,
+	  e.g. to prevent man-in-the-middle attacks. However the use of such keys is impractical for an unmanaged service
+	  registration protocol, and hence is out of scope for this document.</t>
       </section>
       <section anchor="rsa">
 	<name>Required Signature Algorithm</name>
@@ -878,7 +882,7 @@
       <t>
 	Because DNS-SD SRP Updates can be sent off-link, the privacy implications of SRP are different than for multicast DNS
 	responses.  Host implementations that are using TCP SHOULD also use TLS if available.  Registrar implementations MUST offer
-	TLS support.  The use of TLS with DNS is described in <xref target="RFC7858"/>.
+	TLS support.  The use of TLS with DNS is described in <xref target="RFC7858" section="4.1" sectionFormat="comma"/>.
       </t>
       <t>
 	Hosts that implement TLS support SHOULD NOT fall back to TCP; since registrars are required to support
@@ -1135,9 +1139,10 @@
 	implementation. Thanks to Tamara Kemper for doing a nice developmental edit, Tim Wattenberg for doing an SRP requestor
 	proof-of-concept implementation at the Montreal Hackathon at IETF 102, and Tom Pusateri for reviewing during the hackathon
 	and afterwards. Thanks to Esko for a really thorough second last call review. Thanks also to Nathan Dyck, Gabriel
-	Montenegro, Kangping Dong, Martin Turon, and Michael Cowan for their detailed second last call reviews. Thanks to
-	Patrik Fältström, Dhruv Dhody, David Dong, Joey Salazar, Jean-Michel Combes, for their respective directorate reviews. Thanks to Paul Wouters
-	for a <em>really</em> detailed IESG review!</t>
+	Montenegro, Kangping Dong, Martin Turon, and Michael Cowan for their detailed second last call reviews. Thanks to Patrik
+	Fältström, Dhruv Dhody, David Dong, Joey Salazar, and Jean-Michel Combes for their respective directorate reviews. Thanks to
+	Paul Wouters for a <em>really</em> detailed IESG review! Thanks also to the other AD members who provided comments or simply
+	took the time to review the document.</t>
 
 
     </section>
