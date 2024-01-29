@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
-<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-22" ipr="trust200902"
+<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-23" ipr="trust200902"
      xmlns:xi="http://www.w3.org/2001/XInclude" version="3"
      scripts="Common,Latin" sortRefs="false" consensus="true"
      symRefs="true" tocDepth="4" tocInclude="true" xml:lang="en">
@@ -374,8 +374,9 @@
 	      storage; if there is no writable stable storage on the SRP requestor, the SRP requestor MUST be pre-configured with a
 	      public/private key pair in read-only storage that can be used.  This key pair MUST be unique to the device. A device
 	      with rewritable storage should retain this key indefinitely.  When the device changes ownership, it may be appropriate
-	      to erase the old key pair and install a new one. Therefore, the SRP requestor on the device SHOULD provide a mechanism to
-	      overwrite the key, for example as the result of a "factory reset."</t>
+	      for the former owner to erase the old key pair, which would then require the new owner to install a new
+	      one. Therefore, the SRP requestor on the device SHOULD provide a mechanism to erase the key, for example as the
+	      result of a "factory reset," and to generate a new key.</t>
 	    <t>
 	      The policy described here for managing keys assumes that the keys are only used for SRP. If a key that is used for SRP
 	      is also used for other purposes, the policy described here is likely to be insufficient. The policy stated here should
@@ -395,11 +396,10 @@
 	  <section>
 	    <name>Name Conflict Handling</name>
 	    <t>
-	      Both Host Description RR adds and Service Description RR adds can have names that result in name conflicts.  Service
-	      Discovery record adds cannot have name conflicts. If any Host Description or Service Description record is found by
-	      the registrar to have a conflict with an existing name, the registrar will respond to the SRP Update with a YXDomain
-	      RCODE (<xref target="RFC2136" section="2.2" sectionFormat="of"/>). In this case, the requestor MUST either abandon the
-	      service registration attempt, or else choose a new name.</t>
+	      Both Host Description RR adds and Service Description RR adds can have names that result in name conflicts.
+	      Service Discovery record adds cannot have name conflicts. If any Host Description or Service Description record
+	      is found by the registrar to have a conflict with an existing name, the registrar will respond to the SRP Update
+	      with a YXDomain RCODE. In this case, the requestor MUST choose a new name or give up.</t>
 	    <t>
 	      There is no specific requirement for how this is done; typically, however, the requestor will append a number to the
 	      preferred name. This number could be sequentially increasing, or could be chosen randomly. One existing implementation
@@ -585,7 +585,7 @@
 		Host Description Instructions do not modify any other resource records.</li>
             </ul>
 	    <t>
-	      A and/or AAAA records that are not of of sufficient scope to be validly published in a DNS zone can be ignored by the
+	      A and/or AAAA records that are not of sufficient scope to be validly published in a DNS zone can be ignored by the
 	      SRP server, which could result in a host description effectively containing zero reachable addresses even when it
 	      contains one or more addresses.</t>
 
@@ -603,9 +603,14 @@
 	    An SRP Update MUST contain exactly one Host Description Instruction. In addition, there MUST NOT be any Service
 	    Description Instruction to which no Service Discovery Instruction points.  A DNS Update that contains any additional
 	    adds or deletes that cannot be identified as Service Discovery, Service Description or Host Description Instructions is
-	    not an SRP Update. A DNS update that contains any prerequisites is not an SRP Update.  An SRP registrar MAY either
-	    process such messages as regular RFC2136 updates, including access control checks and constraint
-	    checks, if supported, or MAY reject them with Refused RCODE.</t>
+	    not an SRP Update. A DNS update that contains any prerequisites is not an SRP Update.</t>
+	  <t>An SRP Update MUST include an EDNS(0) Update Lease option
+	    <xref target="I-D.ietf-dnssd-update-lease"/>. The Lease time specified in the Update Lease option MUST be less than
+	    or equal to the Key Lease time. A DNS update that does not include the Update Lease option, or that includes a Key
+	    Lease shorter than the Lease, is not an SRP update.</t>
+	  <t>When an SRP registrar receives a DNS Update that is not an SRP update, it MAY
+	    process the update as regular RFC2136 updates, including access control checks and constraint
+	    checks, if supported. Otherwise the registrar MUST reject the DNS Update with the Refused RCODE.</t>
           <t>
 	    If the definitions of each of these instructions are followed carefully and the update requirements are validated
 	    correctly, many DNS Updates that look very much like SRP Updates nevertheless will fail to validate.  For example, a DNS
@@ -1131,7 +1136,8 @@
 	proof-of-concept implementation at the Montreal Hackathon at IETF 102, and Tom Pusateri for reviewing during the hackathon
 	and afterwards. Thanks to Esko for a really thorough second last call review. Thanks also to Nathan Dyck, Gabriel
 	Montenegro, Kangping Dong, Martin Turon, and Michael Cowan for their detailed second last call reviews. Thanks to
-	Patrik Fältström, Dhruv Dhody, David Dong and Joey Salazar for their respective directorate reviews.</t>
+	Patrik Fältström, Dhruv Dhody, David Dong and Joey Salazar for their respective directorate reviews. Thanks to Paul Wouters
+	for a <em>really</em> detailed IESG review!</t>
     </section>
   </middle>
 
