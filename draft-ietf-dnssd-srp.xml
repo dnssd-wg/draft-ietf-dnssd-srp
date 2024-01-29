@@ -202,7 +202,7 @@
             describing their service(s) as subdomains of the chosen service registration domain.  For these names they then discover
             the zone apex of the closest enclosing DNS zone using SOA queries <xref target="RFC8765" section="6.1"/>.  Having
             discovered the enclosing DNS zone, they query for the "_dnssd&nbhy;srp._tcp.&lt;zone&gt;" SRV record to discover the
-            server to which they should send SRP updates.  Hosts that support SRP Updates using TLS use the
+            server to which they can send SRP updates.  Hosts that support SRP Updates using TLS use the
             "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" SRV record instead.</t>
 	  <t>
 	    Examples of full-featured hosts include devices such as home computers, laptops, powered peripherals with network
@@ -266,9 +266,9 @@
               Service Instance Name.</li>
             <li>
 	      For any Service Instance Name (<xref target="RFC6763" section="4.1" sectionFormat="comma"/>), an SRV RR, one or more
-	      TXT RRs, and a KEY RR. In principle Service Description records can include other record types, with the same Service
-	      Instance Name, though in practice they rarely do. SRP does not support other record types. The KEY RR is used to
-	      support FCFS naming, and has no specific meaning for DNS-SD lookups. SRV records for all services described in an
+	      TXT RRs, and a KEY RR. Although in principle DNS-SD Service Description records can include other record types with
+	      the same Service Instance Name, in practice they rarely do. SRP does not permit other record types. The KEY RR is used
+	      to support FCFS naming, and has no specific meaning for DNS-SD lookups. SRV records for all services described in an
 	      SRP update point to the same hostname.</li>
             <li>
 	      There is never more than one hostname in a single SRP update. The hostname has one or more address RRs (AAAA or A) and
@@ -294,7 +294,7 @@
             DNS&nbhy;SD using the DNS protocol: services must exist in some specific DNS namespace that is chosen either by the
 	    network operator, or automatically.</t>
           <t>
-            As described above, full-featured devices are responsible for knowing in what domain they should register their services.
+            As described above, full-featured devices are responsible for knowing the domain in which to register their services.
             Devices made for Constrained-Node Networks register in the special use domain name <xref target="RFC6761"/>
             "default.service.arpa", and let the SRP registrar handle rewriting that to a different domain if necessary.</t>
 	</section>
@@ -338,6 +338,23 @@
 		Constrained-Node SRP requestors are allowed to send updates to the generic domain "default.service.arpa."</li>
             </ul>
           </section>
+	  <section>
+	    <name>Retransmission Strategy</name>
+	    <t>The DNS protocol, including DNS updates, can operate over UDP or TCP. When using UDP, reliable
+	      transmission must be guaranteed by retransmitting if a DNS UDP message is not acknowledged in a
+	      reasonable interval. <xref target="RFC1035" section="4.2.1" sectionFormat="of"/> provides some
+	      guidance on this topic, as does <xref target="RFC1536" section="1" sectionFormat="of"/>.
+	      <xref target="RFC8085" section="3.1.3" sectionFormat="of"/> also provides useful guidance that
+	      is particularly relevant to DNS.</t>
+	  </section>
+
+	  <section>
+	    <name>Successive Updates</name>
+	    <t>Service Registration Protocol does not require that every update contain the same information.
+	      When an SRP requestor needs to send more than one SRP update to the SRP registrar, it MUST send
+	      these sequentially: until an earlier update has been successfully acknowledged, the requestor
+	      MUST NOT begin sending a subsequent update.</t>
+	  </section>
 	</section>
 
 	<section anchor="how-to-secure">
@@ -379,8 +396,8 @@
 	      result of a "factory reset," and to generate a new key.</t>
 	    <t>
 	      The policy described here for managing keys assumes that the keys are only used for SRP. If a key that is used for SRP
-	      is also used for other purposes, the policy described here is likely to be insufficient. The policy stated here should
-	      not be applied in such a situation: a policy appropriate to the full set of uses for the key must be chosen. Specifying
+	      is also used for other purposes, the policy described here is likely to be insufficient. The policy stated here is NOT
+	      RECOMMENDED in such a situation: a policy appropriate to the full set of uses for the key must be chosen. Specifying
 	      such a policy is out of scope for this document.</t>
             <t>
 	      When sending DNS updates, the requestor includes a KEY record containing the public portion of the key in each Host
@@ -413,7 +430,7 @@
 	      of the Update Lease option, and is typically set to two hours.  This means that if a device is disconnected from the
 	      network, it does not appear in the user interfaces of devices looking for services of that type for too long.</t>
 	    <t>
-	      The lifetime of the KEY records is set using the KEY-LEASE field of the Update Lease Option, and should be set to a
+	      The lifetime of the KEY records is set using the KEY-LEASE field of the Update Lease Option, and SHOULD be set to a
 	      much longer time, typically 14 days.  The result of this is that even though a device may be temporarily unplugged,
 	      disappearing from the network for a few days, it makes a claim on its name that lasts much longer.</t>
 	    <t>
@@ -439,8 +456,8 @@
 	      <name>Removing all published services</name>
               <t>
 		To remove all the services registered to a particular host, the SRP requestor retransmits its most recent update with an
-		Update Lease option that has a LEASE value of zero. If the registration is to be permanently removed, KEY-LEASE should
-		also be zero. Otherwise, it should have the same value it had previously; this holds the name in reserve for when the
+		Update Lease option that has a LEASE value of zero. If the registration is to be permanently removed, KEY-LEASE SHOULD
+		also be zero. Otherwise, it SHOULD be set to the same value it had previously; this holds the name in reserve for when the
 		SRP requestor is once again able to provide the service.</t>
               <t>
 		SRP requestors are normally expected to remove all service instances when removing a host.  However, in some cases an SRP
@@ -540,31 +557,31 @@
 	  <section anchor="servdesc">
 	    <name>Service Description Instruction</name>
 
-            <t>An instruction is a Service Description Instruction if, for the appropriate Service Instance Name, it contains</t>
+            <t>An instruction is a Service Description Instruction if, for the appropriate Service Instance Name, the following are true</t>
             <ul spacing="compact">
 	      <li>
-		exactly one "Delete all RRsets from a name" update for the service instance name
+		It contains exactly one "Delete all RRsets from a name" update for the service instance name
 		(<xref target="RFC2136" section="2.5.3" sectionFormat="comma"/>),</li>
 	      <li>
-		zero or one "Add to an RRset" SRV RR,</li>
+		It contains zero or one "Add to an RRset" SRV RR,</li>
 	      <li>
-		zero or one "Add to an RRset" KEY RR that, if present, contains the public key corresponding to the private key
+		It contains zero or one "Add to an RRset" KEY RR that, if present, contains the public key corresponding to the private key
 		that was used to sign the message (if present, the KEY MUST match the KEY RR given in the Host Description),</li>
 	      <li>
-		zero or more "Add to an RRset" TXT RRs,</li>
+		It contains zero or more "Add to an RRset" TXT RRs,</li>
 	      <li>
 		If there is one "Add to an RRset" SRV update, there MUST be at least one "Add to an RRset" TXT update.</li>
 	      <li>
-		the target of the SRV RR Add, if present points to a hostname for which there is a Host Description Instruction in
+		The target of the SRV RR Add, if present points to a hostname for which there is a Host Description Instruction in
 		the SRP Update, or</li>
 	      <li>
-		if there is no "Add to an RRset" SRV RR, then either</li>
+		If there is no "Add to an RRset" SRV RR, then either:</li>
 	      <li><ul>
 		<li>the name to which the "Delete all RRsets from a name" applies does not exist, or</li>
 		<li>there is an existing KEY RR on that name, which matches the key with which the SRP Update was
 		  signed.</li></ul></li>
 	      <li>
-		Service Descriptions Instructions do not modify any other resource records.</li>
+		No other resource records on the Service Instance Name are modified.</li>
             </ul>
 	    <t>An SRP registrar MUST correctly handle compressed names in the SRV target.</t>
 	  </section>
@@ -585,7 +602,7 @@
 		Host Description Instructions do not modify any other resource records.</li>
             </ul>
 	    <t>
-	      A and/or AAAA records that are not of sufficient scope to be validly published in a DNS zone can be ignored by the
+	      A and/or AAAA records that are not of sufficient scope to be validly published in a DNS zone MAY be ignored by the
 	      SRP server, which could result in a host description effectively containing zero reachable addresses even when it
 	      contains one or more addresses.</t>
 
@@ -649,15 +666,17 @@
 	  </t>
 	  <t>
 	    Similarly, there is no mechanism for deleting subtypes. A delete of a service deletes all of its subtypes. To delete an
-	    individual subtype, an SRP Update must be constructed that contains the service type and all subtypes for that service.
+	    individual subtype, an SRP Update must be constructed that contains the service type and all subtypes for that service
+	    except for the one to be deleted.
 	  </t>
 	</section>
 	<section>
 	  <name>SRP Update response</name>
           <t>
-	    The status that is returned depends on the result of processing the update, and can be either NoError, ServFail, Refused or YXDomain: all
-	    other possible outcomes should already have been accounted for when applying the constraints that qualify the update
-	    as an SRP Update. The meanings of these responses are explained in <xref target="RFC2136" section="2.2"/>.</t>
+	    The status that is returned depends on the result of processing the update, and can be either NoError, ServFail, Refused
+	    or YXDomain: all other possible outcomes will already have been accounted for when applying the constraints that
+	    qualify the update as an SRP Update. The meanings of these responses are explained in <xref target="RFC2136"
+	    section="2.2"/>.</t>
 	  <t>
 	    In the case of a response other than NoError, <xref target="RFC2136" section="3.8"/> specifies that the server is permitted
             to respond either with no RRs or to copy the RRs sent by the client into the response. The SRP Requestor MUST NOT attempt
@@ -677,7 +696,7 @@
           <t>
 	    The registrar MAY apply additional criteria when accepting updates.  In some networks, it may be possible to do
 	    out-of-band registration of keys, and only accept updates from pre-registered keys.  In this case, an update for a key
-	    that has not been registered should be rejected with the Refused RCODE.</t>
+	    that has not been registered SHOULD be rejected with the Refused RCODE.</t>
           <t>
 	    There are at least two benefits to doing this rather than simply using normal SIG(0) DNS updates.  First, the same
 	    registration protocol can be used in both cases, so both use cases can be addressed by the same SRP requestor
@@ -711,8 +730,8 @@
 	same TTL on all RRs in the RRset.  How this consistency is enforced is up to the implementation.</t>
       <t>
 	TTLs sent in SRP Updates are advisory: they indicate the SRP requestor's guess as to what a good TTL would be.  SRP registrars may
-	override these TTLs.  SRP registrars SHOULD ensure that TTLs are reasonable: neither too long nor too short.  The TTL should
-	never be longer than the lease time (<xref target="stale"/>).  Shorter TTLs will result in more frequent data refreshes;
+	override these TTLs.  SRP registrars SHOULD ensure that TTLs are reasonable: neither too long nor too short.  The TTL SHOULD NOT
+	ever be longer than the lease time (<xref target="stale"/>).  Shorter TTLs will result in more frequent data refreshes;
 	this increases latency on the DNS-SD client side, increases load on any caching resolvers and on the authoritative server,
 	and also increases network load, which may be an issue for constrained networks.  Longer TTLs will increase the likelihood
 	that data in caches will be stale.  TTL minimums and maximums SHOULD be configurable by the operator of the SRP registrar.
@@ -732,15 +751,15 @@
 	<t>These leases are promises, similar to <xref target="RFC2131">DHCP leases</xref>,
           from the SRP requestor that it will send a new update for the service registration before the
           lease time expires.  The Lease time is chosen to represent the time after the
-          update during which the registered records other than the KEY record should be assumed
+          update during which the registered records other than the KEY record can be assumed
           to be valid.  The Key Lease time represents the time after the update during
-          which the KEY record should be assumed to be valid.</t>
+          which the KEY record can be assumed to be valid.</t>
 
 	<t>The reasoning behind the different lease times is discussed in the section on FCFS naming
           (<xref target="fcfs"/>).  SRP registrars may be configured with limits for these values.  A default limit of two hours for
           the Lease and 14 days for the SIG(0) KEY are currently thought to be good choices.  Constrained devices with limited
           battery that wake infrequently are likely to request longer leases; registrars that support such devices may need to set
-          higher limits.  SRP requestors that are going to continue to use names on which they hold leases should update well before
+          higher limits.  SRP requestors that are going to continue to use names on which they hold leases SHOULD update well before
           the lease ends, in case the SRP registrar is unavailable or under heavy load.</t>
 
 	<t>
@@ -768,8 +787,8 @@
           deciding when to renew its registration.   The times may be shorter or longer than
           those specified in the SRP Update; the SRP requestor must honor them in either case.</t>
 
-	<t>SRP requestors should assume that each lease ends N seconds after the update was first
-          transmitted, where N is the lease duration.  Registrars should assume that each lease
+	<t>SRP requestors SHOULD assume that each lease ends N seconds after the update was first
+          transmitted, where N is the lease duration.  Registrars SHOULD assume that each lease
           ends N seconds after the update that was successfully processed was received.  Because
           the registrar will always receive the update after the SRP requestor sent it, this avoids the
           possibility of misunderstandings.</t>
@@ -796,7 +815,7 @@
 	<t>SRP Updates have no authorization semantics other than
 	  FCFS.   This means that if an attacker from outside of the administrative
 	  domain of the registrar knows the registrar's IP address, it can in principle send updates to the registrar
-	  that will be processed successfully.   Registrars should therefore be configured to reject updates
+	  that will be processed successfully.   Registrars SHOULD therefore be configured to reject updates
 	  from source addresses outside of the administrative domain of the registrar.</t>
 
 	<t>For TCP updates, the initial SYN-SYN+ACK handshake prevents updates being forged by an off-network attacker.  In order to
@@ -823,7 +842,7 @@
 	<t>For example, a normal, authenticated DNS update to any RR that was added using SRP, but that is authenticated using a
 	  different key, could be used to override a promise made by the SRP registrar to an SRP requestor, by replacing all or part of
 	  the service registration information with information provided by an authenticated DNS update requestor.  An implementation
-	  that allows both kinds of updates should not allow DNS Update requestors that are using different authentication and
+	  that allows both kinds of updates SHOULD NOT allow DNS Update requestors that are using different authentication and
 	  authorization credentials to update records added by SRP requestors.</t>
       </section>
       <section>
@@ -848,8 +867,9 @@
 	<t>Local links can be protected by managed services such as RA Guard <xref target="RFC6105"/>, but multicast services like
 	  DHCP <xref target="RFC21321"/>, DHCPv6 <xref target="RFC8415"/> and IPv6 Neighbor Discovery <xref target="RFC4861"/> are
 	  in most cases not authenticated and can't be controlled on unmanaged networks, such as home networks and small-office
-	  networks where no network management staff are present. In such situations, because of FCFS naming, an SRP service has
-	  comparatively fewer potential security exposures. This is discussed in more detail in <xref target="how-to-secure"/>.</t>
+	  networks where no network management staff are present. In such situations, the SRP service has comparatively fewer
+	  potential security exposures and hence is not the weak link. This is discussed in more detail in
+	  <xref target="how-to-secure"/>.</t>
 	<t>The fundamental protection for networks of this type is the user's choice of what devices to add to the network. Work is
 	  being done in other working groups and standards bodies to improve the state of the art for network on-boarding and device
 	  isolation (e.g., <xref target="RFC8520"/> provides a means for constraining what behaviors are allowed for a device in an
@@ -902,7 +922,7 @@
       <t>This section specifies considerations for systems involved in domain name resolution when resolving queries for names
 	ending with '.service.arpa.'.  Each item in this section addresses some aspect of the DNS or the process of resolving domain
 	names that would be affected by this special-use allocation.  Detailed explanations of these items can be found in Section 5
-	of [RFC6761].</t>
+	of <xref target="RFC6761"/>.</t>
       <section>
 	<name>Users</name>
 	<t>The current proposed use for 'service.arpa' does not require special knowledge on the part of the user. While the
@@ -914,11 +934,11 @@
       <section>
 	<name>Application Software</name>
 	<t>
-	  Application software does not need to handle subdomains of 'service.arpa' specially.  'service.arpa' should not be treated
+	  Application software does not need to handle subdomains of 'service.arpa' specially.  'service.arpa' SHOULD NOT be treated
 	  as more trustworthy than any other insecure DNS domain, simply because it is locally-served (or for any other reason). It
 	  is not possible to register a PKI certificate for a subdomain of 'service.arpa.' because it is a locally-served domain
 	  name. So no such subdomain can be considered as uniquely identifying a particular host, as would be required for such a
-	  PKI cert to be issued. Should a subdomain of 'service.arpa.' be returned by an API or entered in an input field of an
+	  PKI cert to be issued. If a subdomain of 'service.arpa.' is returned by an API or entered in an input field of an
 	  application, PKI authentication of the endpoint being identified by the name will not be possible. Alternative methods
 	  and practices for authenticating such endpoints are out of scope for this document.</t>
       </section>
@@ -986,7 +1006,7 @@
     <section anchor="delegation">
       <name>Delegation of 'service.arpa.'</name>
       <t>In order to be fully functional, the owner of the 'arpa.' zone must add a delegation of 'service.arpa.' in the '.arpa.'
-	zone <xref target="RFC3172"/>. This delegation should be set up as was done for 'home.arpa', as a result of the
+	zone <xref target="RFC3172"/>. This delegation is to be set up as was done for 'home.arpa', as a result of the
 	specification in <xref target="RFC8375" section="7" sectionFormat="of"/>. This is currently the responsibility of the IAB
 	<xref target="IAB-ARPA"/></t>
     </section>
@@ -1078,7 +1098,7 @@
       <section>
 	<name>Anycast Address</name>
 	<t>IANA is requested to allocate an IPv6 Anycast address from the IPv6 Special-Purpose Address Registry, similar to the Port
-	  Control Protocol anycast address, 2001:1::1. The value TBD should be replaced with the actual allocation in the table that
+	  Control Protocol anycast address, 2001:1::1. The value TBD is to be replaced with the actual allocation in the table that
 	  follows. The purpose of this allocation is to provide a fixed anycast address that can be commonly used as a destination for
 	  SRP updates when no SRP server is explicitly configured. The values for the registry are:</t>
 	<table>
@@ -1140,7 +1160,7 @@
 	proof-of-concept implementation at the Montreal Hackathon at IETF 102, and Tom Pusateri for reviewing during the hackathon
 	and afterwards. Thanks to Esko for a really thorough second last call review. Thanks also to Nathan Dyck, Gabriel
 	Montenegro, Kangping Dong, Martin Turon, and Michael Cowan for their detailed second last call reviews. Thanks to Patrik
-	Fältström, Dhruv Dhody, David Dong, Joey Salazar, and Jean-Michel Combes for their respective directorate reviews. Thanks to
+	Fältström, Dhruv Dhody, David Dong, Joey Salazar, Jean-Michel Combes, Joerg Ott, for their respective directorate reviews. Thanks to
 	Paul Wouters for a <em>really</em> detailed IESG review! Thanks also to the other AD members who provided comments or simply
 	took the time to review the document.</t>
 
@@ -1258,18 +1278,18 @@
       <name>How to allow SRP requestors to update standard RFC2136-compliant servers</name>
       <t>
         Ordinarily SRP Updates will fail when sent to an RFC 2136-compliant server that does not implement SRP because the zone
-        being updated is "default.service.arpa", and no DNS server that is not an SRP registrar should normally be configured to be
+        being updated is "default.service.arpa", and no DNS server that is not an SRP registrar would normally be configured to be
         authoritative for "default.service.arpa".  Therefore, a requestor that sends an SRP Update can tell that the receiving server
         does not support SRP, but does support RFC2136, because the RCODE will either be NotZone, NotAuth or Refused, or because
         there is no response to the update request (when using the anycast address)</t>
       <t>
         In this case a requestor MAY attempt to register itself using regular RFC2136 DNS updates. To do so, it must discover the
         default registration zone and the DNS server designated to receive updates for that zone, as described earlier, using the
-        _dns&nbhy;update._udp SRV record.  It can then send the update to the port and host pointed to by the SRV record, and
-        should use appropriate prerequisites to avoid overwriting competing records.  Such updates are out of scope for SRP, and a
-        requestor that implements SRP MUST first attempt to use SRP to register itself, and should only attempt to use RFC2136
+        _dns&nbhy;update._udp SRV record.  It can then send the update to the port and host pointed to by the SRV record, and is
+        expected to use appropriate prerequisites to avoid overwriting competing records.  Such updates are out of scope for SRP,
+        and a requestor that implements SRP MUST first attempt to use SRP to register itself, and only attempt to use RFC2136
         backwards compatibility if that fails.  Although the owner name for the SRV record specifies the UDP protocol for updates,
-        it is also possible to use TCP, and TCP should be required to prevent spoofing.</t>
+        it is also possible to use TCP, and TCP SHOULD be required to prevent spoofing.</t>
     </section>
 
     <section anchor="bind-example">
