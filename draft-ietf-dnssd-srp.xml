@@ -343,9 +343,9 @@
 	<section anchor="how-to-secure">
 	  <name>How to secure it</name>
           <t>
-            Traditional DNS update is secured using Secret Key Transaction Signatures, <xref target="RFC8945"/>, which uses a secret key
-            shared between the DNS Update requestor (which issues the update) and the server (which authenticates
-            it).  This model does not work for automatic service registration.</t>
+            DNS update as described in <xref target="RFC2136"/> is secured using Secret Key Transaction Signatures,
+            <xref target="RFC8945"/>, which uses a secret key shared between the DNS Update requestor (which issues the update) and
+            the server (which authenticates it).  This model does not work for automatic service registration.</t>
           <t>
             The goal of securing the DNS&nbhy;SD Registration Protocol is to provide the best possible security given the constraint
             that service registration has to be automatic.  It is possible to layer more operational security on top of what we
@@ -431,7 +431,7 @@
 	      might store it as binary data and thus return an invalid pointer in response to a query. This does not apply in the
 	      case of SRP: an SRP registrar needs to understand SRV records in order to validate the SRP Update. Compression of the
 	      target can save space in the SRP Update, so we want clients to be able to assume that the SRP server will handle
-	      this. Therefore SRP registrars MUST support compression of SRV RR targets.</t>
+	      this. Therefore, SRP registrars MUST support compression of SRV RR targets.</t>
           </section>
           <section anchor="remove">
 	    <name>Removing published services</name>
@@ -443,7 +443,7 @@
 		also be zero. Otherwise, it should have the same value it had previously; this holds the name in reserve for when the
 		SRP requestor is once again able to provide the service.</t>
               <t>
-		SRP requestors are normally expected to remove all service instances when removing a host.  However, in some cases a SRP
+		SRP requestors are normally expected to remove all service instances when removing a host.  However, in some cases an SRP
 		requestor may not have retained sufficient state to know that some service instance is pointing to a host that it is
 		removing.  This method of removing services is intended for the case where the requestor is going offline and does
 		not want its services advertised. Therefore, it is sufficient for the requestor to send the
@@ -995,7 +995,7 @@
 	  <xref target="SUDN"/>. IANA is requested, with the approval of IAB, to implement the delegation requested in
 	  <xref target="delegation"/>.</t>
 
-	<t>IANA is further requested to add a new entry to the "Transport-Independent Locally-Served Zones" subregistry of the
+	<t>IANA is further requested to add a new entry to the "Transport-Independent Locally-Served Zones" subregistry of
 	  the "Locally-Served DNS Zones" registry <xref target="LSDZ"/>.  The entry will be for the domain 'service.arpa.' with the
 	  description "DNS&nbhy;SD Service Registration Protocol Special-Use Domain", listing this document as the reference.</t>
       </section>
@@ -1132,12 +1132,14 @@
       <name>Acknowledgments</name>
       <t>Thanks to <contact fullname="Toke Høiland-Jørgensen"/>, Jonathan Hui, Esko Dijk, Kangping Dong and Abtin Keshavarzian for
 	their thorough technical reviews. Thanks to Kangping and Abtin as well for testing the document by doing an independent
-	implementation. Thanks to Tamara Kemper for doing a nice developmental edit, Tim Wattenberg for doing a SRP requestor
+	implementation. Thanks to Tamara Kemper for doing a nice developmental edit, Tim Wattenberg for doing an SRP requestor
 	proof-of-concept implementation at the Montreal Hackathon at IETF 102, and Tom Pusateri for reviewing during the hackathon
 	and afterwards. Thanks to Esko for a really thorough second last call review. Thanks also to Nathan Dyck, Gabriel
 	Montenegro, Kangping Dong, Martin Turon, and Michael Cowan for their detailed second last call reviews. Thanks to
-	Patrik Fältström, Dhruv Dhody, David Dong and Joey Salazar for their respective directorate reviews. Thanks to Paul Wouters
+	Patrik Fältström, Dhruv Dhody, David Dong, Joey Salazar, Jean-Michel Combes, for their respective directorate reviews. Thanks to Paul Wouters
 	for a <em>really</em> detailed IESG review!</t>
+
+
     </section>
   </middle>
 
@@ -1269,8 +1271,8 @@
       <name>Sample BIND9 configuration for default.service.arpa.</name>
       <figure title="Zone Configuration in named.conf"><artwork><![CDATA[
 zone "default.service.arpa." {
-  type master;
-  file "/etc/bind/master/service.db";
+  type primary;
+  file "/etc/bind/primary/service.db";
   allow-update { key demo.default.service.arpa.; };
 };
                 ]]></artwork></figure>
