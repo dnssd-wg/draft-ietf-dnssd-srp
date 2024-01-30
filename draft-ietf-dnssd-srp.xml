@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
-<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-23" ipr="trust200902"
+<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-24" ipr="trust200902"
      xmlns:xi="http://www.w3.org/2001/XInclude" version="3"
      scripts="Common,Latin" sortRefs="false" consensus="true"
      symRefs="true" tocDepth="4" tocInclude="true" xml:lang="en">
@@ -35,7 +35,7 @@
       </address>
     </author>
 
-    <date>August 4, 2023</date>
+    <date>January 29, 2024</date>
     <area>Internet</area>
     <workgroup>Internet Engineering Task Force</workgroup>
     <keyword>Multicast DNS</keyword>
@@ -416,7 +416,8 @@
 	      Both Host Description RR adds and Service Description RR adds can have names that result in name conflicts.
 	      Service Discovery record adds cannot have name conflicts. If any Host Description or Service Description record
 	      is found by the registrar to have a conflict with an existing name, the registrar will respond to the SRP Update
-	      with a YXDomain RCODE. In this case, the requestor MUST choose a new name or give up.</t>
+	      with a YXDomain RCODE (<xref target="RFC2136" section="2.2" sectionFormat="of"/>).  In this case, the
+	      requestor MUST either abandon the service registration attempt, or else choose a new name.</t>
 	    <t>
 	      There is no specific requirement for how this is done; typically, however, the requestor will append a number to the
 	      preferred name. This number could be sequentially increasing, or could be chosen randomly. One existing implementation
@@ -447,7 +448,7 @@
 	      is not stated, but is assumed to be because a caching resolver that does not understand the format of the SRV record
 	      might store it as binary data and thus return an invalid pointer in response to a query. This does not apply in the
 	      case of SRP: an SRP registrar needs to understand SRV records in order to validate the SRP Update. Compression of the
-	      target can save space in the SRP Update, so we want clients to be able to assume that the SRP server will handle
+	      target can save space in the SRP Update, so we want clients to be able to assume that the SRP registrar will handle
 	      this. Therefore, SRP registrars MUST support compression of SRV RR targets.</t>
           </section>
           <section anchor="remove">
@@ -455,10 +456,10 @@
 	    <section anchor="zero-lease">
 	      <name>Removing all published services</name>
               <t>
-		To remove all the services registered to a particular host, the SRP requestor retransmits its most recent update with an
-		Update Lease option that has a LEASE value of zero. If the registration is to be permanently removed, KEY-LEASE SHOULD
-		also be zero. Otherwise, it SHOULD be set to the same value it had previously; this holds the name in reserve for when the
-		SRP requestor is once again able to provide the service.</t>
+		To remove all the services registered to a particular host, the SRP requestor transmits an SRP update for that host
+		with an Update Lease option that has a LEASE value of zero. If the registration is to be permanently removed,
+		KEY-LEASE SHOULD also be zero. Otherwise, it SHOULD be set to the same value it had previously; this holds the name
+		in reserve for when the SRP requestor is once again able to provide the service.</t>
               <t>
 		SRP requestors are normally expected to remove all service instances when removing a host.  However, in some cases an SRP
 		requestor may not have retained sufficient state to know that some service instance is pointing to a host that it is
@@ -557,7 +558,7 @@
 	  <section anchor="servdesc">
 	    <name>Service Description Instruction</name>
 
-            <t>An instruction is a Service Description Instruction if, for the appropriate Service Instance Name, the following are true</t>
+            <t>An instruction is a Service Description Instruction if, for the appropriate Service Instance Name, the following are true:</t>
             <ul spacing="compact">
 	      <li>
 		It contains exactly one "Delete all RRsets from a name" update for the service instance name
@@ -603,7 +604,7 @@
             </ul>
 	    <t>
 	      A and/or AAAA records that are not of sufficient scope to be validly published in a DNS zone MAY be ignored by the
-	      SRP server, which could result in a host description effectively containing zero reachable addresses even when it
+	      SRP registrar, which could result in a host description effectively containing zero reachable addresses even when it
 	      contains one or more addresses.</t>
 
 	    <t>
@@ -622,9 +623,9 @@
 	    adds or deletes that cannot be identified as Service Discovery, Service Description or Host Description Instructions is
 	    not an SRP Update. A DNS update that contains any prerequisites is not an SRP Update.</t>
 	  <t>An SRP Update MUST include an EDNS(0) Update Lease option
-	    <xref target="I-D.ietf-dnssd-update-lease"/>. The Lease time specified in the Update Lease option MUST be less than
-	    or equal to the Key Lease time. A DNS update that does not include the Update Lease option, or that includes a Key
-	    Lease shorter than the Lease, is not an SRP update.</t>
+	    <xref target="I-D.ietf-dnssd-update-lease"/>. The LEASE time specified in the Update Lease option MUST be less than
+	    or equal to the KEY-LEASE time. A DNS update that does not include the Update Lease option, or that includes a
+	    KEY-LEASE value that is less than the LEASE value, is not an SRP update.</t>
 	  <t>When an SRP registrar receives a DNS Update that is not an SRP update, it MAY
 	    process the update as regular RFC2136 updates, including access control checks and constraint
 	    checks, if supported. Otherwise the registrar MUST reject the DNS Update with the Refused RCODE.</t>
@@ -825,7 +826,7 @@
 
 	<t>For UDP updates from constrained devices, spoofing would have to be prevented with appropriate source address filtration
 	  on routers <xref target="RFC2827"/>. This would ordinarily be accomplished by measures such as are described in
-	  <xref target="RFC7084" section="4.5" sectionFormat="of"/>. For example, a stub router <xref target="draft-ietf-snac-simple"/>
+	  <xref target="RFC7084" section="4.5" sectionFormat="of"/>. For example, a stub router <xref target="I-D.ietf-snac-simple"/>
 	  for a constrained network might only accept UDP updates from source addresses known to be on-link on that stub network, and might
 	  further validate that the UDP update was actually received on the stub network interface and not the interface connected to
 	  the adjacent infrastructure link.</t>
@@ -865,7 +866,7 @@
       <section>
 	<name>Security of local service discovery</name>
 	<t>Local links can be protected by managed services such as RA Guard <xref target="RFC6105"/>, but multicast services like
-	  DHCP <xref target="RFC21321"/>, DHCPv6 <xref target="RFC8415"/> and IPv6 Neighbor Discovery <xref target="RFC4861"/> are
+	  DHCP <xref target="RFC2131"/>, DHCPv6 <xref target="RFC8415"/> and IPv6 Neighbor Discovery <xref target="RFC4861"/> are
 	  in most cases not authenticated and can't be controlled on unmanaged networks, such as home networks and small-office
 	  networks where no network management staff are present. In such situations, the SRP service has comparatively fewer
 	  potential security exposures and hence is not the weak link. This is discussed in more detail in
@@ -902,7 +903,9 @@
       <t>
 	Because DNS-SD SRP Updates can be sent off-link, the privacy implications of SRP are different than for multicast DNS
 	responses.  Host implementations that are using TCP SHOULD also use TLS if available.  Registrar implementations MUST offer
-	TLS support.  The use of TLS with DNS is described in <xref target="RFC7858" section="4.1" sectionFormat="comma"/>.
+	TLS support.  The use of TLS with DNS is described in <xref target="RFC7858"/>. Because there is no mechanism for sharing
+	keys, validation of DNS-over-TLS keys is not possible; DNS-over-TLS is used only as described in
+	<xref target="RFC7858" section="4.1" sectionFormat="comma"/>
       </t>
       <t>
 	Hosts that implement TLS support SHOULD NOT fall back to TCP; since registrars are required to support
@@ -910,10 +913,10 @@
       </t>
       <t>
 	Public keys can be used as identifiers to track hosts. SRP registrars MAY elect not to return KEY records for queries for
-	SRP registrations. To avoid DNSSEC validation failures, an SRP server that refuses to return a KEY record MUST NOT store the
-	KEY record in the zone itself. Because the key record isn't in the zone, the nonexistance of the KEY record can be
-	validated. If the zone is not signed, the server MAY instead return a negative non-error response (either NXDOMAIN or
-	no data).
+	SRP registrations. To avoid DNSSEC validation failures, an SRP registrar that signs the zone for DNSSEC but refuses to return
+	a KEY record MUST NOT store the KEY record in the zone itself. Because the KEY record isn't in the zone, the nonexistance of
+	the KEY record can be validated. If the zone is not signed, the server MAY instead return a negative non-error response
+	(either NXDOMAIN or no data).
       </t>
     </section>
 
@@ -1100,7 +1103,7 @@
 	<t>IANA is requested to allocate an IPv6 Anycast address from the IPv6 Special-Purpose Address Registry, similar to the Port
 	  Control Protocol anycast address, 2001:1::1. The value TBD is to be replaced with the actual allocation in the table that
 	  follows. The purpose of this allocation is to provide a fixed anycast address that can be commonly used as a destination for
-	  SRP updates when no SRP server is explicitly configured. The values for the registry are:</t>
+	  SRP updates when no SRP registrar is explicitly configured. The values for the registry are:</t>
 	<table>
 	  <thead>
 	    <tr><td>Attribute</td>                    <td>value</td></tr>
@@ -1160,11 +1163,9 @@
 	proof-of-concept implementation at the Montreal Hackathon at IETF 102, and Tom Pusateri for reviewing during the hackathon
 	and afterwards. Thanks to Esko for a really thorough second last call review. Thanks also to Nathan Dyck, Gabriel
 	Montenegro, Kangping Dong, Martin Turon, and Michael Cowan for their detailed second last call reviews. Thanks to Patrik
-	Fältström, Dhruv Dhody, David Dong, Joey Salazar, Jean-Michel Combes, Joerg Ott, for their respective directorate reviews. Thanks to
-	Paul Wouters for a <em>really</em> detailed IESG review! Thanks also to the other AD members who provided comments or simply
-	took the time to review the document.</t>
-
-
+	Fältström, Dhruv Dhody, David Dong, Joey Salazar, Jean-Michel Combes, and Joerg Ott for their respective directorate
+	reviews. Thanks to Paul Wouters for a <em>really</em> detailed IESG review! Thanks also to the other IESG members who
+	provided comments or simply took the time to review the document.</t>
     </section>
   </middle>
 
@@ -1177,6 +1178,7 @@
       <name>Normative References</name>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnssd-update-lease.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml" />
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1536.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2136.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2181.xml" />
@@ -1189,6 +1191,7 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6303.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6763.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7858.xml" />
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8085.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8126.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8375.xml"/>
@@ -1216,6 +1219,7 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8945.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.cheshire-dnssd-roadmap.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnssd-advertising-proxy.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-snac-simple.xml"/>
 
       <reference anchor="SUDN" target="https://www.iana.org/assignments/special-use-domain-names/special-use-domain-names.xhtml">
         <front>
