@@ -452,12 +452,23 @@
 	    <name>Compression in SRV records</name>
 	    <t>
 	      Although <xref target="RFC2782"/> requires that the target name in the SRV record not be compressed, an SRP requestor
-	      SHOULD compress the target in the SRV record. The motivation for <em>not</em> compressing in <xref target="RFC2782"/>
+	      MAY compress the target in the SRV record. The motivation for <em>not</em> compressing in <xref target="RFC2782"/>
 	      is not stated, but is assumed to be because a caching resolver that does not understand the format of the SRV record
 	      might store it as binary data and thus return an invalid pointer in response to a query. This does not apply in the
 	      case of SRP: an SRP registrar needs to understand SRV records in order to validate the SRP Update. Compression of the
 	      target can save space in the SRP Update, so we want clients to be able to assume that the registrar will handle
 	      this. Therefore, SRP registrars MUST support compression of SRV RR targets.</t>
+	    <t>
+	      Note that this does not update <xref target="RFC2782"/>: DNS servers still MUST NOT compress SRV record targets. The
+	      requirement to accept compressed SRV records in updates only applies to SRP registrars, and SRP registrars that are
+	      also DNS servers still MUST NOT compress SRV record targets in DNS responses. We note also that
+	      <xref target="RFC6762"/> recomments that SRV records be compressed in mDNS messages, so <xref target="RFC2782"/> does
+	      not apply to mDNS messages.</t>
+	    <t>
+	      In addition, we note that an implementor of an SRP requestor might update existing code that creates SRV records
+	      or compresses DNS messages so that it compresses the target of an SRV record. Care must be taken if such code is
+	      used both in requestors and in DNS servers that the code only compresses in the case where a requestor is generating
+	      an SRP update.</t>
           </section>
           <section anchor="remove">
 	    <name>Removing published services</name>
