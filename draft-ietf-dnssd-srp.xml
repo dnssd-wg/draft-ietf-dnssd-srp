@@ -302,7 +302,6 @@
 	  <t>
             Devices made for Constrained-Node Networks register in the special use domain name <xref target="RFC6761"/>
             "default.service.arpa", and let the SRP registrar handle rewriting that to a different domain if necessary.</t>
-	  </t>
 	</section>
 
 	<section>
@@ -411,6 +410,9 @@
 	      The update is signed using SIG(0), using the private key that corresponds to the public key in the KEY record.  The
 	      lifetimes of the records in the update is set using the EDNS(0) Update Lease option
 	      <xref target="I-D.ietf-dnssd-update-lease"/>.</t>
+	    <t>
+	      The format of the KEY resource record in the SRP Update is defined in <xref target="RFC3445"/>. Because the KEY RR
+	      used in TSIG is not a zone-signing key, the flags field in the KEY RR MUST be all zeroes.</t>
             <t>
 	      The KEY record in Service Description updates MAY be omitted for brevity; if it is omitted, the SRP registrar MUST behave
 	      as if the same KEY record that is given for the Host Description is also given for each Service Description for which
@@ -662,6 +664,9 @@
 	    KEY record updates omitted from Service Description Instruction are processed as if they had been explicitly present:
 	    every Service Description that is updated MUST, after the SRP Update has been applied, have a KEY RR, and it must be the
 	    same KEY RR that is present in the Host Description to which the Service Description refers.</t>
+	  <t>
+	    <xref target="RFC3445"/> states that although the flags field in the KEY RR MUST be zero except for bit 7, which can
+	    be one in the case of a zone key, the SRP registrar MUST NOT validate the flags field.</t>
 	</section>
 	<section>
 	  <name>Handling of Service Subtypes</name>
@@ -1193,6 +1198,7 @@
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2782.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2931.xml" />
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3172.xml"/>
+      <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3445.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3596.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml"/>
       <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6303.xml"/>
@@ -1342,7 +1348,7 @@ $TTL 300    ; 5 minutes
 ns3                     AAAA         2001:db8:0:1::1
 $TTL 3600   ; 1 hour
 demo                    AAAA         2001:db8:0:2::1
-                        KEY 513 3 13 (
+                        KEY 0 3 13 (
                            qweEmaaq0FAWok5//ftuQtZgiZoiFSUsm0srWREdywQU
                            9dpvtOhrdKWUuPT3uEFF5TZU6B4q1z1I662GdaUwqg==
                         ); alg = ECDSAP256SHA256 ; key id = 15008
