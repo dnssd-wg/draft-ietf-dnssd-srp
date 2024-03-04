@@ -975,12 +975,12 @@
 	<t>There are three considerations for caching DNS servers that
 	  follow this specification:</t>
 	<ol>
-	  <li>Recursive resolvers at sites using 'service.arpa.'  MUST transparently support DNSSEC queries: queries for DNSSEC
-            records and queries with the DNSSEC OK (DO) bit set (<xref target="RFC4035" section="3.2.1" sectionFormat="of"/>).
-            While validation is not required, it is strongly encouraged: a caching recursive resolver that does not validate answers
-            that can be validated may cache invalid data.  This, in turn, will prevent validating stub resolvers from successfully
-            validating answers. We can't place normative requirements on DNS recursive resolvers, but we remind implementors that
-            DNSSEC validation is a Best Current Practice <xref target="RFC9364"/>.</li>
+	  <li>For correctness, recursive resolvers at sites using 'service.arpa.' must in practice transparently support DNSSEC
+            queries: queries for DNSSEC records and queries with the DNSSEC OK (DO) bit set (<xref target="RFC4035" section="3.2.1"
+            sectionFormat="of"/>).  DNSSEC validation is a Best Current Practice <xref target="RFC9364"/>: although validation is
+            not required, a caching recursive resolver that does not validate answers that can be validated may cache invalid data.
+            This, in turn, would prevent validating stub resolvers from successfully validating answers. Hence, as a practical
+            matter, recursive resolvers at sites using 'service.arpa' should do DNSSEC validation.</li>
 	  <li>
 	    <t>Unless configured otherwise, recursive resolvers and DNS proxies MUST behave as described in Locally Served Zones,
 	      <xref target="RFC6303" section="3" sectionFormat="of"/>.  That is, queries for 'service.arpa.' and subdomains of
