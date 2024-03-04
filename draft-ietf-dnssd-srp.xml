@@ -665,8 +665,8 @@
 	    every Service Description that is updated MUST, after the SRP Update has been applied, have a KEY RR, and it must be the
 	    same KEY RR that is present in the Host Description to which the Service Description refers.</t>
 	  <t>
-	    <xref target="RFC3445"/> states that although the flags field in the KEY RR MUST be zero except for bit 7, which can
-	    be one in the case of a zone key, the SRP registrar MUST NOT validate the flags field.</t>
+	    <xref target="RFC3445"/> states that the flags field in the KEY RR MUST be zero except for bit 7, which can
+	    be one in the case of a zone key. However, the SRP registrar MUST NOT validate the flags field.</t>
 	</section>
 	<section>
 	  <name>Handling of Service Subtypes</name>
