@@ -105,12 +105,12 @@
 
       <t>
 	The Service Registration Protocol (SRP) adds a set of default heuristics for processing DNS updates that eliminates the need for DNS update
-	conditional predicates: instead, the SRP registrar (a DNS server that supports SRP updates) has a set of default predicates
+	conditional predicates: instead, the SRP registrar (a DNS server that supports SRP Updates) has a set of default predicates
 	that are applied to the update, and the update either succeeds entirely, or fails in a way that allows the requestor to know
 	what went wrong and construct a new update.</t>
 
       <t>
-	SRP also adds a feature called First-Come, First-Served (FCFS) Naming, which allows the requestor to claim a name that is
+	SRP also adds a feature called First-Come, First-Served (FCFS) naming, which allows the requestor to claim a name that is
 	not yet in use, and, using SIG(0) <xref target="RFC2931"/>, to authenticate both the initial claim and subsequent
 	updates. This prevents name conflicts, since a second SRP requestor attempting to claim the same name will not possess the
 	SIG(0) key used by the first requestor to claim it, and so its claim will be rejected and the second requestor will have to
@@ -143,9 +143,9 @@
 
       <t>
 	Finally, SRP adds the concept of a 'lease,' similar to leases in Dynamic Host Configuration Protocol
-	<xref target="RFC8415"/>.  The SRP registration itself has a lease which may be on the order of an hour; if the requestor
+	<xref target="RFC8415"/>.  The SRP registration itself has a lease interval (the interval during which the lease is valid) which may be on the order of an hour; if the requestor
 	does not renew the lease before it has elapsed, the registration is removed.  The claim on the name can have a longer
-	lease, so that another requestor cannot claim the name, even though the registration has expired.</t>
+	lease interval, the key lease interval, so that another requestor cannot claim the name, even though the registration has expired.</t>
 
       <t>
         The Service Registration Protocol for DNS&nbhy;SD (SRP), specified in this document, provides a reasonably secure mechanism
@@ -184,7 +184,7 @@
         Services that implement SRP use DNS Update <xref target="RFC2136"/> <xref target="RFC3007"/> to publish service information
         in the DNS.  Two variants exist, one for full-featured hosts, and one for devices designed for "Constrained-Node Networks"
         <xref target="RFC7228"/>. An SRP registrar is most likely an authoritative DNS server, or else is updating an authoritative
-	DNS server. There is no requirement that the server that is receiving SRP updates be the same server that is answering
+	DNS server. There is no requirement that the server that is receiving SRP Updates be the same server that is answering
 	queries that return records that have been registered.</t>
       <section>
 	<name>Protocol Variants</name>
@@ -202,7 +202,7 @@
             describing their service(s) as subdomains of the chosen service registration domain.  For these names they then discover
             the zone apex of the closest enclosing DNS zone using SOA queries <xref target="RFC8765" section="6.1"/>.  Having
             discovered the enclosing DNS zone, they query for the "_dnssd&nbhy;srp._tcp.&lt;zone&gt;" SRV record to discover the
-            server to which they can send SRP updates.  Hosts that support SRP Updates using TLS use the
+            server to which they can send SRP Updates.  Hosts that support SRP Updates using TLS use the
             "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" SRV record instead.</t>
 	  <t>
 	    Examples of full-featured hosts include devices such as home computers, laptops, powered peripherals with network
@@ -253,7 +253,7 @@
 	<section>
 	  <name>What to publish</name>
           <t>
-            SRP Updates are sent by SRP requestors to SRP registrars.  Three types of instructions appear in an SRP update: Service
+            SRP Updates are sent by SRP requestors to SRP registrars.  Three types of instructions appear in an SRP Update: Service
 	    Discovery instructions, Service Description instructions, and Host Description instructions. These instructions are made
 	    up of DNS Update RRs that are either adds or deletes. The types of records that are added, updated and removed in each
 	    of these instructions, as well as the constraints that apply to them, are described in <xref target="server_behavior"/>.
@@ -269,9 +269,9 @@
 	      TXT RRs, and a KEY RR. Although in principle DNS-SD Service Description records can include other record types with
 	      the same Service Instance Name, in practice they rarely do. SRP does not permit other record types. The KEY RR is used
 	      to support FCFS naming, and has no specific meaning for DNS-SD lookups. SRV records for all services described in an
-	      SRP update point to the same hostname.</li>
+	      SRP Update point to the same hostname.</li>
             <li>
-	      There is never more than one hostname in a single SRP update. The hostname has one or more address RRs (AAAA or A) and
+	      There is never more than one hostname in a single SRP Update. The hostname has one or more address RRs (AAAA or A) and
               a KEY RR (used for FCFS naming). Depending on the use case, an SRP requestor may be required to suppress some
               addresses that would not be usable by hosts discovering the service through the SRP registrar. The exact address
               record suppression behavior required may vary for different types of SRP requestors. An example of such advice can be
@@ -314,7 +314,7 @@
             An SRP Update takes advantage of this: it is implemented as a single DNS Update message that contains a service's Service
             Discovery records, Service Description records, and Host Description records.</t>
           <t>
-            Updates done according to this specification are somewhat different than regular DNS Updates as defined in
+            Update messages done according to this specification are somewhat different than regular DNS Update messages as defined in
 	    <xref target="RFC2136"/>.  The <xref target="RFC2136"/> update process can involve many update attempts: you might first
 	    attempt to add a name if it doesn't exist; if that fails, then in a second message you might update the name if it does
 	    exist but matches certain preconditions.  Because the registration protocol uses a single transaction, some of this
@@ -356,7 +356,7 @@
 	  <section>
 	    <name>Successive Updates</name>
 	    <t>Service Registration Protocol does not require that every update contain the same information.
-	      When an SRP requestor needs to send more than one SRP update to the SRP registrar, it MUST send
+	      When an SRP requestor needs to send more than one SRP Update to the SRP registrar, it MUST send
 	      these sequentially: until an earlier update has been successfully acknowledged, the requestor
 	      MUST NOT begin sending a subsequent update.</t>
 	  </section>
@@ -374,14 +374,14 @@
             describe here, but FCFS naming is already an improvement over the security of mDNS.</t>
 
           <section anchor="fcfs">
-	    <name>First-Come First-Served Naming</name>
+	    <name>First-Come First-Served naming</name>
             <t>
               First-Come First-Serve naming provides a limited degree of security: a server that registers its service using
               DNS&nbhy;SD Registration protocol is given ownership of a name for an extended period of time based on a lease
-              specific to the key used to authenticate the DNS Update, which may be longer than the lease associated with the
+              interval specific to the key used to authenticate the DNS Update message, which may be longer than the lease interval associated with the
               registered records.  As long as the registration service remembers the name and
               the key used to register that name, no other server can add or update the information associated with that.  If the
-              server fails to renew its service registration before the KEY lease (<xref target="I-D.ietf-dnssd-update-lease"
+              server fails to renew its service registration before the key lease interval (<xref target="I-D.ietf-dnssd-update-lease"
               section="4"/>) expires, its name is no longer protected.  FCFS naming is used to protect both the Service Description
               and the Host Description.</t>
 	  </section>
@@ -405,18 +405,18 @@
 	      RECOMMENDED in such a situation: a policy appropriate to the full set of uses for the key must be chosen. Specifying
 	      such a policy is out of scope for this document.</t>
             <t>
-	      When sending DNS updates, the requestor includes a KEY record containing the public portion of the key in each Host
-	      Description Instruction and each Service Description Instruction.  Each KEY record MUST contain the same public key.
-	      The update is signed using SIG(0), using the private key that corresponds to the public key in the KEY record.  The
+	      When sending DNS updates, the requestor includes a KEY RR containing the public portion of the key in each Host
+	      Description Instruction and each Service Description Instruction.  Each KEY RR MUST contain the same public key.
+	      The update is signed using SIG(0), using the private key that corresponds to the public key in the KEY RR.  The
 	      lifetimes of the records in the update is set using the EDNS(0) Update Lease option
 	      <xref target="I-D.ietf-dnssd-update-lease"/>.</t>
 	    <t>
-	      The format of the KEY resource record in the SRP Update is defined in <xref target="RFC3445"/>. Because the KEY RR
-	      used in TSIG is not a zone-signing key, the flags field in the KEY RR MUST be all zeroes.</t>
+	      The format of the KEY RR in the SRP Update is defined in <xref target="RFC3445"/>. Because the KEY RR
+	      used in SIG(0) is not a zone-signing key, the flags field in the KEY RR MUST be all zeroes.</t>
             <t>
-	      The KEY record in Service Description updates MAY be omitted for brevity; if it is omitted, the SRP registrar MUST behave
-	      as if the same KEY record that is given for the Host Description is also given for each Service Description for which
-	      no KEY record is provided.  Omitted KEY records are not used when computing the SIG(0) signature.</t>
+	      The KEY RR in Service Description updates MAY be omitted for brevity; if it is omitted, the SRP registrar MUST behave
+	      as if the same KEY RR that is given for the Host Description is also given for each Service Description for which
+	      no KEY RR is provided.  Omitted KEY RRs are not used when computing the SIG(0) signature.</t>
 	  </section>
 	  <section>
 	    <name>Name Conflict Handling</name>
@@ -439,7 +439,7 @@
 	      of the Update Lease option, and is typically set to two hours.  This means that if a device is disconnected from the
 	      network, it does not appear in the user interfaces of devices looking for services of that type for too long.</t>
 	    <t>
-	      The lifetime of the KEY records is set using the KEY-LEASE field of the Update Lease Option, and SHOULD be set to a
+	      The lifetime of the KEY RRs is set using the key lease interval, which is sent in the KEY-LEASE field of the Update Lease option, and SHOULD be set to a
 	      much longer time, typically 14 days.  The result of this is that even though a device may be temporarily unplugged,
 	      disappearing from the network for a few days, it makes a claim on its name that lasts much longer.</t>
 	    <t>
@@ -468,16 +468,16 @@
 	      In addition, we note that an implementor of an SRP requestor might update existing code that creates SRV records
 	      or compresses DNS messages so that it compresses the target of an SRV record. Care must be taken if such code is
 	      used both in requestors and in DNS servers that the code only compresses in the case where a requestor is generating
-	      an SRP update.</t>
+	      an SRP Update.</t>
           </section>
           <section anchor="remove">
 	    <name>Removing published services</name>
 	    <section anchor="zero-lease">
 	      <name>Removing all published services</name>
               <t>
-		To remove all the services registered to a particular host, the SRP requestor transmits an SRP update for that host
-		with an Update Lease option that has a LEASE value of zero. If the registration is to be permanently removed,
-		KEY-LEASE SHOULD also be zero. Otherwise, it SHOULD be set to the same value it had previously; this holds the name
+		To remove all the services registered to a particular host, the SRP requestor transmits an SRP Update for that host
+		with an Update Lease option that has a LEASE field with a value of zero. If the registration is to be permanently removed,
+		KEY-LEASE field's value SHOULD also be zero. Otherwise, it SHOULD be set to the same value it had previously; this holds the name
 		in reserve for when the SRP requestor is once again able to provide the service.</t>
               <t>
 		SRP requestors are normally expected to remove all service instances when removing a host.  However, in some cases an SRP
@@ -487,9 +487,9 @@
 		<xref target="hdi">Host Description Instruction</xref>.
 	      </t>
 	      <t>
-		To support this, when removing services based on the lease time being zero, an SRP registrar MUST remove all service
+		To support this, when removing services based on the lease interval being zero, an SRP registrar MUST remove all service
 		instances pointing to a host when a host is removed, even if the SRP requestor doesn't list them explicitly. If the
-		KEY lease time is nonzero, the SRP registrar MUST NOT delete the KEY records for these SRP requestors.
+		key lease interval is nonzero, the SRP registrar MUST NOT delete the KEY RRs for these SRP requestors.
 	      </t>
 	    </section>
 	    <section>
@@ -519,7 +519,7 @@
 		the Service Description Instruction.
 	      </t>
 	      <t>
-		Whichever of these two alternatives is used, the host lease will be updated with the lease time provided in the SRP
+		Whichever of these two alternatives is used, the host lease will be updated with the lease interval provided in the SRP
 		update. In neither of these cases is it permissible to delete the host. All services must point to a host. If a host
 		is to be deleted, this must be done using the method described in <xref target="zero-lease"/>, which deletes the
 		host and all services that have that host as their target.
@@ -533,7 +533,7 @@
         <section anchor="add_validation">
 	  <name>Validation of DNS Update Add and Delete RRs</name>
           <t>
-	    The SRP registrar first validates that the DNS Update is a syntactically and semantically valid DNS Update according to
+	    The SRP registrar first validates that the DNS Update message is a syntactically and semantically valid DNS Update message according to
 	    the rules specified in <xref target="RFC2136"/>.</t>
           <t>
 	    SRP Updates consist of a set of <em>instructions</em> that together add or remove one or more services. Each instruction
@@ -585,8 +585,8 @@
 	      <li>
 		It contains zero or one "Add to an RRset" SRV RR,</li>
 	      <li>
-		It contains zero or one "Add to an RRset" KEY RR that, if present, contains the public key corresponding to the private key
-		that was used to sign the message (if present, the KEY MUST match the KEY RR given in the Host Description),</li>
+		It contains zero or one "Add to an RRset" KEY RRs that, if present, contains the public key corresponding to the private key
+		that was used to sign the message (if present, the KEY RR MUST match the KEY RR given in the Host Description),</li>
 	      <li>
 		It contains zero or more "Add to an RRset" TXT RRs,</li>
 	      <li>
@@ -629,7 +629,7 @@
 	    <t>
 	      For example, if a link-scope address or IPv4 autoconfiguration address is provided by the SRP requestor, the SRP
 	      registrar could not publish this in a DNS zone. However, in some situations, the registrar might make the records
-	      available through a mechanism such as an advertising proxy only on the specific link from which the SRP update
+	      available through a mechanism such as an advertising proxy only on the specific link from which the SRP Update
 	      originated; in such a situation, locally-scoped records are still valid.</t>
 	  </section>
 	</section>
@@ -638,19 +638,19 @@
 	  <name>Valid SRP Update Requirements</name>
           <t>
 	    An SRP Update MUST contain exactly one Host Description Instruction. In addition, there MUST NOT be any Service
-	    Description Instruction to which no Service Discovery Instruction points.  A DNS Update that contains any additional
+	    Description Instruction to which no Service Discovery Instruction points.  A DNS Update message that contains any additional
 	    adds or deletes that cannot be identified as Service Discovery, Service Description or Host Description Instructions is
 	    not an SRP Update. A DNS update that contains any prerequisites is not an SRP Update.</t>
-	  <t>An SRP Update MUST include an EDNS(0) Update Lease option
-	    <xref target="I-D.ietf-dnssd-update-lease"/>. The LEASE time specified in the Update Lease option MUST be less than
-	    or equal to the KEY-LEASE time. A DNS update that does not include the Update Lease option, or that includes a
-	    KEY-LEASE value that is less than the LEASE value, is not an SRP update.</t>
-	  <t>When an SRP registrar receives a DNS Update that is not an SRP update, it MAY
+	  <t>An SRP Update MUST include an Update Lease option
+	    <xref target="I-D.ietf-dnssd-update-lease"/>. The lease interval  specified in the Update Lease option MUST be less than
+	    or equal to the key lease interval. A DNS update that does not include the Update Lease option, or that includes a
+	    KEY-LEASE value that is less than the LEASE value, is not an SRP Update.</t>
+	  <t>When an SRP registrar receives a DNS Update message that is not an SRP Update, it MAY
 	    process the update as regular RFC2136 updates, including access control checks and constraint
-	    checks, if supported. Otherwise the SRP registrar MUST reject the DNS Update with the Refused RCODE.</t>
+	    checks, if supported. Otherwise the SRP registrar MUST reject the DNS Update message with the Refused RCODE.</t>
           <t>
 	    If the definitions of each of these instructions are followed carefully and the update requirements are validated
-	    correctly, many DNS Updates that look very much like SRP Updates nevertheless will fail to validate.  For example, a DNS
+	    correctly, many DNS Update messages that look very much like SRP Updates nevertheless will fail to validate.  For example, a DNS
 	    update that contains an Add to an RRset instruction for a Service Name and an Add to an RRset instruction for a Service
 	    Instance Name, where the PTR record added to the Service Name does not reference the Service Instance Name, is not a
 	    valid SRP Update message, but may be a valid RFC2136 update.</t>
@@ -660,19 +660,19 @@
           <t>
 	    Assuming that a DNS Update message has been validated with these conditions and is a valid SRP Update, the SRP registrar
 	    checks that the name in the Host Description Instruction exists.  If so, then the registrar checks to see if the KEY
-	    record on that name is the same as the KEY record in the Host Description Instruction.  The registrar performs the same
-	    check for the KEY records in any Service Description Instructions.  For KEY records that were omitted from Service
-	    Description Instructions, the KEY from the Host Description Instruction is used.  If any existing KEY record
-	    corresponding to a KEY record in the SRP Update does not match the KEY record in the SRP Update (whether provided
+	    RR on that name is the same as the KEY RR in the Host Description Instruction.  The registrar performs the same
+	    check for the KEY RRs in any Service Description Instructions.  For KEY RRs that were omitted from Service
+	    Description Instructions, the KEY RR from the Host Description Instruction is used.  If any existing KEY RR
+	    corresponding to a KEY RR in the SRP Update does not match the KEY RR in the SRP Update (whether provided
 	    or taken from the Host Description Instruction), then the SRP registrar MUST reject the SRP Update with the YXDomain
 	    RCODE.</t>
           <t>
-	    Otherwise, the SRP registrar validates the SRP Update using SIG(0) against the public key in the KEY record of the Host
+	    Otherwise, the SRP registrar validates the SRP Update using SIG(0) against the public key in the KEY RR of the Host
 	    Description Instruction.  If the validation fails, the registrar MUST reject the SRP Update with the Refused RCODE.
 	    Otherwise, the SRP Update is considered valid and authentic, and is processed according to the method described in
 	    RFC2136.</t>
           <t>
-	    KEY record updates omitted from Service Description Instruction are processed as if they had been explicitly present:
+	    KEY RR updates omitted from Service Description Instruction are processed as if they had been explicitly present:
 	    every Service Description that is updated MUST, after the SRP Update has been applied, have a KEY RR, and it must be the
 	    same KEY RR that is present in the Host Description to which the Service Description refers.</t>
 	  <t>
@@ -726,7 +726,7 @@
 	    implementation.  Second, the registration protocol includes maintenance functionality not present with normal DNS
 	    updates.</t>
           <t>
-	    Note that the semantics of using SRP in this way are different than for typical RFC2136 implementations: the KEY used
+	    Note that the semantics of using SRP in this way are different than for typical RFC2136 implementations: the key used
 	    to sign the SRP Update only allows the SRP requestor to update records that refer to its Host Description.  RFC2136
 	    implementations do not normally provide a way to enforce a constraint of this type.</t>
           <t>
@@ -754,7 +754,7 @@
       <t>
 	TTLs sent in SRP Updates are advisory: they indicate the SRP requestor's guess as to what a good TTL would be.  SRP registrars may
 	override these TTLs.  SRP registrars SHOULD ensure that TTLs are reasonable: neither too long nor too short.  The TTL SHOULD NOT
-	ever be longer than the lease time (<xref target="stale"/>).  Shorter TTLs will result in more frequent data refreshes;
+	ever be longer than the lease interval (<xref target="stale"/>).  Shorter TTLs will result in more frequent data refreshes;
 	this increases latency on the DNS-SD client side, increases load on any caching resolvers and on the authoritative server,
 	and also increases network load, which may be an issue for constrained networks.  Longer TTLs will increase the likelihood
 	that data in caches will be stale.  TTL minimums and maximums SHOULD be configurable by the operator of the SRP registrar.
@@ -767,45 +767,45 @@
 	<name>Cleaning up stale data</name>
 	<t>Because the DNS&nbhy;SD registration protocol is automatic, and not managed by humans,
           some additional bookkeeping is required.  When an update is constructed by the SRP requestor,
-          it MUST include an EDNS(0) Update Lease Option <xref target="I-D.ietf-dnssd-update-lease"/>.
-          The Update Lease Option contains two lease times: the Lease Time and the KEY
-          Lease Time.</t>
+          it MuST include an Update Lease option <xref target="I-D.ietf-dnssd-update-lease"/>.
+          The Update Lease option contains two lease intervals: the lease interval and the key
+          lease interval.</t>
 
 	<t>These leases are promises, similar to <xref target="RFC2131">DHCP leases</xref>,
           from the SRP requestor that it will send a new update for the service registration before the
-          lease time expires.  The Lease time is chosen to represent the time after the
-          update during which the registered records other than the KEY record can be assumed
-          to be valid.  The KEY lease time represents the time after the update during
-          which the KEY record can be assumed to be valid.</t>
+          lease interval expires.  The lease interval is chosen to represent the time after the
+          update during which the registered records other than the KEY RR can be assumed
+          to be valid.  The key lease interval represents the time after the update during
+          which the KEY RR can be assumed to be valid.</t>
 
-	<t>The reasoning behind the different lease times is discussed in the section on FCFS naming
+	<t>The reasoning behind the different lease intervals is discussed in the section on FCFS naming
           (<xref target="fcfs"/>).  SRP registrars may be configured with limits for these values.  A default limit of two hours for
-          the Lease and 14 days for the SIG(0) KEY are currently thought to be good choices.  Constrained devices with limited
+          the Lease and 14 days for the SIG(0) key are currently thought to be good choices.  Constrained devices with limited
           battery that wake infrequently are likely to request longer leases; registrars that support such devices may need to set
           higher limits.  SRP requestors that are going to continue to use names on which they hold leases SHOULD update well before
           the lease ends, in case the registrar is unavailable or under heavy load.</t>
 
 	<t>
-	  The lease time applies specifically to the host. All service instances, and all service entries for such service
+	  The lease interval applies specifically to the host. All service instances, and all service entries for such service
 	  instances, depend on the host. When the lease on a host expires, the host and all services that reference it MUST be
 	  removed at the same time&mdash;it is never valid for a service instance to remain when the host it references has been
-	  removed. If the KEY record for the host is to remain, the KEY record for any services that reference it MUST also
+	  removed. If the KEY RR for the host is to remain, the KEY RR for any services that reference it MUST also
 	  remain. However, the service PTR record MUST be removed, since it has no key associated with it, and since it is never
 	  valid to have a service PTR record for which there is no service instance on the target of the PTR record.
 	</t>
 
 	<t>
-	  SRP registrars MUST also track a lease time per service instance. The reason for doing this is that a requestor may
+	  SRP registrars MUST also track a lease interval per service instance. The reason for doing this is that a requestor may
 	  re-register a host with a different set of services, and not remember that some different service instance had previously
 	  been registered. In this case, when that service instance lease expires, the SRP registrar MUST remove the service
-	  instance (although the KEY record for the service instance SHOULD be retained until the KEY lease on that service
+	  instance (although the KEY RR for the service instance SHOULD be retained until the key lease interval on that service
 	  expires). This is beneficial because otherwise if the SRP requestor continues to renew the host, but never mentions the
 	  stale service again, the stale service will continue to be advertised.
 	</t>
 
-	<t>The SRP registrar MUST include an EDNS(0) Update Lease option in the
-          response if the lease time proposed by the requestor has been shortened or lengthened by the registrar.  The requestor
-          MUST check for the EDNS(0) Update Lease option in the response and MUST use the lease
+	<t>The SRP registrar MUST include an Update Lease option in the
+          response if the lease interval proposed by the requestor has been shortened or lengthened by the registrar.  The requestor
+          MUST check for the Update Lease option in the response and MUST use the lease
           times from that option in place of the options that it sent to the registrar when
           deciding when to renew its registration.   The times may be shorter or longer than
           those specified in the SRP Update; the SRP requestor must honor them in either case.</t>
@@ -817,14 +817,14 @@
           possibility of misunderstandings.</t>
 
 	<t>SRP registrars MUST reject updates that do not include an
-          EDNS(0) Update Lease option.  DNS authoritative servers that allow both SRP and non-SRP DNS updates MAY accept updates that don't include
+          Update Lease option.  DNS authoritative servers that allow both SRP and non-SRP DNS updates MAY accept updates that don't include
           leases, but SHOULD differentiate between SRP Updates and
           other updates, and MUST reject updates that would otherwise be SRP Updates
           if they do not include leases.</t>
 
-	<t>Lease times have a completely different function than TTLs.  On an authoritative
+	<t>lease intervals have a completely different function than TTLs.  On an authoritative
           DNS server, the TTL on a resource record is a constant: whenever that RR is served in
-          a DNS response, the TTL value sent in the answer is the same.  The lease time is never
+          a DNS response, the TTL value sent in the answer is the same.  The lease interval is never
           sent as a TTL; its sole purpose is to determine when the authoritative DNS server will
           delete stale records.  It is not an error to send a DNS response with a TTL of 'n' when
           the remaining time on the lease is less than 'n'.</t>
@@ -869,16 +869,16 @@
 	  authorization credentials to update records added by SRP requestors.</t>
       </section>
       <section>
-	<name>Risks of allowing arbitrary names to be registered in SRP updates</name>
-	<t>It is possible to set up SRP updates for a zone that is used for non-DNSSD services. For example, imagine that you set
+	<name>Risks of allowing arbitrary names to be registered in SRP Updates</name>
+	<t>It is possible to set up SRP Updates for a zone that is used for non-DNSSD services. For example, imagine that you set
 	  up SRP service for example.com. SRP hosts can now register names like "www" or "mail" or "smtp" in this domain. In addition,
-	  SRP updates using FCFS naming can insert names that are obscene or offensive into the zone. There is no simple solution to
+	  SRP Updates using FCFS naming can insert names that are obscene or offensive into the zone. There is no simple solution to
 	  these problems. We have two recommendations to address this problem, however:</t>
 	<ul spacing="compact">
 	  <li>Do not provide SRP service in organization-level zones. Use subdomains of the organizational domain for DNS service
 	    discovery.  This does not prevent registering names as mentioned above, but does ensure that genuinely important names
 	    are not accidentally reserved for SRP clients. So for example, the zone "dnssd.example.com" could be used instead of
-	    "example.com" for SRP updates. Because of the way that DNS browsing domains are discovered, there is no need for the
+	    "example.com" for SRP Updates. Because of the way that DNS browsing domains are discovered, there is no need for the
 	    DNSSD discovery zone that is updated by SRP to have a user-friendly or important-sounding name.</li>
 	  <li>Configure a dictionary of names that are prohibited. Dictionaries of common obscene and offensive names are no doubt
 	    available, and can be augmented with a list of typical "special" names like "www", "mail", "smtp" and so on. Lists of
@@ -934,10 +934,10 @@
 	TLS, it is entirely up to the host implementation whether to use it.
       </t>
       <t>
-	Public keys can be used as identifiers to track hosts. SRP registrars MAY elect not to return KEY records for queries for
+	Public keys can be used as identifiers to track hosts. SRP registrars MAY elect not to return KEY RRs for queries for
 	SRP registrations. To avoid DNSSEC validation failures, an SRP registrar that signs the zone for DNSSEC but refuses to return
-	a KEY record MUST NOT store the KEY record in the zone itself. Because the KEY record isn't in the zone, the nonexistance of
-	the KEY record can be validated. If the zone is not signed, the server MAY instead return a negative non-error response
+	a KEY RR MUST NOT store the KEY RR in the zone itself. Because the KEY RR isn't in the zone, the nonexistance of
+	the KEY RR can be validated. If the zone is not signed, the server MAY instead return a negative non-error response
 	(either NXDOMAIN or no data).
       </t>
     </section>
@@ -1077,7 +1077,7 @@
 	  <tbody>
 	    <tr>
 	      <td>default.service.arpa.</td>
-	      <td>Default domain for SRP updates</td>
+	      <td>Default domain for SRP Updates</td>
 	      <td>[THIS DOCUMENT]</td>
 	    </tr>
 	  </tbody>
@@ -1126,7 +1126,7 @@
 	<t>IANA is requested to allocate an IPv6 Anycast address from the IPv6 Special-Purpose Address Registry, similar to the Port
 	  Control Protocol anycast address, 2001:1::1. The value TBD is to be replaced with the actual allocation in the table that
 	  follows. The purpose of this allocation is to provide a fixed anycast address that can be commonly used as a destination for
-	  SRP updates when no SRP registrar is explicitly configured. The values for the registry are:</t>
+	  SRP Updates when no SRP registrar is explicitly configured. The values for the registry are:</t>
 	<table>
 	  <thead>
 	    <tr><td>Attribute</td>                    <td>value</td></tr>
@@ -1299,7 +1299,7 @@
       <t>
         Since SRP Updates are signed with keys, validation of the SIG(0) algorithm used by the requestor can be done by manually
         installing the requestor's public key on the DNS server that will be receiving the updates.  The key can then be used to
-        authenticate the SRP update, and can be used as a requirement for the update.  An example configuration for testing SRP
+        authenticate the SRP Update, and can be used as a requirement for the update.  An example configuration for testing SRP
         using BIND 9 is given in <xref target="bind-example"/>.</t>
     </section>
 
