@@ -85,7 +85,6 @@
      similar text?  And perhaps avoiding the two "provide" uses so
      close together would be helpful for the reader?
 
-
 Original:
    DNS-Based Service Discovery (DNS-SD) allows services to advertise
    the fact that they provide service, and to provide the
@@ -101,10 +100,14 @@ Perhaps:
 The term "server" would be confusing here. We really do mean services. That's what is discovered
 using service discovery. I've reworded the sentence to make this (I hope!) clearer.
 
+A server is the thing that provides the service. So servers register services, or more correctly the SRP requestor registers a service on behalf of a server.
+Another point of confusion is "server" versus "DNS server" so I've clarified that throughout by replacing "server" with "DNS server" when it's a DNS server and
+not a server publishing a service.
+
 -->
 
-        DNS&nbhy;SD allows services to advertise their availability to provide
-        the information required to access them.  DNS&nbhy;SD clients can then discover the set of services of a particular
+        DNS&nbhy;SD allows servers to publish
+        the information required to access the services they provide.  DNS&nbhy;SD clients can then discover the set of services of a particular
         type that are available.  They can then select a service from among those that are available and obtain the information
         required to use it.  Although DNS-SD using the DNS protocol (as opposed to mDNS) can be more efficient and versatile, it is
         not common in practice because of the difficulties associated with updating authoritative DNS services with service
@@ -127,7 +130,7 @@ using service discovery. I've reworded the sentence to make this (I hope!) clear
      here is actually redundant anyway, and the sentence is clearer without it. -->
 
       <t>
-	The Service Registration Protocol (SRP) adds a set of default heuristics for processing DNS updates that eliminates the need for conditional predicates. Instead, the SRP registrar (a DNS server that supports SRP updates) has a set of default predicates
+	The Service Registration Protocol (SRP) adds a set of default heuristics for processing DNS updates that eliminates the need for conditional predicates. Instead, the SRP registrar (a DNS server that supports SRP Updates) has a set of default predicates
 	that are applied to the update; and the update either succeeds entirely or fails in a way that allows the requestor to know
 	what went wrong and construct a new update.</t>
 
@@ -193,8 +196,8 @@ using service discovery. I've reworded the sentence to make this (I hope!) clear
         standard DNS lookups.</t>
 <!-- [Ted] The original text was unclear, but the change unfortunately guesses wrong as to the meaning and makes it even less clear. How about: -->
       <t>
-        Section 10 of the DNS-SD specification <xref target="RFC6763"/> briefly discusses ways that servers can publish their information in the DNS namespace.  In the case of
-        mDNS, it allows servers to publish their information on the local link, using names in the ".local" namespace, which makes
+        Section 10 of the DNS-SD specification <xref target="RFC6763"/> briefly discusses ways that servers can advertise the services they provide in the DNS namespace.  In the case of
+        mDNS, it allows servers to advertise their services on the local link, using names in the ".local" namespace, which makes
         their services directly discoverable by peers attached to that same local link.</t>
 <!-- [Ted] Adding a dependent clause here obscures the meaning of the second half of the compound sentence. -->
       <t>
@@ -230,7 +233,7 @@ using service discovery. I've reworded the sentence to make this (I hope!) clear
         Services that implement SRP use DNS Update <xref target="RFC2136"/> with SIG(0) <xref target="RFC3007"/> to publish service information
         in the DNS.  Two variants exist: one for full-featured hosts and one for devices designed for Constrained-Node Networks (CNNs)
         <xref target="RFC7228"/>. An SRP registrar is most likely an authoritative DNS server or is updating an authoritative
-	DNS server. There is no requirement that the server that is receiving SRP updates be the same server that is answering
+	DNS server. There is no requirement that the DNS server that is receiving SRP Updates be the same DNS server that is answering
 	queries that return records that have been registered.</t>
       <section>
 	<name>Protocol Variants</name>
@@ -251,7 +254,7 @@ using service discovery. I've reworded the sentence to make this (I hope!) clear
             describing their service or services as subdomains of the chosen service registration domain.  For these names, they then discover
             the zone apex of the closest enclosing DNS zone using SOA queries (see <xref target="RFC8765" section="6.1"/>).  Having
             discovered the enclosing DNS zone, they query for the "_dnssd&nbhy;srp._tcp.&lt;zone&gt;" SRV record to discover the
-            server to which they can send SRP updates.  Hosts that support SRP Updates using TLS use the
+            SRP registrar to which they can send SRP Updates.  Hosts that support SRP Updates using TLS use the
             "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" SRV record instead.</t>
 	  <t>
 	    Examples of full-featured hosts include devices such as home computers, laptops, powered peripherals with network
@@ -311,7 +314,7 @@ We will discuss several parts to this process:</t>
 	<section anchor="what">
 	  <name>What to Publish</name>
           <t>
-            SRP Updates are sent by SRP requestors to SRP registrars.  Three types of instructions appear in an SRP update: Service
+            SRP Updates are sent by SRP requestors to SRP registrars.  Three types of instructions appear in an SRP Update: Service
 	    Discovery instructions, Service Description instructions, and Host Description instructions. These instructions are made
 	    up of DNS Update Resource Records (RRs) that are either adds or deletes. The types of records that are added, updated, and removed in each
 	    of these instructions, as well as the constraints that apply to them, are described in <xref target="server_behavior"/>.
@@ -328,9 +331,9 @@ We will discuss several parts to this process:</t>
 	      TXT RRs, and a KEY RR. Although, in principle, DNS-SD Service Description records can include other record types with
 	      the same Service Instance Name, in practice, they rarely do. SRP does not permit other record types. The KEY RR is used
 	      to support FCFS Naming and has no specific meaning for DNS-SD lookups. SRV records for all services described in an
-	      SRP update point to the same hostname.</li>
+	      SRP Update point to the same hostname.</li>
             <li>
-	      There is never more than one hostname in a single SRP update. The hostname has one or more address RRs (AAAA or A) and
+	      There is never more than one hostname in a single SRP Update. The hostname has one or more address RRs (AAAA or A) and
               a KEY RR (used for FCFS Naming). Depending on the use case, an SRP requestor may be required to suppress some
               addresses that would not be usable by hosts discovering the service through the SRP registrar. The exact address
               record suppression behavior required may vary for different types of SRP requestors. An example of such advice can be
@@ -346,7 +349,7 @@ We will discuss several parts to this process:</t>
             information about what to publish; the reason for summarizing this here is to provide the reader with enough information
             about what will be published that the service registration process can be understood at a high level without first
             learning the full details of DNS-SD.  Also, the "Service Instance Name" is an important aspect of FCFS
-            naming, which we describe later on in this document.</t>
+            Naming, which we describe later on in this document.</t>
 	</section>
 
 	<section anchor="where">
@@ -397,7 +400,7 @@ We will discuss several parts to this process:</t>
               DNS-SD Service Registration uses DNS Update <xref target="RFC2136"/>, with some additions:</t>
             <ul spacing="normal">
               <li>
-		It implements FCFS name allocation, protected using SIG(0) (<xref target="RFC2931"/>).</li>
+		It implements FCFS Naming, protected using SIG(0) (<xref target="RFC2931"/>).</li>
               <li>
 		It enforces policy about what updates are allowed.</li>
               <li>
@@ -423,7 +426,7 @@ We will discuss several parts to this process:</t>
 	  <section>
 	    <name>Successive Updates</name>
 	    <t>SRP does not require that every update contain the same information.
-	      When an SRP requestor needs to send more than one SRP update to the SRP registrar, it <bcp14>MUST</bcp14> send
+	      When an SRP requestor needs to send more than one SRP Update to the SRP registrar, it <bcp14>MUST</bcp14> send
 	      these sequentially: until an earlier update has been successfully acknowledged, the requestor
 	      <bcp14>MUST NOT</bcp14> begin sending a subsequent update.</t>
 	  </section>
@@ -434,7 +437,7 @@ We will discuss several parts to this process:</t>
           <t>
             DNS Update messages can be secured using secret key transaction signatures (TSIG)
             (<xref target="RFC8945"/>). This approach uses a secret key shared between the DNS Update requestor (which issues the update) and
-            the server (which authenticates it).  This model does not work for automatic service registration.</t>
+            the DNS server (which authenticates it).  This model does not work for automatic service registration.</t>
           <t>
             The goal of securing the DNS-SD Registration Protocol is to provide the best possible security given the constraint
             that service registration has to be automatic.  It is possible to layer more operational security on top of what we
@@ -500,7 +503,7 @@ Perhaps:
 	      (see <xref target="RFC9664"/>).</t>
 	    <t>
 	      The format of the KEY resource record in the SRP Update is defined in <xref target="RFC3445"/>. Because the KEY RR
-	      used in TSIG is not a zone-signing key, the flags field in the KEY RR <bcp14>MUST</bcp14> be all zeroes.</t>
+	      used in SIG(0) is not a zone-signing key, the flags field in the KEY RR <bcp14>MUST</bcp14> be all zeroes.</t>
             <t>
 	      The KEY record in Service Description updates <bcp14>MAY</bcp14> be omitted for brevity; if it is omitted, the SRP registrar <bcp14>MUST</bcp14> behave
 	      as if the same KEY record that is given for the Host Description is also given for each Service Description for which
@@ -554,9 +557,12 @@ Perhaps:
 Original:
    Note that this does not update [RFC2782]: DNS servers still MUST
    NOT compress SRV record targets.
+
+[Ted] "this" refers to this document, RFC9665.
+
 -->
 
-	      Note that this does not update <xref target="RFC2782"/>: DNS servers still <bcp14>MUST NOT</bcp14> compress SRV record targets. The
+	      Note that this document does not update <xref target="RFC2782"/>: DNS servers still <bcp14>MUST NOT</bcp14> compress SRV record targets. The
 	      requirement to accept compressed SRV records in updates only applies to SRP registrars, and SRP registrars that are
 	      also DNS servers still <bcp14>MUST NOT</bcp14> compress SRV record targets in DNS responses. We note also that
 	      <xref target="RFC6762"/> recommends that SRV records be compressed in mDNS messages, so <xref target="RFC2782"/> does
@@ -565,14 +571,14 @@ Original:
 	      In addition, we note that an implementor of an SRP requestor might update existing code that creates SRV records
 	      or compresses DNS messages so that it compresses the target of an SRV record. Care must be taken if such code is
 	      used both in requestors and in DNS servers that the code only compresses in the case where a requestor is generating
-	      an SRP update.</t>
+	      an SRP Update.</t>
           </section>
           <section anchor="remove">
 	    <name>Removing Published Services</name>
 	    <section anchor="zero-lease">
 	      <name>Removing All Published Services</name>
               <t>
-		To remove all the services registered to a particular host, the SRP requestor transmits an SRP update for that host
+		To remove all the services registered to a particular host, the SRP requestor transmits an SRP Update for that host
 		with an Update Lease option that has a LEASE value of zero. If the registration is to be permanently removed,
 		KEY-LEASE <bcp14>SHOULD</bcp14> also be zero. Otherwise, it <bcp14>SHOULD</bcp14> be set to the same value it had previously; this holds the name
 		in reserve for when the SRP requestor is once again able to provide the service.</t>
@@ -596,9 +602,9 @@ be accomplished in one of two ways:</t>
 <ol><li>To simply remove a specific service, the requestor sends a valid SRP Update where
 		the Service Discovery Instruction (see <xref target="servdis"></xref>) contains a single "Delete An RR From An RRset" update
 		(<xref target="RFC2136" section="2.5.4" sectionFormat="of"/>) that deletes the PTR record whose target is
-		the service instance name. In this case, the Service Description Instruction (see <xref target="servdesc"></xref>) contains
+		the Service Instance Name. In this case, the Service Description Instruction (see <xref target="servdesc"></xref>) contains
 		a single "Delete All RRsets From A Name" update (<xref target="RFC2136" section="2.5.3" sectionFormat="of"/>) to
-		the service instance name. </li>
+		the Service Instance Name. </li>
 <!-- [Ted] Edit is good, but inconsistent use of "update" -->
 	      <li>
 		This alternative is used when some service is being replaced by a different service with a different service
@@ -610,7 +616,7 @@ be accomplished in one of two ways:</t>
 	      </li></ol>
 <!-- [Ted] Not sure this change was needed, but it's the SRP Update that will look similar, and while situation could mean that, I think it's confusing. -->
 	      <t>
-		It is perhaps worth noting that, if a service is being updated without the service instance name changing, that SRP Update will
+		It is perhaps worth noting that, if a service is being updated without the Service Instance Name changing, that SRP Update will
 		look very much like the second alternative above. The difference is that because the target for the PTR record in
 		the Service Discovery Instruction is the same for both the "Delete An RR From An RRset" update and the "Add
 		To An RRset" update (<xref target="RFC2136" section="2.5.1" sectionFormat="of"/>), there is no way to tell whether they were intended to be one or two Instructions. The same would be true of
@@ -739,7 +745,7 @@ Current:
             appropriate Service Instance Name, the following are true:</t>
             <ul spacing="compact">
 	      <li>
-		It contains exactly one "Delete All RRsets From A Name" update for the service instance name
+		It contains exactly one "Delete All RRsets From A Name" update for the Service Instance Name
 		(<xref target="RFC2136" section="2.5.3" sectionFormat="comma"/>),</li>
 	      <li>
 		It contains zero or one "Add To An RRset" SRV RR,</li>
@@ -749,9 +755,9 @@ Current:
 	      <li>
 		It contains zero or more "Add To An RRset" TXT RRs,</li>
 	      <li>
-		If there is one "Add To An RRset" SRV update, there MUST be at least one "Add To An RRset" TXT update.</li>
+		If there is one "Add To An RRset" update for an SRV RR, there MUST be at least one "Add To An RRset" update for a TXT RR.</li>
 	      <li>
-		The target of the SRV RR Add, if present, points to a hostname for which there is a Host Description Instruction in
+		If an "Add To An RRSet" update for an SRV RR is present, the target of the SRV RR is a hostname for which there is a Host Description Instruction in
 		the SRP Update, or</li>
 	      <li>
 		If there is no "Add To An RRset" SRV RR, then either:</li>
@@ -795,12 +801,12 @@ Current:
 	    <t>
 	      For example, if a link-scope address or IPv4 autoconfiguration address is provided by the SRP requestor, the SRP
 	      registrar could not publish this in a DNS zone. However, in some situations, the registrar might make the records
-	      available through a mechanism such as an advertising proxy only on the specific link from which the SRP update
+	      available through a mechanism such as an advertising proxy only on the specific link from which the SRP Update
 	      originated. In such a situation, locally scoped records are still valid.</t>
 	  </section>
 	</section>
 
-	<section>
+	<section anchor="validation">
 	  <name>Valid SRP Update Requirements</name>
           <t>
 	    An SRP Update <bcp14>MUST</bcp14> contain exactly one Host Description Instruction. In addition, there <bcp14>MUST NOT</bcp14> be any Service
@@ -810,7 +816,7 @@ Current:
 	  <t>An SRP Update <bcp14>MUST</bcp14> include an EDNS(0) Update Lease option
 	    (see <xref target="RFC9664"/>). The LEASE time specified in the Update Lease option <bcp14>MUST</bcp14> be less than
 	    or equal to the KEY-LEASE time. A DNS update that does not include the Update Lease option, or that includes a
-	    KEY-LEASE value that is less than the LEASE value, is not an SRP update.</t>
+	    KEY-LEASE value that is less than the LEASE value, is not an SRP Update.</t>
 	  <t>When an SRP registrar receives a DNS Update message that is not an SRP
 	  update, it <bcp14>MAY</bcp14> process the update as regular DNS Update
 	  <xref target="RFC2136" format="default"/>, including
@@ -844,8 +850,8 @@ Perhaps:
 -->
 
           <t>
-	    Assuming that a DNS Update message has been confirmed (as described in <xref target="add_validation"/>) to be a valid SRP Update, the SRP registrar
-	    checks that the name in the Host Description Instruction exists.  If so, then the registrar checks to see if the KEY
+	    Assuming that the SRP registrar has confirmed (as described in <xref target="validation"/>) that a DNS Update message is a valid SRP Update, it
+	    then checks that the name in the Host Description Instruction exists in the zone being updated.  If so, then the registrar checks to see if the KEY
 	    record on that name is the same as the KEY record in the Host Description Instruction.  The registrar performs the same
 	    check for the KEY records in any Service Description Instructions.  For KEY records that were omitted from Service
 	    Description Instructions, the KEY from the Host Description Instruction is used.  If any existing KEY record
@@ -867,10 +873,12 @@ Perhaps:
    If the above steps are not taken, the SRP registrar validates the
    SRP Update using SIG(0) against the public key in the KEY record of
    the Host Description Instruction.
+
+[Ted] Hm, not easy. See edit below.
 -->
 
           <t>
-	    Otherwise, the SRP registrar validates the SRP Update using SIG(0) against the public key in the KEY record of the Host
+	    If the SRP Update is not in conflict with existing data in the zone being updated, the SRP registrar validates the SRP Update using SIG(0) against the public key in the KEY record of the Host
 	    Description Instruction.  If the validation fails, the registrar <bcp14>MUST</bcp14> reject the SRP Update with the Refused RCODE.
 	    Otherwise, the SRP Update is considered valid and authentic and is processed according to the method described in
 	    <xref target="RFC2136" format="default"/>.</t>
@@ -905,7 +913,7 @@ Perhaps:
 	    qualify the update as an SRP Update. The meanings of these responses are explained in <xref target="RFC2136"
 	    section="2.2"/>.</t>
 	  <t>
-	    In the case of a response other than NoError, <xref target="RFC2136" section="3.8"/> specifies that the server is permitted
+	    In the case of a response other than NoError, <xref target="RFC2136" section="3.8"/> specifies that the DNS server is permitted
             to respond either with no RRs or to copy the RRs sent by the client into the response. The SRP requestor <bcp14>MUST NOT</bcp14> attempt
 	    to validate any RRs that are included in the response. It is possible that a future SRP extension may include per-RR
 	    indications as to why the update failed, but at the time of writing this is not specified. So, if a client were to attempt to validate
@@ -967,7 +975,7 @@ Perhaps:
 	TTLs sent in SRP Updates are advisory: they indicate the SRP requestor's guess as to what a good TTL would be.  SRP registrars may
 	override these TTLs.  SRP registrars <bcp14>SHOULD</bcp14> ensure that TTLs are reasonable: neither too long nor too short.  The TTL <bcp14>SHOULD NOT</bcp14>
 	ever be longer than the lease time (<xref target="stale"/>).  Shorter TTLs will result in more frequent data refreshes;
-	this increases latency on the DNS-SD client side, increases load on any caching resolvers and on the authoritative server,
+	this increases latency on the DNS-SD client side, increases load on any caching resolvers and on the authoritative DNS server,
 	and also increases network load, which may be an issue for CNNs.  Longer TTLs will increase the likelihood
 	that data in caches will be stale.  TTL minimums and maximums <bcp14>SHOULD</bcp14> be configurable by the operator of the SRP registrar.
       </t>
@@ -1088,7 +1096,7 @@ Original "'n'":
       <section>
 	<name>Other DNS Updates</name>
 	<t>Note that these rules only apply to the validation of SRP Updates.
-	  A server that accepts updates from SRP
+	  A DNS server that accepts updates from SRP
 	  requestors may also accept other DNS Update messages, and those DNS Update messages may be validated
 	  using different rules.   However, in the case of a DNS server that accepts SRP
 	  updates, the intersection of the SRP Update rules and
@@ -1102,15 +1110,15 @@ Original "'n'":
       </section>
       <section>
 	<name>Risks of Allowing Arbitrary Names to be Registered in SRP Updates</name>
-	<t>It is possible to set up SRP updates for a zone that is used for non-DNSSD services. For example, imagine that you set
+	<t>It is possible to set up SRP Updates for a zone that is used for non-DNS&nbhy;SD services. For example, imagine that you set
 	  up SRP service for example.com. SRP hosts can now register names like "www" or "mail" or "smtp" in this domain. In addition,
-	  SRP updates using FCFS Naming can insert names that are obscene or offensive into the zone. There is no simple solution to
+	  SRP Updates using FCFS Naming can insert names that are obscene or offensive into the zone. There is no simple solution to
 	  these problems. However, we have two recommendations to address this problem:</t>
 	<ul spacing="normal">
 	  <li>Do not provide SRP service in organization-level zones. Use subdomains of the organizational domain for DNS-SD.  This does not prevent registering names as mentioned above but does ensure that genuinely important names
 	    are not accidentally reserved for SRP clients. So, for example, the zone "dnssd.example.com" could be used instead of
-	    "example.com" for SRP updates. Because of the way that DNS-browsing domains are discovered, there is no need for the
-	  DNSSD discovery zone that is updated by SRP to have a user-friendly or important-sounding name.</li>
+	    "example.com" for SRP Updates. Because of the way that DNS-browsing domains are discovered, there is no need for the
+	  DNS&nbhy;SD discovery zone that is updated by SRP to have a user-friendly or important-sounding name.</li>
 
 
 	  <li>Configure a dictionary of names that are prohibited. Dictionaries of common obscene and offensive names are no doubt
@@ -1171,7 +1179,7 @@ Original "'n'":
 	Public keys can be used as identifiers to track hosts. SRP registrars <bcp14>MAY</bcp14> elect not to return KEY records for queries for
 	SRP registrations. To avoid DNSSEC validation failures, an SRP registrar that signs the zone for DNSSEC but refuses to return
 	a KEY record <bcp14>MUST NOT</bcp14> store the KEY record in the zone itself. Because the KEY record isn't in the zone, the nonexistence of
-	the KEY record can be validated. If the zone is not signed, the server <bcp14>MAY</bcp14> instead return a negative non-error response
+	the KEY record can be validated. If the zone is not signed, the DNS server <bcp14>MAY</bcp14> instead return a negative non-error response
 	(either NXDOMAIN or no data).
       </t>
     </section>
@@ -1255,9 +1263,12 @@ Current:
        necessary.  Typically, this will just be a query for the DS
        record since the necessary authority information will be included
        in the authority section of the response if the DO bit is set.
+
+[Ted] NOOBODY expects the Spanish Inquisition [https://en.wikipedia.org/wiki/The_Spanish_Inquisition_(Monty_Python)]
+I think it should be two. Dunno what happened here.
 -->
 
-	<t>There are three considerations for caching DNS servers that
+	<t>There are two considerations for caching DNS servers that
 	follow this specification:</t>
 
 <!--[rfced In the following, is the intention to talk about the
@@ -1274,6 +1285,8 @@ Perhaps A:
 
 Perhaps B:
 DNSSEC (see [RFC9364]) validation is a best current practice:
+
+[Ted] I think B is better.
 -->
 
 	<ol spacing="normal">
@@ -1281,8 +1294,8 @@ DNSSEC (see [RFC9364]) validation is a best current practice:
 	  'service.arpa.' must, in practice, transparently support DNSSEC
 	  queries: queries for DNSSEC records and queries with the DNSSEC OK
 	  (DO) bit set (<xref target="RFC4035" section="3.2.1"
-	  sectionFormat="of"/>).  DNSSEC validation is a Best Current Practice
-	  (<xref target="RFC9364"/>): although validation is not required, a
+	  sectionFormat="of"/>).  DNSSEC (<xref target="RFC9364"/>) validation
+	  is a best current practice: although validation is not required, a
 	  caching recursive resolver that does not validate answers that can
 	  be validated may cache invalid data.  In turn, this would prevent
 	  validating stub resolvers from successfully validating
@@ -1312,12 +1325,14 @@ Perhaps:
 However, to provide accurate authority information, a
 query for the DS record MUST result in forwarding whatever queries are
 necessary.
+
+[Ted] Yup.
 -->
 
             <t>So, for example, a query for the NS record for "service.arpa."
             <bcp14>MUST NOT</bcp14> result in that query being forwarded to an
             upstream cache nor to the authoritative DNS server for ".arpa.".
-            However, as necessary to provide accurate authority information, a
+            However, to provide accurate authority information, a
             query for the DS record <bcp14>MUST</bcp14> result in forwarding
             whatever queries are necessary. Typically, this will just be a
             query for the DS record since the necessary authority information
@@ -1329,10 +1344,10 @@ necessary.
       <section>
 	<name>Authoritative DNS Servers</name>
 	<t>No special processing of "service.arpa." is required for authoritative DNS server implementations.  It is possible that an
-	  authoritative DNS server might attempt to check the authoritative servers for "service.arpa." for a delegation beneath that
+	  authoritative DNS server might attempt to check the authoritative DNS servers for "service.arpa." for a delegation beneath that
 	  name before answering authoritatively for such a delegated name.  In such a case, because the name always has only local
-	  significance, there will be no such delegation in the "service.arpa." zone; therefore, the server would refuse to answer
-	  authoritatively for such a zone.  A server that implements this sort of check <bcp14>MUST</bcp14> be configurable so that either it does
+	  significance, there will be no such delegation in the "service.arpa." zone; therefore, the DNS server would refuse to answer
+	  authoritatively for such a zone.  A DNS server that implements this sort of check <bcp14>MUST</bcp14> be configurable so that either it does
 	  not do this check for the "service.arpa." domain or it ignores the results of the check.</t>
       </section>
       <section>
@@ -1351,12 +1366,13 @@ The operator for the DNS servers that are authoritative for "service.arpa." in
 the global DNS will configure any such servers as described in Section
 9.
 
+[Ted] Yup.
 -->
 
 
 	<name>DNS Server Operators</name>
-	<t>DNS server operators <bcp14>MAY</bcp14> configure an authoritative server for "service.arpa." for use with SRP.  The operator for the
-	  DNS servers authoritative for "service.arpa." in the global DNS will configure any such servers as described in
+	<t>DNS server operators <bcp14>MAY</bcp14> configure an authoritative DNS server for "service.arpa." for use with SRP.  The operator for the
+	  DNS servers that are authoritative for "service.arpa." in the global DNS will configure any such DNS servers as described in
 	  <xref target="delegation"/>.</t>
       </section>
       <section>
@@ -1369,10 +1385,11 @@ the global DNS will configure any such servers as described in Section
 
     <section anchor="delegation">
       <name>Delegation of "service.arpa."</name>
-      <t>In order to be fully functional, the owner of the "arpa." zone must add a delegation of "service.arpa." in the ".arpa."
-	zone (see <xref target="RFC3172"/>). This delegation is to be set up as was done for "home.arpa", as a result of the
-	specification in <xref target="RFC8375" section="7" sectionFormat="of"/>. This is currently the responsibility of the IAB
-	(see <xref target="IAB-ARPA"/>).</t>
+      <t>
+	The owner of the 'arpa.' zone, at the time of writing the IAB <xref target="IAB-ARPA"/>,
+	has added a delegation of 'service.arpa.' in the '.arpa.' zone <xref target="RFC3172"/>,
+	following the guidance provided in <xref target="RFC8375" section="7" sectionFormat="of"/>.
+      </t>
     </section>
 
     <section>
@@ -1404,6 +1421,8 @@ Original:
    Protocol Special-Use Domain", and listing this document as the
    reference.
 
+[Ted] I've proposed a fix below.
+
 b) The first paragraph of Section 10.1 mentions Section 9, which
 states:
 
@@ -1427,7 +1446,7 @@ The owner of the 'arpa.' zone, at the time of writing the IAB [IAB-ARPA],
 has added a delegation of 'service.arpa.' in the '.arpa.' zone
 [RFC3172], following the guidance provided in Section 7 of [RFC8375].
 
-
+[Ted] This looks fine.
 -->
 
 
@@ -1436,6 +1455,9 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 	  (see <xref target="SUDN"/>). IANA has implemented the delegation requested in
 	  <xref target="delegation"/>.</t>
 
+      </section>
+      <section>
+	<name>Addition of "service.arpa" to the Locally-Served Zones Registry</name>
 	<t>IANA has also added a new entry to the "Transport-Independent Locally-Served Zones Registry" registry of
 	  the "Locally-Served DNS Zones" group (see <xref target="LSDZ"/>).  The entry is for the domain "SERVICE.ARPA" with the
 	  description "DNS-SD Service Registration Protocol Special-Use Domain" and lists this document as the reference.</t>
@@ -1470,7 +1492,7 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 	  <tbody>
 	    <tr>
 	      <td>default.service.arpa.</td>
-	      <td>Default domain for SRP updates</td>
+	      <td>Default domain for SRP Updates</td>
 	      <td>RFC 9665</td>
 	    </tr>
 	  </tbody>
@@ -1519,9 +1541,9 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 </section>
       <section>
 	<name>Anycast Address</name>
-	<t>IANA has allocated an IPv6 Anycast address from the "IANA IPv6 Special-Purpose Address Registry" (see <xref target="IPv6"/>), similar to the Port
+	<t>IANA has allocated an IPv6 anycast address from the "IANA IPv6 Special-Purpose Address Registry" (see <xref target="IPv6"/>), similar to the Port
 	  Control Protocol anycast address: 2001:1::1. The purpose of this allocation is to provide a fixed anycast address that can be commonly used as a destination for
-	  SRP updates when no SRP registrar is explicitly configured. The initial values for the registry are as follows:</t>
+	  SRP Updates when no SRP registrar is explicitly configured. The initial values for the registry are as follows:</t>
 
 
 	<table>
@@ -1584,6 +1606,8 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 
 <!-- [rfced] Normative reference RFC 3445 has been obsoleted by
 RFC 4033.  We will update to the latter unless we hear objection.
+
+[Ted] WFM
 -->
 
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3445.xml"/>
@@ -1620,10 +1644,19 @@ RFC 4033.  We will update to the latter unless we hear objection.
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8766.xml" />
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8945.xml" />
 
-<!-- [I-D.cheshire-dnssd-roadmap] IESG state: Expired as of 07/15/24-->
+<!-- [I-D.cheshire-dnssd-roadmap] IESG state: Expired as of 07/15/24
+
+[Ted] I don't know if Stuart is going to update this. References to drafts are always problematic in this way.
+      I think we need to either leave it as is, or take it out. I think it's okay to leave it as is, but will
+      defer to the experts. -->
+
       <xi:include href="https://datatracker.ietf.org/doc/bibxml3/reference.I-D.cheshire-dnssd-roadmap.xml"/>
 
-<!-- [I-D.ietf-snac-simple] IESG state: I-D Exists as of 07/15/24-->
+<!-- [I-D.ietf-snac-simple] IESG state: I-D Exists as of 07/15/24
+
+[Ted] I would not want to see this added to the cluster. It's informative, after all. snac-simple should head to the IESG in the next couple of
+      months, but I think we should just leave the reference to the draft unless there's a strong argument not to. This is just an informative
+      reference anyway. -->
       <xi:include href="https://datatracker.ietf.org/doc/bibxml3/reference.I-D.ietf-snac-simple.xml"/>
 
       <reference anchor="SUDN" target="https://www.iana.org/assignments/special-use-domain-names">
@@ -1709,34 +1742,37 @@ Appendix A.  Testing the Use of Standard DNS Servers Compliant with RFC
 Perhaps:
 
 Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
+
+[Ted] Nope. See below. :)
+
 -->
 
     <section>
-      <name>Testing Using Standard DNS Servers Compliant with RFC 2136</name>
+      <name>Using Standard DNS Servers Compliant with RFC 2136 to test SRP requestors</name>
       <t>
         It may be useful to set up an authoritative DNS server for testing that does not implement SRP.  This can be done by configuring the
-        server to listen on the anycast address or by advertising it in the _dnssd&nbhy;srp._tcp.&lt;zone&gt; SRV and
-        _dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt; record.  It must be configured to be authoritative for
+        DNS server to listen on the anycast address or by advertising it in the :_dnssd&nbhy;srp._tcp.&lt;zone&gt;: SRV and
+        "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" record.  It must be configured to be authoritative for
         "default.service.arpa" and to accept updates from hosts on local networks for names under "default.service.arpa"
-        without authentication since such servers will not have support for FCFS authentication (<xref target="fcfs"/>).</t>
+        without authentication since such DNS servers will not have support for FCFS authentication (<xref target="fcfs"/>).</t>
       <t>
         An authoritative DNS server configured in this way will be able to successfully accept and process SRP Updates from requestors that send SRP
-        updates.  However, no prerequisites will be applied; this means that the test server will accept internally
+        updates.  However, no prerequisites will be applied; this means that the test DNS server will accept internally
         inconsistent SRP Updates and will not stop two SRP Updates sent by different services that claim the same name or names
         from overwriting each other.</t>
       <t>
         Since SRP Updates are signed with keys, validation of the SIG(0) algorithm used by the requestor can be done by manually
         installing the requestor's public key on the DNS server that will be receiving the updates.  The key can then be used to
-        authenticate the SRP update and can be used as a requirement for the update.  An example configuration for testing SRP
+        authenticate the SRP Update and can be used as a requirement for the update.  An example configuration for testing SRP
         using BIND 9 is given in <xref target="bind-example"/>.</t>
     </section>
 
     <section>
       <name>How to Allow SRP Requestors to Update Standard Servers Compliant with RFC 2136</name>
       <t>
-        Ordinarily, SRP Updates will fail when sent to a server compliant with <xref target="RFC2136"/> that does not implement SRP because the zone
+        Ordinarily, SRP Updates will fail when sent to a DNS server compliant with <xref target="RFC2136"/> that does not implement SRP because the zone
         being updated is "default.service.arpa" and because no DNS server that is not an SRP registrar would normally be configured to be
-        authoritative for "default.service.arpa".  Therefore, a requestor that sends an SRP Update can tell that the receiving server
+        authoritative for "default.service.arpa".  Therefore, a requestor that sends an SRP Update can tell that the receiving DNS server
         does not support SRP but does support <xref target="RFC2136"/> because the RCODE will either be NotZone, NotAuth, or Refused or because
         there is no response to the update request (when using the anycast address).</t>
       <t>
@@ -1750,7 +1786,7 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
     </section>
 
     <section anchor="bind-example">
-      <name>Sample BIND9 Configuration for "default.service.arpa."</name>
+      <name>Sample BIND 9 Configuration for "default.service.arpa."</name>
 
       <figure title="Zone Configuration in named.conf">
 <artwork><![CDATA[
@@ -1836,6 +1872,7 @@ a) Should "DNSSD" (in "non-DNSSD services" and "DNSSD discovery zone")
 be updated to "DNS-SD" (hyphen) or "dnssd" (lowercase) to match prior
 usage in the document?
 
+[Ted] Yes.
 
 b) Is the "Service" (or "Service Description") redundant here and in
 similar cases throughout the document (as SD = Service Discovery)?
@@ -1850,6 +1887,8 @@ Although in principle DNS-SD Service Description records can
 include other record types with the same Service Instance Name, in
 practice they rarely do.
 
+[Ted] No. Do not unpack the acronym! :)
+
 c) For "TSIG", would you like us to expand to "transaction signature"
 upon first usage to match RFC 8945?
 
@@ -1858,13 +1897,17 @@ Original:
    [RFC3445].  Because the KEY RR used in TSIG is not a zone-signing
    key, the flags field in the KEY RR MUST be all zeroes.
 
-d) Throughout the document, "SRP update" is used, and there is only
+[Ted] Yikes! This should be SIG(0), not TSIG! That's the name of the protocol, and we've given reference to the correct RFC, so unpacking it would just be confusing.
+
+d) Throughout the document, "SRP Update" is used, and there is only
 one instance of "SRV update". We wanted to make sure that "SRV" was
 indeed intended and not "SRP".
 
 Original:
    *  If there is one "Add to an RRset" SRV update, there MUST be at
    least one "Add to an RRset" TXT update.
+
+[Ted] This is actually an update to an SRV RR, not an SRP Update, but I agree that it's confusing and have tweaked the text to address the concern.
 
 e) We have updated to use the abbreviation CNN for Constrained-Node
 Network (to match its use in RFC 7228).  Please review and let us know
@@ -1891,6 +1934,7 @@ Anycast vs. anycast:
    fixed anycast address
    anycast address
 
+[Ted] Should be lowercase, I've fixed in the text.
 
 b) We see the following similar terms.  Please review and let us know
 if/how to make these terms consistent.
@@ -1898,19 +1942,25 @@ if/how to make these terms consistent.
    service instance name
    Service Instance Name
    "Service Instance Name"
+[Ted] The above are all the same thing
    service instance
+[Ted] This is the data structure (a set of RRs) that the Service Instance Name points to. It's not currently capitalized, and that's probably okay.
    Service Name
+[Ted] The Service Name has zero or more PTR RRs each of which has a Service Instance Name as its target. IOW the Service Name is not the same as the Service Instance Name.
 
 c) We see the following similar terms.  Please let us know how to
 update for consistency.
 
 
 BIND 9 vs. BIND9
+[Ted] Fixed
 
 d) We have updated the quoted terms that correspond to Sections 2.5.1
 - 2.5.4 of RFC 2136 to appear consistently in double quotes and with
 capitalization that matches those section titles.  Please let us know
 any objections.
+
+[Ted] This seems fine.
 
 We further wondered if the following update should be made:
 
@@ -1920,8 +1970,12 @@ The target of the SRV RR Add...
 Perhaps:
 The "Add To An RRset" SRV update
 
+[Ted] That's indeed confusing, and I've updated the text to make it more clear.
+
 Please review other terms similar to these titles if they exist and
 let us know if any further changes should be made.
+
+[Ted] I'm not sure what you're asking here, unfortunately.
 
 e) The NoError status names are in all caps in Section 2.2 of RFC
 2136.  Should the following updates be made to match?
@@ -1929,6 +1983,8 @@ e) The NoError status names are in all caps in Section 2.2 of RFC
 ServFail to SERVFAIL
 Refused to REFUSED
 YXDomain to YXDOMAIN
+
+[Ted] I don't think this is necessary, and would rather we didn't.
 
 f) Regarding the terms “Service Description”, Service Discovery, and
 “Host Description”.
@@ -1945,6 +2001,8 @@ Example:
    brevity; if it is omitted, the SRP registrar MUST behave as if the
    same KEY record that is given for the Host Description is also given
    for each Service Description for which no KEY record is provided.
+
+[Ted] Please just leave this text alone. The working group reviewed it and beleives it is correct. Making editorial changes for consistency here might in some cases have merit, but our cache is blown on this work and I do not want to open this can of worms.
 
 g) Please review the following similar terms and let us know if/how
 they should be made uniform with regard to quotes and ending with a
@@ -1964,6 +2022,8 @@ Further note that we have updated from single to double quotes around
 terms that were quoted in the original consistently.  Please review
 and let us know if further updates are necessary.
 
+[Ted] I've reviewed and don't see any issues.
+
 h) Please review the following for the use of quotes and consistent
 use of SRV record.  Please let us know if/how to update.
 
@@ -1971,10 +2031,14 @@ use of SRV record.  Please let us know if/how to update.
 "_dnssd-srp-tls._tcp.<zone>"  SRV record vs. _dnssd-srp-tls._tcp.<zone> record
 _dns-update._udp SRV
 
+[Ted] I've made changes for consistency here. Any inconsistency you still see, e.g. with the zone file, is intentional.
+
 -->
 
 <!-- [rfced] Please review each artwork element in Appendix C in case
      they should be tagged as sourcecode or another element.
+
+[Ted] These are configuration files. Spacing should not be modified. I don't think there's a need to do anything fancy here. The HTML is currently correct.
 -->
 
 <!-- [rfced] Please review the "Inclusive Language" portion of the
