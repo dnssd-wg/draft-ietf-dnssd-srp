@@ -7,7 +7,7 @@
  <!ENTITY wj     "&#8288;">
 ]>
 
-<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-25" number="9665" ipr="trust200902" xmlns:xi="http://www.w3.org/2001/XInclude" obsoletes="" updates="" version="3" sortRefs="true" consensus="true" symRefs="true" tocDepth="4" tocInclude="true" xml:lang="en">
+<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-latest" number="9665" ipr="trust200902" xmlns:xi="http://www.w3.org/2001/XInclude" obsoletes="" updates="" version="3" sortRefs="true" consensus="true" symRefs="true" tocDepth="4" tocInclude="true" xml:lang="en">
   <front>
     <title abbrev="Service Registration Protocol">Service Registration Protocol for DNS-Based Service Discovery</title>
     <seriesInfo name="RFC" value="9665"/>
