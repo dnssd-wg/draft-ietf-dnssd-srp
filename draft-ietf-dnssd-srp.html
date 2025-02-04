@@ -18,23 +18,23 @@
         their registrations.
        
     " name="description">
-<meta content="xml2rfc 3.25.0" name="generator">
+<meta content="xml2rfc 3.26.0" name="generator">
 <meta content="Multicast DNS" name="keyword">
 <meta content="DNS-Based Service Discovery" name="keyword">
 <meta content="DNS Update" name="keyword">
 <meta content="SIG(0)" name="keyword">
 <meta content="9665" name="rfc.number">
 <!-- Generator version information:
-  xml2rfc 3.25.0
-    Python 3.12.7
+  xml2rfc 3.26.0
+    Python 3.12.8
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
-    Jinja2 3.1.4
+    Jinja2 3.1.5
     lxml 5.3.0
     platformdirs 4.3.6
-    pycountry 22.3.5
-    PyYAML 6.0.1
+    pycountry 24.6.1
+    PyYAML 6.0.2
     requests 2.32.3
     setuptools 70.3.0
     wcwidth 0.2.13
@@ -546,7 +546,11 @@ figcaption, caption {
   }
   pre, svg {
     display: inline-block;
-    overflow-x: auto;
+    /* In the horizontal direction, sometimes people make over-sized figures.
+       Scrollbars for those is therefore necessary: auto adds them as necessary..
+       In the vertical direction, the line-height can combine with the font
+       asender/descender height to produce scrollbars: hidden avoids that. */
+    overflow: auto hidden;
   }
   pre {
     max-width: 100%;
@@ -1046,7 +1050,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 }
 </style>
 
-<link href="https://datatracker.ietf.org/doc/draft-ietf-dnssd-srp-25" rel="prev">
+<link href="https://datatracker.ietf.org/doc/draft-ietf-dnssd-srp-latest" rel="prev">
   <link href="https://dx.doi.org/10.17487/rfc9665" rel="alternate">
   <link href="urn:issn:2070-1721" rel="alternate">
   </head>
