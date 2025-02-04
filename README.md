@@ -1,6 +1,6 @@
 # Service Registration Protocol for DNS-Based Service Discovery
 
-This is the working area for the IETF [DNSSD Working Group](https://datatracker.ietf.org/wg/dnssd/documents/) Internet-Draft, "Service Registration Protocol for DNS-Based Service Discovery".
+This is the working area for the IETF [DNSSD Working Group](https://datatracker.ietf.org/group/dnssd/documents/) Internet-Draft, "Service Registration Protocol for DNS-Based Service Discovery".
 
 * [Editor's Copy](https://dnssd-wg.github.io/draft-ietf-dnssd-srp/#go.draft-ietf-dnssd-srp.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-dnssd-srp)
