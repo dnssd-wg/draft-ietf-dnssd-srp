@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-07-13T00:45:46.055880+00:00",
+  "timestamp": "2025-02-06T00:37:13.150112+00:00",
   "repo": "dnssd-wg/draft-ietf-dnssd-srp",
   "labels": [
     {
@@ -161,6 +161,61 @@
       "updatedAt": "2023-07-11T12:47:03Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOH1-V8s515EW7",
+      "title": "Should we / can we still clarify what a client needs to do to remove all published services?",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/issues/23",
+      "state": "OPEN",
+      "author": "EskoDijk",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Based on the email thread: https://mailarchive.ietf.org/arch/msg/dnssd/_JY8BWMpkALfJz-V4sjlgajKskQ/\r\n\r\nAnd draft text:\r\n\r\n> To remove all the services registered to a particular host, the SRP requestor retransmits its most recent update with an Update Lease option that has a LEASE value of zero.\r\n\r\n\r\nthere was some unclarity because a client actually doesn't need to repeat its latest registration as a way to remove all published services,  It could just not include any services at all, which is far more efficient than sending the services again included in the message just to remove them.\r\n\r\nCan we still apply some clarification here, or would an erratum remark later on be better?\r\n",
+      "createdAt": "2023-11-05T17:56:42Z",
+      "updatedAt": "2024-01-29T23:30:15Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "Abhayakara",
+          "authorAssociation": "COLLABORATOR",
+          "body": "It\u2019s a bit late for a change like this. The only reason the document hasn\u2019t\r\nbeen published is that right after the IESG review I had two deaths in the\r\nfamily and haven\u2019t caught up from the backlog that produced yet.\r\n\r\nThat would not be a legitimate erratum because it defines new behavior. In\r\norder to fix this we need to write a new document. Which we may indeed want\r\nto do.\r\n\r\nOp zo 5 nov 2023 om 18:56 schreef Esko Dijk ***@***.***>\r\n\r\n> Based on the email thread:\r\n> https://mailarchive.ietf.org/arch/msg/dnssd/_JY8BWMpkALfJz-V4sjlgajKskQ/\r\n>\r\n> And draft text:\r\n>\r\n> To remove all the services registered to a particular host, the SRP\r\n> requestor retransmits its most recent update with an Update Lease option\r\n> that has a LEASE value of zero.\r\n>\r\n> there was some unclarity because a client actually doesn't need to repeat\r\n> its latest registration as a way to remove all published services, It could\r\n> just not include any services at all, which is far more efficient than\r\n> sending the services again included in the message just to remove them.\r\n>\r\n> Can we still apply some clarification here, or would an erratum remark\r\n> later on be better?\r\n>\r\n> \u2014\r\n> Reply to this email directly, view it on GitHub\r\n> <https://github.com/dnssd-wg/draft-ietf-dnssd-srp/issues/23>, or\r\n> unsubscribe\r\n> <https://github.com/notifications/unsubscribe-auth/AA5USALTAYINIIEKSUFLB53YC7HOLAVCNFSM6AAAAAA66PVA7OVHI2DSMVQWIX3LMV43ASLTON2WKOZRHE3TOOBZGQZTGMI>\r\n> .\r\n> You are receiving this because you are subscribed to this thread.Message\r\n> ID: ***@***.***>\r\n>\r\n",
+          "createdAt": "2023-11-05T18:08:42Z",
+          "updatedAt": "2023-11-05T18:08:42Z"
+        },
+        {
+          "author": "Abhayakara",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The srp update is fairly heavy at this point, so I think it's okay to\r\ninclude a clarification for this after all. I've changed the text as\r\nfollows:\r\n\r\nTo remove all the services registered to a particular host, the SRP\r\nrequestor transmits an SRP update for that host\r\nupdate with an Update Lease option that has a LEASE value of zero.\r\n\r\nThis is actually corroborated by the third paragraph in the section, so we\r\naren't changing the specified behavior, just removing some text that's\r\narguably simply wrong.\r\n\r\nOn Sun, Nov 5, 2023 at 1:08\u202fPM Ted Lemon ***@***.***> wrote:\r\n\r\n> It\u2019s a bit late for a change like this. The only reason the document\r\n> hasn\u2019t been published is that right after the IESG review I had two deaths\r\n> in the family and haven\u2019t caught up from the backlog that produced yet.\r\n>\r\n> That would not be a legitimate erratum because it defines new behavior. In\r\n> order to fix this we need to write a new document. Which we may indeed want\r\n> to do.\r\n>\r\n> Op zo 5 nov 2023 om 18:56 schreef Esko Dijk ***@***.***>\r\n>\r\n>> Based on the email thread:\r\n>> https://mailarchive.ietf.org/arch/msg/dnssd/_JY8BWMpkALfJz-V4sjlgajKskQ/\r\n>>\r\n>> And draft text:\r\n>>\r\n>> To remove all the services registered to a particular host, the SRP\r\n>> requestor retransmits its most recent update with an Update Lease option\r\n>> that has a LEASE value of zero.\r\n>>\r\n>> there was some unclarity because a client actually doesn't need to repeat\r\n>> its latest registration as a way to remove all published services, It could\r\n>> just not include any services at all, which is far more efficient than\r\n>> sending the services again included in the message just to remove them.\r\n>>\r\n>> Can we still apply some clarification here, or would an erratum remark\r\n>> later on be better?\r\n>>\r\n>> \u2014\r\n>> Reply to this email directly, view it on GitHub\r\n>> <https://github.com/dnssd-wg/draft-ietf-dnssd-srp/issues/23>, or\r\n>> unsubscribe\r\n>> <https://github.com/notifications/unsubscribe-auth/AA5USALTAYINIIEKSUFLB53YC7HOLAVCNFSM6AAAAAA66PVA7OVHI2DSMVQWIX3LMV43ASLTON2WKOZRHE3TOOBZGQZTGMI>\r\n>> .\r\n>> You are receiving this because you are subscribed to this thread.Message\r\n>> ID: ***@***.***>\r\n>>\r\n>\r\n",
+          "createdAt": "2024-01-29T23:30:14Z",
+          "updatedAt": "2024-01-29T23:30:14Z"
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "I_kwDOH1-V8s6BD85Y",
+      "title": "possible non-compliant KEY RR flags field used for example in Appendix C",
+      "url": "https://github.com/dnssd-wg/draft-ietf-dnssd-srp/issues/24",
+      "state": "OPEN",
+      "author": "jimdigriz",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "[Highlighted on the mailing list](https://mailarchive.ietf.org/arch/msg/dnssd/tGLWlkxs-6-IWQv6P8h3cMMGOgE/), [RFC3445 section 4](https://www.rfc-editor.org/rfc/rfc3445.html#section-4) states that most of the 'flags' field for the KEY RR should be zero (the documents that obsolete RFC3445 apply to non-`SIG(0)`).\r\n\r\nThe example in Appendix C does not adhere to this (flags is `513`):\r\n```\r\ndemo               KEY 513 3 13 (\r\n                           qweEmaaq0FAWok5//ftuQtZgiZoiFSUsm0srWREdywQU\r\n                           9dpvtOhrdKWUuPT3uEFF5TZU6B4q1z1I662GdaUwqg==\r\n                        ); alg = ECDSAP256SHA256 ; key id = 15008\r\n```\r\n\r\nIt would be [helpful to provide advice on what `flags` value to use](https://mailarchive.ietf.org/arch/msg/dnssd/RXUiWIRiz71pRmtyeTw3_VEBFcY/), the only implementations I am aware of to glean hints from also look to be non-RFC3445 compliant:\r\n\r\n * [`mdnsresponder`](https://github.com/Abhayakara/mdnsresponder/blob/d7779d704ef6e4724d0d0fd4a11a91ff9caa4004/ServiceRegistration/towire.c#L410)\r\n * [`openthread`](https://github.com/openthread/openthread/blob/41526d5de27d451179276dff082eeb138e839445/src/core/net/srp_client.cpp#L1372-L1373)\r\n\r\nMy reading of both [RFC2535 section 3.1.2](https://www.rfc-editor.org/rfc/rfc2535#section-3.1.2) and [RFC3445 section 4](https://www.rfc-editor.org/rfc/rfc3445.html#section-4), I think the `flags` field should now be simply zero (`0`), someone needs to check my homework though...\r\n\r\nThe original KEY RR flags:\r\n```\r\n   0   1   2   3   4   5   6   7   8   9   0   1   2   3   4   5\r\n   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\r\n   |  A/C  | Z | XT| Z | Z | NAMTYP| Z | Z | Z | Z |      SIG      |\r\n   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\r\n```\r\n\r\nThe new KEY RR flags:\r\n```\r\n   0   1   2   3   4   5   6   7   8   9   0   1   2   3   4   5\r\n   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\r\n   | Z | Z | Z | Z | Z | Z | Z | N | Z | Z | Z | Z | Z | Z | Z | Z |\r\n   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\r\n```\r\n\r\nWhere the 'zone bit' (`N`, bit 7) is for this use case (`SIG(0)`) is zero (`0`).",
+      "createdAt": "2024-03-03T10:44:33Z",
+      "updatedAt": "2024-03-05T21:56:25Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jimdigriz",
+          "authorAssociation": "NONE",
+          "body": "The 'key id' comment also needs amending https://mailarchive.ietf.org/arch/msg/dnssd/QbqZgyyGr_JRw-TeNrIRyQN8uRA/\r\n\r\n15008 -> 14495",
+          "createdAt": "2024-03-05T21:56:23Z",
+          "updatedAt": "2024-03-05T21:56:23Z"
+        }
+      ]
     }
   ],
   "pulls": [
