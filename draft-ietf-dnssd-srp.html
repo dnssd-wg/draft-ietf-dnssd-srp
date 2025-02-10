@@ -1448,7 +1448,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
  updates.<a href="#section-1-10.2" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-1-11">This prevents name conflicts: a second SRP requester attempting to claim the same name will not possess the
+<p id="section-1-11">This prevents a new service instance from "stealing" a name that is already in use:
+ a second SRP requester attempting to claim an existing name will not possess the
  SIG(0) key used by the first requester to claim it. Because of this, its claim will be rejected. This will force it to
  choose a new name.<a href="#section-1-11" class="pilcrow">¶</a></p>
 <p id="section-1-12">
@@ -1622,15 +1623,17 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
      Discovery instructions, Service Description instructions, and Host Description instructions. These instructions are made
      up of DNS Update Resource Records (RRs) that are either adds or deletes. The types of records that are added, updated, and removed in each
      of these instructions, as well as the constraints that apply to them, are described in <a href="#server_behavior" class="auto internal xref">Section 3.3</a>.
-     An SRP Update is a DNS Update message that is constructed so as to meet the constraints described in that section. The
+     An SRP Update is a DNS Update message <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span> that is
+     constructed so as to meet the constraints described in that section. The
      following is a brief overview of what is included in a typical SRP Update:<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.1-2.1">
-              PTR RR for services, which map from a generic service type (or subtype) name to a specific
+              PTR RR(s) for service(s), which map from a
+              generic service type (or subtype(s)) to a specific
               Service Instance Name (<span><a href="https://rfc-editor.org/rfc/rfc6763#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>).<a href="#section-3.2.1-2.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3.2.1-2.2">
-       For any Service Instance Name, an SRV RR, one or more
+       For each Service Instance Name, an SRV RR, one or more
        TXT RRs, and a KEY RR. Although, in principle, DNS-SD Service Description records can include other record types with
        the same Service Instance Name, in practice, they rarely do. SRP does not permit other record types. The KEY RR is used
        to support FCFS Naming and has no specific meaning for DNS-SD lookups. SRV records for all services described in an
@@ -1677,9 +1680,13 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-how-to-publish-it" class="section-name selfRef">How to Publish It</a>
           </h4>
 <p id="section-3.2.3-1">
-            It is possible to send a DNS Update message that does several things at once: for example, it's possible to do all the work of
-            adding a PTR RR to the PTR RRset on the Service Name while at the same time adding or updating RRs on the Service Instance Name and
-            Host Description in a single transaction.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
+            It is possible to send a DNS Update message that does several things at once:
+            for example, it's possible in a single transaction
+            to add or update a single Host Description
+            while also adding or updating the RRs comprising the Service Description(s)
+            for one or more service instance(s) available on that host,
+            and adding or updating the RRs comprising the Service Discovery instruction(s)
+            for those service instance(s).<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.3-2">
             An SRP Update takes advantage of this: it is implemented as a single DNS Update message that contains a service's Service
             Discovery records, Service Description records, and Host Description records.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
@@ -1833,7 +1840,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <p id="section-3.2.5.3-1">
        The lifetime of the DNS-SD PTR, SRV, A, AAAA, and TXT records (see <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>) uses the LEASE field
        of the Update Lease option and is typically set to two hours.  Thus, if a device is disconnected from the
-       network, it does not appear in the user interfaces of devices looking for services of that type for too long.<a href="#section-3.2.5.3-1" class="pilcrow">¶</a></p>
+       network, it does not continue to appear for too long in the
+       user interfaces of devices looking for instances of that service type.<a href="#section-3.2.5.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.5.3-2">
        The lifetime of the KEY records is set using the KEY-LEASE field of the Update Lease Option and <span class="bcp14">SHOULD</span> be set to a
        much longer time, typically 14 days.  The result being that even though a device may be temporarily unplugged --
@@ -1849,10 +1857,17 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <a href="#section-3.2.5.4" class="section-number selfRef">3.2.5.4. </a><a href="#name-compression-in-srv-records" class="section-name selfRef">Compression in SRV Records</a>
             </h5>
 <p id="section-3.2.5.4-1">
-       Although <span>[<a href="#RFC2782" class="cite xref">RFC2782</a>]</span> requires that the target name in the SRV record not be compressed, an SRP requester
-       <span class="bcp14">MAY</span> compress the target in the SRV record. The motivation for <em>not</em> compressing in <span>[<a href="#RFC2782" class="cite xref">RFC2782</a>]</span>
-       is not stated but is assumed to be because a caching resolver that does not understand the format of the SRV record
-       might store it as binary data and thus return an invalid pointer in response to a query. This does not apply in the
+       Although <span>[<a href="#RFC2782" class="cite xref">RFC2782</a>]</span>
+       requires that the target hostname in the rdata of an SRV record
+       not be compressed in DNS queries and responses, an SRP requester
+       <span class="bcp14">MAY</span> compress the target in the SRV record.
+       The motivation for <em>not</em> compressing in <span>[<a href="#RFC2782" class="cite xref">RFC2782</a>]</span>
+       is not stated but is assumed to be because a recursive resolver
+       (caching server) that does not understand the format of the
+       SRV record might store it as binary data without decoding a
+       compression pointer embedded with the target hostname field,
+       and thus return nonsensical rdata in response to a query.
+       This does not apply in the
        case of SRP. An SRP registrar needs to understand SRV records in order to validate the SRP Update. Compression of the
        target can save space in the SRP Update, so we want clients to be able to assume that the registrar will handle
        this. Therefore, SRP registrars <span class="bcp14">MUST</span> support compression of SRV RR targets.<a href="#section-3.2.5.4-1" class="pilcrow">¶</a></p>
@@ -1905,8 +1920,12 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <a href="#section-3.2.5.5.2" class="section-number selfRef">3.2.5.5.2. </a><a href="#name-removing-some-published-ser" class="section-name selfRef">Removing Some Published Services</a>
               </h6>
 <p id="section-3.2.5.5.2-1">
- In some use cases, a requester may need to remove a specific service without removing its other services.  This can
-be accomplished in one of two ways:<a href="#section-3.2.5.5.2-1" class="pilcrow">¶</a></p>
+ In some use cases, a requester may need to remove a
+ specific service without removing its other services.
+ For example, a device may
+ shut down its remote screen access (_rfb._tcp) service
+ while retaining its command-line login (_ssh._tcp) service.
+ This can be accomplished in one of two ways:<a href="#section-3.2.5.5.2-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.2.5.5.2-2">
 <li id="section-3.2.5.5.2-2.1">To simply remove a specific service, the requester sends a valid SRP Update where
  the Service Discovery Instruction (see <a href="#servdis" class="auto internal xref">Section 3.3.1.1</a>) contains a single "Delete An RR From An RRset" update
@@ -1916,8 +1935,11 @@ be accomplished in one of two ways:<a href="#section-3.2.5.5.2-1" class="pilcrow
  the Service Instance Name.<a href="#section-3.2.5.5.2-2.1" class="pilcrow">¶</a>
 </li>
                 <li id="section-3.2.5.5.2-2.2">
- This alternative is used when some service is being replaced by a different service with a different service
- instance name. In this case, the old service is deleted as in the first alternative. The new service is added, just
+ When deleting one service instance while simultaneously creating
+ a new service instance with a different service instance name,
+ an alternative is to perform both operations using a single DNS message.
+ In this case, the old service is deleted as in the first alternative.
+ The new service is added, just
  as it would be in an update that wasn't deleting the old service. Because both the removal of the old service and
  the add of the new service consist of a valid Service Discovery Instruction and a valid Service Description
  Instruction, the update as a whole is a valid SRP Update and will result in the old service being removed and the
@@ -1935,6 +1957,11 @@ be accomplished in one of two ways:<a href="#section-3.2.5.5.2-1" class="pilcrow
  update. In neither of these cases is it permissible to delete the host. All services must point to a host. If a host
  is to be deleted, this must be done using the method described in <a href="#zero-lease" class="auto internal xref">Section 3.2.5.5.1</a>, which deletes the
  host and all services that have that host as their target.<a href="#section-3.2.5.5.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.5.5.2-5">
+ Multiple Service Discovery updates and Service Description updates
+ may be combined into a single single DNS message
+ along with a single Host Description update,
+ as described in <a href="#how" class="auto internal xref">Section 3.2.3</a>.<a href="#section-3.2.5.5.2-5" class="pilcrow">¶</a></p>
 </section>
 </section>
 </div>
@@ -1954,9 +1981,11 @@ be accomplished in one of two ways:<a href="#section-3.2.5.5.2-1" class="pilcrow
      The SRP registrar first validates that the DNS Update message is a syntactically and semantically valid DNS Update message according to
      the rules specified in <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-2">
-     SRP Updates consist of a set of <em>instructions</em> that together add or remove one or more services. Each instruction
-     consists of some combination of delete updates and add updates. When an instruction contains a delete and an add, the
-     delete <span class="bcp14">MUST</span> precede the add.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
+     SRP Updates consist of a set of <em>instructions</em>
+     that together add or remove one or more services.
+     Each SRP Update consists of
+     one or more delete update(s), or one or more add update(s),
+     or some combination of both delete updates and add updates.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-3">
      The SRP registrar checks each instruction in the SRP Update to see that it is either a Service Discovery Instruction, a
      Service Description Instruction, or a Host Description Instruction.  Order matters in DNS updates.  Specifically,

@@ -186,8 +186,9 @@ Table of Contents
    *  using SIG(0) ([RFC2931]), authenticate both the initial claim and
       subsequent updates.
 
-   This prevents name conflicts: a second SRP requester attempting to
-   claim the same name will not possess the SIG(0) key used by the first
+   This prevents a new service instance from "stealing" a name that is
+   already in use: a second SRP requester attempting to claim an
+   existing name will not possess the SIG(0) key used by the first
    requester to claim it.  Because of this, its claim will be rejected.
    This will force it to choose a new name.
 
@@ -383,17 +384,17 @@ Table of Contents
    Records (RRs) that are either adds or deletes.  The types of records
    that are added, updated, and removed in each of these instructions,
    as well as the constraints that apply to them, are described in
-   Section 3.3.  An SRP Update is a DNS Update message that is
+   Section 3.3.  An SRP Update is a DNS Update message [RFC2136] that is
    constructed so as to meet the constraints described in that section.
    The following is a brief overview of what is included in a typical
    SRP Update:
 
-   *  PTR RR for services, which map from a generic service type (or
-      subtype) name to a specific Service Instance Name (Section 4.1 of
-      [RFC6763]).
+   *  PTR RR(s) for service(s), which map from a generic service type
+      (or subtype(s)) to a specific Service Instance Name (Section 4.1
+      of [RFC6763]).
 
-   *  For any Service Instance Name, an SRV RR, one or more TXT RRs, and
-      a KEY RR.  Although, in principle, DNS-SD Service Description
+   *  For each Service Instance Name, an SRV RR, one or more TXT RRs,
+      and a KEY RR.  Although, in principle, DNS-SD Service Description
       records can include other record types with the same Service
       Instance Name, in practice, they rarely do.  SRP does not permit
       other record types.  The KEY RR is used to support FCFS Naming and
@@ -441,10 +442,12 @@ Table of Contents
 3.2.3.  How to Publish It
 
    It is possible to send a DNS Update message that does several things
-   at once: for example, it's possible to do all the work of adding a
-   PTR RR to the PTR RRset on the Service Name while at the same time
-   adding or updating RRs on the Service Instance Name and Host
-   Description in a single transaction.
+   at once: for example, it's possible in a single transaction to add or
+   update a single Host Description while also adding or updating the
+   RRs comprising the Service Description(s) for one or more service
+   instance(s) available on that host, and adding or updating the RRs
+   comprising the Service Discovery instruction(s) for those service
+   instance(s).
 
    An SRP Update takes advantage of this: it is implemented as a single
    DNS Update message that contains a service's Service Discovery
@@ -598,8 +601,8 @@ Table of Contents
    The lifetime of the DNS-SD PTR, SRV, A, AAAA, and TXT records (see
    [RFC6763]) uses the LEASE field of the Update Lease option and is
    typically set to two hours.  Thus, if a device is disconnected from
-   the network, it does not appear in the user interfaces of devices
-   looking for services of that type for too long.
+   the network, it does not continue to appear for too long in the user
+   interfaces of devices looking for instances of that service type.
 
    The lifetime of the KEY records is set using the KEY-LEASE field of
    the Update Lease Option and SHOULD be set to a much longer time,
@@ -616,17 +619,20 @@ Table of Contents
 
 3.2.5.4.  Compression in SRV Records
 
-   Although [RFC2782] requires that the target name in the SRV record
-   not be compressed, an SRP requester MAY compress the target in the
-   SRV record.  The motivation for _not_ compressing in [RFC2782] is not
-   stated but is assumed to be because a caching resolver that does not
+   Although [RFC2782] requires that the target hostname in the rdata of
+   an SRV record not be compressed in DNS queries and responses, an SRP
+   requester MAY compress the target in the SRV record.  The motivation
+   for _not_ compressing in [RFC2782] is not stated but is assumed to be
+   because a recursive resolver (caching server) that does not
    understand the format of the SRV record might store it as binary data
-   and thus return an invalid pointer in response to a query.  This does
-   not apply in the case of SRP.  An SRP registrar needs to understand
-   SRV records in order to validate the SRP Update.  Compression of the
-   target can save space in the SRP Update, so we want clients to be
-   able to assume that the registrar will handle this.  Therefore, SRP
-   registrars MUST support compression of SRV RR targets.
+   without decoding a compression pointer embedded with the target
+   hostname field, and thus return nonsensical rdata in response to a
+   query.  This does not apply in the case of SRP.  An SRP registrar
+   needs to understand SRV records in order to validate the SRP Update.
+   Compression of the target can save space in the SRP Update, so we
+   want clients to be able to assume that the registrar will handle
+   this.  Therefore, SRP registrars MUST support compression of SRV RR
+   targets.
 
    Note that this document does not update [RFC2782]: authoritative DNS
    servers still MUST NOT compress SRV record targets.  The requirement
@@ -673,8 +679,10 @@ Table of Contents
 3.2.5.5.2.  Removing Some Published Services
 
    In some use cases, a requester may need to remove a specific service
-   without removing its other services.  This can be accomplished in one
-   of two ways:
+   without removing its other services.  For example, a device may shut
+   down its remote screen access (_rfb._tcp) service while retaining its
+   command-line login (_ssh._tcp) service.  This can be accomplished in
+   one of two ways:
 
    1.  To simply remove a specific service, the requester sends a valid
        SRP Update where the Service Discovery Instruction (see
@@ -685,16 +693,17 @@ Table of Contents
        single "Delete All RRsets From A Name" update (Section 2.5.3 of
        [RFC2136]) to the Service Instance Name.
 
-   2.  This alternative is used when some service is being replaced by a
-       different service with a different service instance name.  In
-       this case, the old service is deleted as in the first
-       alternative.  The new service is added, just as it would be in an
-       update that wasn't deleting the old service.  Because both the
-       removal of the old service and the add of the new service consist
-       of a valid Service Discovery Instruction and a valid Service
-       Description Instruction, the update as a whole is a valid SRP
-       Update and will result in the old service being removed and the
-       new one added; or, to put it differently, the SRP Update will
+   2.  When deleting one service instance while simultaneously creating
+       a new service instance with a different service instance name, an
+       alternative is to perform both operations using a single DNS
+       message.  In this case, the old service is deleted as in the
+       first alternative.  The new service is added, just as it would be
+       in an update that wasn't deleting the old service.  Because both
+       the removal of the old service and the add of the new service
+       consist of a valid Service Discovery Instruction and a valid
+       Service Description Instruction, the update as a whole is a valid
+       SRP Update and will result in the old service being removed and
+       the new one added; or, to put it differently, the SRP Update will
        result in the old service being replaced by the new service.
 
    It is perhaps worth noting that, if a service is being updated
@@ -714,6 +723,10 @@ Table of Contents
    using the method described in Section 3.2.5.5.1, which deletes the
    host and all services that have that host as their target.
 
+   Multiple Service Discovery updates and Service Description updates
+   may be combined into a single single DNS message along with a single
+   Host Description update, as described in Section 3.2.3.
+
 3.3.  Validation and Processing of SRP Updates
 
 3.3.1.  Validation of DNS Update Add and Delete RRs
@@ -723,9 +736,9 @@ Table of Contents
    the rules specified in [RFC2136].
 
    SRP Updates consist of a set of _instructions_ that together add or
-   remove one or more services.  Each instruction consists of some
-   combination of delete updates and add updates.  When an instruction
-   contains a delete and an add, the delete MUST precede the add.
+   remove one or more services.  Each SRP Update consists of one or more
+   delete update(s), or one or more add update(s), or some combination
+   of both delete updates and add updates.
 
    The SRP registrar checks each instruction in the SRP Update to see
    that it is either a Service Discovery Instruction, a Service
