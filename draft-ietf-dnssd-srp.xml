@@ -76,7 +76,7 @@
 	protocol (e.g., Android, Windows, Linux, Apple).</t>
       <t>
         This document is intended for three audiences: implementers of software that provides services that should be advertised
-        using DNS&nbhy;SD, implementers of DNS servers that will be used in contexts where DNS&nbhy;SD registration is needed, and
+        using DNS&nbhy;SD, implementers of authoritative DNS servers that will be used in contexts where DNS&nbhy;SD registration is needed, and
         administrators of networks where DNS&nbhy;SD service is required.  The document is expected to provide sufficient
         information to allow interoperable implementation of the registration protocol.</t>
 	<t>
@@ -101,7 +101,8 @@ The term "server" would be confusing here. We really do mean services. That's wh
 using service discovery. I've reworded the sentence to make this (I hope!) clearer.
 
 A server is the thing that provides the service. So servers register services, or more correctly the SRP requester registers a service on behalf of a server.
-Another point of confusion is "server" versus "DNS server" so I've clarified that throughout by replacing "server" with "DNS server" when it's a DNS server and
+Another point of confusion is "server" versus "DNS server" so I've clarified that
+throughout by replacing "server" with "authoritative DNS server" when it's a DNS server and
 not a server publishing a service.
 
 -->
@@ -119,7 +120,8 @@ not a server publishing a service.
       <ul>
 	<li>that the authoritative DNS server automatically trust
 	updates or</li>
-	<li>that the DNS Update requester have some kind of shared secret or public key that is known to the DNS server
+	<li>that the DNS Update requester have some kind of shared secret
+	or public key that is known to the authoritative DNS server
 	and can be used to authenticate the update.</li></ul>
 	<t>Furthermore, DNS Update can be a fairly chatty process, requiring multiple
 	roundtrips with different conditional predicates to complete the update process.</t>
@@ -130,7 +132,11 @@ not a server publishing a service.
      here is actually redundant anyway, and the sentence is clearer without it. -->
 
       <t>
-	The Service Registration Protocol (SRP) adds a set of default heuristics for processing DNS updates that eliminates the need for conditional predicates. Instead, the SRP registrar (a DNS server that supports SRP Updates) has a set of default predicates
+	The Service Registration Protocol (SRP) adds a set of default
+	heuristics for processing DNS updates that eliminates the need for
+	conditional predicates.
+	Instead, the SRP registrar (an authoritative DNS server
+	that supports SRP Updates) has a set of default predicates
 	that are applied to the update; and the update either succeeds entirely or fails in a way that allows the requester to know
 	what went wrong and construct a new update.</t>
 
@@ -232,9 +238,14 @@ not a server publishing a service.
       <t>
         Services that implement SRP use DNS Update <xref target="RFC2136"/> with SIG(0) <xref target="RFC3007"/> to publish service information
         in the DNS.  Two variants exist: one for full-featured hosts and one for devices designed for Constrained-Node Networks (CNNs)
-        <xref target="RFC7228"/>. An SRP registrar is most likely an authoritative DNS server or is updating an authoritative
-	DNS server. There is no requirement that the DNS server that is receiving SRP Updates be the same DNS server that is answering
-	queries that return records that have been registered.</t>
+        <xref target="RFC7228"/>.
+        An SRP registrar is most likely an authoritative DNS server,
+        or is a source of data for one or more authoritative DNS servers.
+        There is no requirement that the authoritative DNS server that is
+        receiving SRP Updates be the same authoritative DNS server that is
+        answering queries that return records that have been registered.
+        For example, an SRP registrar could be the "hidden primary" that is
+        the source of data for a fleet of secondary authoritative DNS servers.</t>
       <section>
 	<name>Protocol Variants</name>
 	<section>
@@ -437,7 +448,8 @@ We will discuss several parts to this process:</t>
           <t>
             DNS Update messages can be secured using secret key transaction signatures (TSIG)
             (<xref target="RFC8945"/>). This approach uses a secret key shared between the DNS Update requester (which issues the update) and
-            the DNS server (which authenticates it).  This model does not work for automatic service registration.</t>
+            the authoritative DNS server (which authenticates it).
+            This model does not work for automatic service registration.</t>
           <t>
             The goal of securing the DNS-SD Registration Protocol is to provide the best possible security given the constraint
             that service registration has to be automatic.  It is possible to layer more operational security on top of what we
@@ -562,16 +574,19 @@ Original:
 
 -->
 
-	      Note that this document does not update <xref target="RFC2782"/>: DNS servers still <bcp14>MUST NOT</bcp14> compress SRV record targets. The
-	      requirement to accept compressed SRV records in updates only applies to SRP registrars, and SRP registrars that are
-	      also DNS servers still <bcp14>MUST NOT</bcp14> compress SRV record targets in DNS responses. We note also that
+	      Note that this document does not update <xref target="RFC2782"/>:
+	      authoritative DNS servers still <bcp14>MUST NOT</bcp14> compress SRV record targets.
+	      The requirement to accept compressed SRV records in updates only applies to SRP
+	      registrars, and SRP registrars that are also authoritative DNS servers still
+	      <bcp14>MUST NOT</bcp14> compress SRV record targets in DNS responses.
+	      We note also that
 	      <xref target="RFC6762"/> recommends that SRV records be compressed in mDNS messages, so <xref target="RFC2782"/> does
 	      not apply to mDNS messages.</t>
 	    <t>
 	      In addition, we note that an implementer of an SRP requester might update existing code that creates SRV records
 	      or compresses DNS messages so that it compresses the target of an SRV record. Care must be taken if such code is
-	      used both in requesters and in DNS servers that the code only compresses in the case where a requester is generating
-	      an SRP Update.</t>
+	      used both in requesters and in authoritative DNS servers that the code only
+	      compresses in the case where a requester is generating an SRP Update.</t>
           </section>
           <section anchor="remove">
 	    <name>Removing Published Services</name>
@@ -913,7 +928,9 @@ Perhaps:
 	    qualify the update as an SRP Update. The meanings of these responses are explained in <xref target="RFC2136"
 	    section="2.2"/>.</t>
 	  <t>
-	    In the case of a response other than NoError, <xref target="RFC2136" section="3.8"/> specifies that the DNS server is permitted
+	    In the case of a response other than NoError,
+	    <xref target="RFC2136" section="3.8"/> specifies that
+	    the authoritative DNS server is permitted
             to respond either with no RRs or to copy the RRs sent by the client into the response. The SRP requester <bcp14>MUST NOT</bcp14> attempt
 	    to validate any RRs that are included in the response. It is possible that a future SRP extension may include per-RR
 	    indications as to why the update failed, but at the time of writing this is not specified. So, if a client were to attempt to validate
@@ -1096,9 +1113,10 @@ Original "'n'":
       <section>
 	<name>Other DNS Updates</name>
 	<t>Note that these rules only apply to the validation of SRP Updates.
-	  A DNS server that accepts updates from SRP
+	  An authoritative DNS server that accepts updates from SRP
 	  requesters may also accept other DNS Update messages, and those DNS Update messages may be validated
-	  using different rules.   However, in the case of a DNS server that accepts SRP
+	  using different rules.
+	  However, in the case of an authoritative DNS server that accepts SRP
 	  updates, the intersection of the SRP Update rules and
 	  whatever other update rules are present must be considered very carefully.</t>
 
@@ -1179,8 +1197,9 @@ Original "'n'":
 	Public keys can be used as identifiers to track hosts. SRP registrars <bcp14>MAY</bcp14> elect not to return KEY records for queries for
 	SRP registrations. To avoid DNSSEC validation failures, an SRP registrar that signs the zone for DNSSEC but refuses to return
 	a KEY record <bcp14>MUST NOT</bcp14> store the KEY record in the zone itself. Because the KEY record isn't in the zone, the nonexistence of
-	the KEY record can be validated. If the zone is not signed, the DNS server <bcp14>MAY</bcp14> instead return a negative non-error response
-	(either NXDOMAIN or no data).
+	the KEY record can be validated.
+	If the zone is not signed, the authoritative DNS server <bcp14>MAY</bcp14>
+	instead return a negative non-error response (either NXDOMAIN or no data).
       </t>
     </section>
 
@@ -1213,7 +1232,8 @@ Original "'n'":
 	<t>Name resolution APIs and libraries <bcp14>MUST NOT</bcp14> recognize names that end in "service.arpa." as special and <bcp14>MUST NOT</bcp14> treat
 	  them as having special significance, except that it may be necessary that such APIs not bypass the locally configured
 	  recursive resolvers.</t>
-	<t>One or more IP addresses for recursive DNS servers will usually be supplied to the client through router advertisements
+	<t>One or more IP addresses for recursive resolvers will usually
+	  be supplied to the client through router advertisements
 	  or DHCP.  For an administrative domain that uses subdomains of "service.arpa.", the recursive resolvers provided by that
 	  domain will be able to answer queries for subdomains of "service.arpa.". Other (non-local) resolvers will not, or they
 	  will provide answers that are not correct within that administrative domain.</t>
@@ -1223,7 +1243,7 @@ Original "'n'":
 	  use other resolvers.</t>
       </section>
       <section>
-	<name>Caching DNS Servers</name>
+	<name>Recursive Resolvers</name>
 
 <!-- [rfced] In the following text, before the two numbered points,
      the text reads "There are three considerations". Should we update
@@ -1268,7 +1288,8 @@ Current:
 I think it should be two. Dunno what happened here.
 -->
 
-	<t>There are two considerations for caching DNS servers that
+	<t>There are two considerations for recursive resolvers
+	(also known as "caching DNS servers" or "recursive DNS servers") that
 	follow this specification:</t>
 
 <!--[rfced In the following, is the intention to talk about the
@@ -1346,8 +1367,10 @@ necessary.
 	<t>No special processing of "service.arpa." is required for authoritative DNS server implementations.  It is possible that an
 	  authoritative DNS server might attempt to check the authoritative DNS servers for "service.arpa." for a delegation beneath that
 	  name before answering authoritatively for such a delegated name.  In such a case, because the name always has only local
-	  significance, there will be no such delegation in the "service.arpa." zone; therefore, the DNS server would refuse to answer
-	  authoritatively for such a zone.  A DNS server that implements this sort of check <bcp14>MUST</bcp14> be configurable so that either it does
+	  significance, there will be no such delegation in the "service.arpa." zone;
+	  therefore, the authoritative DNS server would refuse to answer
+	  authoritatively for such a zone.  An authoritative DNS server that implements
+	  this sort of check <bcp14>MUST</bcp14> be configurable so that either it does
 	  not do this check for the "service.arpa." domain or it ignores the results of the check.</t>
       </section>
       <section>
@@ -1748,21 +1771,25 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
 -->
 
     <section>
-      <name>Using Standard DNS Servers Compliant with RFC 2136 to test SRP requesters</name>
+      <name>Using Standard Authoritative DNS Servers Compliant with RFC 2136 to test SRP requesters</name>
       <t>
         It may be useful to set up an authoritative DNS server for testing that does not implement SRP.  This can be done by configuring the
-        DNS server to listen on the anycast address or by advertising it in the :_dnssd&nbhy;srp._tcp.&lt;zone&gt;: SRV and
+        authoritative DNS server to listen on the anycast address or by
+        advertising it in the :_dnssd&nbhy;srp._tcp.&lt;zone&gt;: SRV and
         "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" record.  It must be configured to be authoritative for
         "default.service.arpa" and to accept updates from hosts on local networks for names under "default.service.arpa"
-        without authentication since such DNS servers will not have support for FCFS authentication (<xref target="fcfs"/>).</t>
+        without authentication since such authoritative DNS servers will not
+        have support for FCFS authentication (<xref target="fcfs"/>).</t>
       <t>
         An authoritative DNS server configured in this way will be able to successfully accept and process SRP Updates from requesters that send SRP
-        updates.  However, no prerequisites will be applied; this means that the test DNS server will accept internally
+        updates.  However, no prerequisites will be applied; this means
+        that the test authoritative DNS server will accept internally
         inconsistent SRP Updates and will not stop two SRP Updates sent by different services that claim the same name or names
         from overwriting each other.</t>
       <t>
         Since SRP Updates are signed with keys, validation of the SIG(0) algorithm used by the requester can be done by manually
-        installing the requester's public key on the DNS server that will be receiving the updates.  The key can then be used to
+        installing the requester's public key on the authoritative DNS server
+        that will be receiving the updates.  The key can then be used to
         authenticate the SRP Update and can be used as a requirement for the update.  An example configuration for testing SRP
         using BIND 9 is given in <xref target="bind-example"/>.</t>
     </section>
@@ -1770,14 +1797,19 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
     <section>
       <name>How to Allow SRP Requesters to Update Standard Servers Compliant with RFC 2136</name>
       <t>
-        Ordinarily, SRP Updates will fail when sent to a DNS server compliant with <xref target="RFC2136"/> that does not implement SRP because the zone
-        being updated is "default.service.arpa" and because no DNS server that is not an SRP registrar would normally be configured to be
-        authoritative for "default.service.arpa".  Therefore, a requester that sends an SRP Update can tell that the receiving DNS server
+        Ordinarily, SRP Updates will fail when sent to an authoritative DNS server
+        compliant with <xref target="RFC2136"/> that does not implement SRP
+        because the zone being updated is "default.service.arpa" and because
+        no authoritative DNS server that is not an SRP registrar would normally
+        be configured to be authoritative for "default.service.arpa".
+        Therefore, a requester that sends an SRP Update can
+        tell that the receiving authoritative DNS server
         does not support SRP but does support <xref target="RFC2136"/> because the RCODE will either be NotZone, NotAuth, or Refused or because
         there is no response to the update request (when using the anycast address).</t>
       <t>
         In this case, a requester <bcp14>MAY</bcp14> attempt to register itself using regular DNS updates described in <xref target="RFC2136"/>. To do so, it must discover the
-        default registration zone and the DNS server designated to receive updates for that zone, as described earlier, using the
+        default registration zone and the authoritative DNS server designated
+        to receive updates for that zone, as described earlier, using the
         _dns&nbhy;update._udp SRV record.  It can then send the update to the port and host pointed to by the SRV record, and it is
         expected to use appropriate prerequisites to avoid overwriting competing records.  Such updates are out of scope for SRP,
         and a requester that implements SRP <bcp14>MUST</bcp14> first attempt to use SRP to register itself and only attempt to use backwards capability with <xref target="RFC2136"/>
