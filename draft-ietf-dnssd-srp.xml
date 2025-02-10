@@ -75,8 +75,8 @@
 	allows servers to register the services they offer using the DNS protocol rather than using Multicast DNS (mDNS) (see <xref target="RFC6762"></xref>).  There is already a large installed base of DNS&nbhy;SD clients that can discover services using the DNS
 	protocol (e.g., Android, Windows, Linux, Apple).</t>
       <t>
-        This document is intended for three audiences: implementors of software that provides services that should be advertised
-        using DNS&nbhy;SD, implementors of DNS servers that will be used in contexts where DNS&nbhy;SD registration is needed, and
+        This document is intended for three audiences: implementers of software that provides services that should be advertised
+        using DNS&nbhy;SD, implementers of DNS servers that will be used in contexts where DNS&nbhy;SD registration is needed, and
         administrators of networks where DNS&nbhy;SD service is required.  The document is expected to provide sufficient
         information to allow interoperable implementation of the registration protocol.</t>
 	<t>
@@ -270,7 +270,7 @@ not a server publishing a service.
             <xref target="RFC6761"/>) "default.service.arpa" is used.  The details of how SRP registrars are discovered will be specific
             to the constrained network; therefore, we do not suggest a specific mechanism here.</t>
 	  <t>
-            SRP requestors on CNNs are expected to receive, from the network, a list of SRP registrars with which to register.
+            SRP requesters on CNNs are expected to receive, from the network, a list of SRP registrars with which to register.
             It is the responsibility of a CNN supporting SRP to provide one or more registrar addresses.  It is
             the responsibility of the registrar supporting a CNN to handle the updates appropriately.  In some
             network environments, updates may be accepted directly into a local "default.service.arpa" zone, which has only local
@@ -314,7 +314,7 @@ We will discuss several parts to this process:</t>
 	<section anchor="what">
 	  <name>What to Publish</name>
           <t>
-            SRP Updates are sent by SRP requestors to SRP registrars.  Three types of instructions appear in an SRP Update: Service
+            SRP Updates are sent by SRP requesters to SRP registrars.  Three types of instructions appear in an SRP Update: Service
 	    Discovery instructions, Service Description instructions, and Host Description instructions. These instructions are made
 	    up of DNS Update Resource Records (RRs) that are either adds or deletes. The types of records that are added, updated, and removed in each
 	    of these instructions, as well as the constraints that apply to them, are described in <xref target="server_behavior"/>.
@@ -336,7 +336,7 @@ We will discuss several parts to this process:</t>
 	      There is never more than one hostname in a single SRP Update. The hostname has one or more address RRs (AAAA or A) and
               a KEY RR (used for FCFS Naming). Depending on the use case, an SRP requestor may be required to suppress some
               addresses that would not be usable by hosts discovering the service through the SRP registrar. The exact address
-              record suppression behavior required may vary for different types of SRP requestors. An example of such advice can be
+              record suppression behavior required may vary for different types of SRP requesters. An example of such advice can be
               found in <xref target="RFC8766" section="5.5.2" sectionFormat="of"/>.
 	    </li>
 	  </ul>
@@ -410,7 +410,7 @@ We will discuss several parts to this process:</t>
               <li>
 		An SRP registrar is not required to implement general DNS Update prerequisite processing.</li>
               <li>
-		CNN SRP requestors are allowed to send updates to the generic domain "default.service.arpa.".</li>
+		CNN SRP requesters are allowed to send updates to the generic domain "default.service.arpa.".</li>
             </ul>
           </section>
 	  <section>
@@ -570,7 +570,7 @@ Original:
 	    <t>
 	      In addition, we note that an implementor of an SRP requestor might update existing code that creates SRV records
 	      or compresses DNS messages so that it compresses the target of an SRV record. Care must be taken if such code is
-	      used both in requestors and in DNS servers that the code only compresses in the case where a requestor is generating
+	      used both in requesters and in DNS servers that the code only compresses in the case where a requestor is generating
 	      an SRP Update.</t>
           </section>
           <section anchor="remove">
@@ -583,7 +583,7 @@ Original:
 		KEY-LEASE <bcp14>SHOULD</bcp14> also be zero. Otherwise, it <bcp14>SHOULD</bcp14> be set to the same value it had previously; this holds the name
 		in reserve for when the SRP requestor is once again able to provide the service.</t>
               <t>
-		SRP requestors are normally expected to remove all service instances when removing a host.  However, in some cases, an SRP
+		SRP requesters are normally expected to remove all service instances when removing a host.  However, in some cases, an SRP
 		requestor may not have retained sufficient state to know that some service instance is pointing to a host that it is
 		removing.  This method of removing services is intended for the case where the requestor is going offline and does
 		not want its services advertised. Therefore, it is sufficient for the requestor to send the Host Description Instruction (see <xref target="hdi"></xref>).
@@ -591,7 +591,7 @@ Original:
 	      <t>
 		To support this, when removing services based on the lease time being zero, an SRP registrar <bcp14>MUST</bcp14> remove all service
 		instances pointing to a host when a host is removed, even if the SRP requestor doesn't list them explicitly. If the
-		KEY lease time is nonzero, the SRP registrar <bcp14>MUST NOT</bcp14> delete the KEY records for these SRP requestors.
+		KEY lease time is nonzero, the SRP registrar <bcp14>MUST NOT</bcp14> delete the KEY records for these SRP requesters.
 	      </t>
 	    </section>
 	    <section>
@@ -961,10 +961,10 @@ Perhaps:
       <t>
 	All RRs within an RRset are required to have the same TTL
 	(see <xref target="RFC2181" section="5.2" sectionFormat="of"/>).
-	In order to avoid inconsistencies, SRP places restrictions on TTLs sent by requestors and requires that SRP registrars enforce
+	In order to avoid inconsistencies, SRP places restrictions on TTLs sent by requesters and requires that SRP registrars enforce
 	consistency.</t>
       <t>
-	Requestors sending SRP Updates <bcp14>MUST</bcp14> use consistent TTLs in all RRs within the SRP Update.</t>
+	Requesters sending SRP Updates <bcp14>MUST</bcp14> use consistent TTLs in all RRs within the SRP Update.</t>
       <t>
 	SRP registrars <bcp14>MUST</bcp14> check that the TTLs for all RRs within the SRP Update are the same.  If they are not, the SRP
 	update <bcp14>MUST</bcp14> be rejected with a Refused RCODE.</t>
@@ -1000,7 +1000,7 @@ Perhaps:
 	<t>The reasoning behind the different lease times is discussed in <xref target="fcfs" format="default"/>.  SRP registrars may be configured with limits for these values.  At the time of writing, a default limit of two hours for
           the Lease and 14 days for the SIG(0) KEY are thought to be good choices.  Devices with limited
           battery that wake infrequently are likely to request longer leases; registrars that support such devices may need to set
-          higher limits.  SRP requestors that are going to continue to use names on which they hold leases <bcp14>SHOULD</bcp14> update well before
+          higher limits.  SRP requesters that are going to continue to use names on which they hold leases <bcp14>SHOULD</bcp14> update well before
           the lease ends in case the registrar is unavailable or under heavy load.</t>
 
 	<t>
@@ -1032,7 +1032,7 @@ Perhaps:
      and let us know if/how we may update for uniformity.
 
 Original "N":
-   SRP requestors SHOULD assume that each lease ends N seconds after the
+   SRP requesters SHOULD assume that each lease ends N seconds after the
    update was first transmitted, where N is the lease duration.
 
 Original "'n'":
@@ -1044,7 +1044,7 @@ Original "'n'":
 [Ted] These are actually two different quantities, but I agree with the correction generally, so have used M for the last paragraph.
 -->
 
-	<t>SRP requestors <bcp14>SHOULD</bcp14> assume that each lease ends N
+	<t>SRP requesters <bcp14>SHOULD</bcp14> assume that each lease ends N
 	seconds after the update was first transmitted (where N is the lease
 	duration).  SRP registrars <bcp14>SHOULD</bcp14> assume that each lease
 	ends N seconds after the update that was successfully processed was
@@ -1097,7 +1097,7 @@ Original "'n'":
 	<name>Other DNS Updates</name>
 	<t>Note that these rules only apply to the validation of SRP Updates.
 	  A DNS server that accepts updates from SRP
-	  requestors may also accept other DNS Update messages, and those DNS Update messages may be validated
+	  requesters may also accept other DNS Update messages, and those DNS Update messages may be validated
 	  using different rules.   However, in the case of a DNS server that accepts SRP
 	  updates, the intersection of the SRP Update rules and
 	  whatever other update rules are present must be considered very carefully.</t>
@@ -1105,8 +1105,8 @@ Original "'n'":
 	<t>For example, a normal authenticated DNS update to any RR that was added using SRP, but that is authenticated using a
 	  different key, could be used to override a promise made by the SRP registrar to an SRP requestor by replacing all or part of
 	  the service registration information with information provided by an authenticated DNS update requestor.  An implementation
-	  that allows both kinds of updates <bcp14>SHOULD NOT</bcp14> allow DNS Update requestors that are using different authentication and
-	  authorization credentials to update records added by SRP requestors.</t>
+	  that allows both kinds of updates <bcp14>SHOULD NOT</bcp14> allow DNS Update requesters that are using different authentication and
+	  authorization credentials to update records added by SRP requesters.</t>
       </section>
       <section>
 	<name>Risks of Allowing Arbitrary Names to be Registered in SRP Updates</name>
@@ -1143,7 +1143,7 @@ Original "'n'":
       <section>
 	<name>SRP Registrar Authentication</name>
 	<t>This specification does not provide a mechanism for validating responses from SRP registrars to
-	  SRP requestors.   In principle, a KEY RR could be used by
+	  SRP requesters.   In principle, a KEY RR could be used by
 	  a non-CNN SRP requestor to validate responses from the registrar, but this is not required,
 	  nor do we specify a mechanism for determining which key to use.</t>
 	<t>In addition, for DNS-over-TLS connections, out-of-band key pinning as described in
@@ -1158,7 +1158,7 @@ Original "'n'":
 	  algorithms that are specified in <xref target="RFC8624" section="3.1" sectionFormat="of"/>, in the validation column of the
 	  table, that are numbered 13 or higher, and that have a "<bcp14>MUST</bcp14>", "<bcp14>RECOMMENDED</bcp14>", or "<bcp14>MAY</bcp14>" designation in the validation column of
 	  the table.
-	  SRP requestors <bcp14>MUST NOT</bcp14> assume that any algorithm numbered lower than 13 is
+	  SRP requesters <bcp14>MUST NOT</bcp14> assume that any algorithm numbered lower than 13 is
 	  available for use in validating SIG(0) signatures.</t>
       </section>
     </section>
@@ -1748,7 +1748,7 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
 -->
 
     <section>
-      <name>Using Standard DNS Servers Compliant with RFC 2136 to test SRP requestors</name>
+      <name>Using Standard DNS Servers Compliant with RFC 2136 to test SRP requesters</name>
       <t>
         It may be useful to set up an authoritative DNS server for testing that does not implement SRP.  This can be done by configuring the
         DNS server to listen on the anycast address or by advertising it in the :_dnssd&nbhy;srp._tcp.&lt;zone&gt;: SRV and
@@ -1756,7 +1756,7 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
         "default.service.arpa" and to accept updates from hosts on local networks for names under "default.service.arpa"
         without authentication since such DNS servers will not have support for FCFS authentication (<xref target="fcfs"/>).</t>
       <t>
-        An authoritative DNS server configured in this way will be able to successfully accept and process SRP Updates from requestors that send SRP
+        An authoritative DNS server configured in this way will be able to successfully accept and process SRP Updates from requesters that send SRP
         updates.  However, no prerequisites will be applied; this means that the test DNS server will accept internally
         inconsistent SRP Updates and will not stop two SRP Updates sent by different services that claim the same name or names
         from overwriting each other.</t>
@@ -1768,7 +1768,7 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
     </section>
 
     <section>
-      <name>How to Allow SRP Requestors to Update Standard Servers Compliant with RFC 2136</name>
+      <name>How to Allow SRP Requesters to Update Standard Servers Compliant with RFC 2136</name>
       <t>
         Ordinarily, SRP Updates will fail when sent to a DNS server compliant with <xref target="RFC2136"/> that does not implement SRP because the zone
         being updated is "default.service.arpa" and because no DNS server that is not an SRP registrar would normally be configured to be
