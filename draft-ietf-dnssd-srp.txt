@@ -130,14 +130,15 @@ Table of Contents
 
 1.  Introduction
 
-   DNS-SD (see [RFC6763]) is a component of Zero Configuration
-   Networking (see [RFC6760], [ZC], and [ROADMAP]).
+   DNS-SD [RFC6763] is a component of Zero Configuration Networking
+   [RFC6760] [ZC] [ROADMAP].
 
    This document describes an enhancement to DNS-SD that allows servers
-   to register the services they offer using the DNS protocol rather
-   than using Multicast DNS (mDNS) (see [RFC6762]).  There is already a
-   large installed base of DNS-SD clients that can discover services
-   using the DNS protocol (e.g., Android, Windows, Linux, Apple).
+   to register the services they offer using the DNS protocol over
+   unicast rather than using Multicast DNS (mDNS) [RFC6762].  There is
+   already a large installed base of DNS-SD clients that can discover
+   services using the DNS protocol (e.g., Android, Windows, Linux,
+   Apple).
 
    This document is intended for three audiences: implementers of
    software that provides services that should be advertised using
@@ -157,8 +158,8 @@ Table of Contents
    updating authoritative DNS services with service information.
 
    The existing practice for updating DNS zones is either to enter new
-   data manually or to use DNS Update (see [RFC2136]).  Unfortunately,
-   DNS Update requires either:
+   data manually or to use DNS Update [RFC2136].  Unfortunately, DNS
+   Update requires either:
 
    *  that the authoritative DNS server automatically trust updates or
 
@@ -249,16 +250,17 @@ Table of Contents
    which makes their services directly discoverable by peers attached to
    that same local link.
 
-   RFC 6763 also allows clients to discover services using the DNS
-   protocol (see [RFC1035]).  This can be done by having a system
-   administrator manually configure service information in the DNS;
-   however, manually populating DNS authoritative server databases is
-   costly and potentially error-prone and requires a knowledgeable
-   network administrator.  Consequently, although all DNS-SD client
-   implementations of which we are aware support DNS-SD using DNS
-   queries, in practice it is used much less frequently than mDNS.
+   DNS-SD [RFC6763] also allows clients to discover services using the
+   DNS protocol over traditional unicast [RFC1035].  This can be done by
+   having a system administrator manually configure service information
+   in the DNS; however, manually populating DNS authoritative server
+   databases is costly and potentially error-prone and requires a
+   knowledgeable network administrator.  Consequently, although all
+   DNS-SD client implementations of which we are aware support DNS-SD
+   using DNS queries, in practice it is used much less frequently than
+   mDNS.
 
-   The Discovery Proxy (see [RFC8766]) provides one way to automatically
+   The Discovery Proxy [RFC8766] provides one way to automatically
    populate the DNS namespace but is only appropriate on networks where
    services are easily advertised using mDNS.  The present document
    describes a solution more suitable for networks where multicast is
@@ -293,10 +295,11 @@ Table of Contents
 3.1.1.  Full-Featured Hosts
 
    Full-featured hosts either are configured manually with a
-   registration domain or discover the default registration domain as
-   described in Section 11 of [RFC6763].  If this process does not
-   produce a default registration domain, the SRP registrar is not
-   discoverable on the local network using this mechanism.  Other
+   registration domain or discover the default registration domain
+   automatically using the Domain Enumeration process described in
+   Section 11 of the DNS-SD specification [RFC6763].  If this process
+   does not produce a default registration domain, the SRP registrar is
+   not discoverable on the local network using this mechanism.  Other
    discovery mechanisms are possible, but they are out of scope for this
    document.
 
@@ -313,11 +316,12 @@ Table of Contents
    records describing their service or services as subdomains of the
    chosen service registration domain.  For these names, they then
    discover the zone apex of the closest enclosing DNS zone using SOA
-   queries (see Section 6.1 of [RFC8765]).  Having discovered the
-   enclosing DNS zone, they query for the "_dnssd-srp._tcp.<zone>" SRV
-   record to discover the SRP registrar to which they can send SRP
-   Updates.  Hosts that support SRP Updates using TLS use the
-   "_dnssd-srp-tls._tcp.<zone>" SRV record instead.
+   queries as described in Section 6.1 of the DNS Push Notification
+   specification [RFC8765].  Having discovered the enclosing DNS zone,
+   they query for the "_dnssd-srp._tcp.<zone>" SRV record to discover
+   the SRP registrar to which they can send SRP Updates.  Hosts that
+   support SRP Updates using TLS use the "_dnssd-srp-tls._tcp.<zone>"
+   SRV record instead.
 
    Examples of full-featured hosts include devices such as home
    computers, laptops, powered peripherals with network connections
@@ -328,10 +332,10 @@ Table of Contents
 
    For devices designed for CNNs ([RFC7228]), some simplifications are
    available.  Instead of being configured with (or discovering) the
-   service registration domain, the special-use domain name (see
-   [RFC6761]) "default.service.arpa" is used.  The details of how SRP
-   registrars are discovered will be specific to the constrained
-   network; therefore, we do not suggest a specific mechanism here.
+   service registration domain, the special-use domain name [RFC6761]
+   "default.service.arpa" is used.  The details of how SRP registrars
+   are discovered will be specific to the constrained network;
+   therefore, we do not suggest a specific mechanism here.
 
    SRP requesters on CNNs are expected to receive, from the network, a
    list of SRP registrars with which to register.  It is the
@@ -369,16 +373,15 @@ Table of Contents
 
    We will discuss several parts to this process:
 
-   *  how to know what to publish (see Section 3.2.1),
+   *  how to know what to publish (Section 3.2.1),
 
-   *  how to know where to publish it (under what name) (see
-      Section 3.2.2),
+   *  how to know where to publish it (under what name) (Section 3.2.2),
 
-   *  how to publish it (see Section 3.2.3),
+   *  how to publish it (Section 3.2.3),
 
-   *  how to secure its publication (see Section 3.2.4), and
+   *  how to secure its publication (Section 3.2.4), and
 
-   *  how to maintain the information once published (see Section 5).
+   *  how to maintain the information once published (Section 5).
 
 3.2.1.  What to Publish
 
@@ -395,8 +398,7 @@ Table of Contents
    SRP Update:
 
    *  PTR RR(s) for service(s), which map from a generic service type
-      (or subtype(s)) to a specific Service Instance Name (Section 4.1
-      of [RFC6763]).
+      (or subtype(s)) to a specific Service Instance Name [RFC6763].
 
    *  For each Service Instance Name, an SRV RR, one or more TXT RRs,
       and a KEY RR.  Although, in principle, DNS-SD Service Description
@@ -414,8 +416,9 @@ Table of Contents
       requester may be required to suppress some addresses that would
       not be usable by hosts discovering the service through the SRP
       registrar.  The exact address record suppression behavior required
-      may vary for different types of SRP requesters.  An example of
-      such advice can be found in Section 5.5.2 of [RFC8766].
+      may vary for different types of SRP requesters.  Guidance for
+      suppressing unusable records can be found in Section 5.5.2 of the
+      Discovery Proxy specification [RFC8766].
 
    [RFC6763] describes the details of what each of these RR types mean,
    with the exception of the KEY RR, which is defined in [RFC2539].
@@ -439,8 +442,8 @@ Table of Contents
    the domain in which to register their services.  Such devices MAY
    optionally support configuration of a registration domain by the
    operator of the device.  However, such devices MUST support
-   registration domain discovery as described in Section 11 of
-   [RFC6763].
+   registration domain discovery as described in Section 11 of the
+   DNS-SD specification [RFC6763].
 
    Devices made for CNNs register in the special-use domain name
    ([RFC6761]) "default.service.arpa" and let the SRP registrar handle
@@ -504,10 +507,11 @@ Table of Contents
    The DNS protocol, including DNS updates, can operate over UDP or TCP.
    When using UDP, reliable transmission must be guaranteed by
    retransmitting if a DNS UDP message is not acknowledged in a
-   reasonable interval.  Section 4.2.1 of [RFC1035] provides some
-   guidance on this topic, as does Section 1 of [RFC1536].
-   Section 3.1.3 of [RFC8085] also provides useful guidance that is
-   particularly relevant to DNS.
+   reasonable interval.  Section 4.2.1 of the DNS specification
+   [RFC1035] provides some guidance on this topic, as does Section 1 of
+   the document describing common DNS implementation errors [RFC1536].
+   Section 3.1.3 of the UDP Usage Guidelines document [RFC8085] also
+   provides useful guidance that is particularly relevant to DNS.
 
 3.2.3.3.  Successive Updates
 
@@ -541,15 +545,16 @@ Table of Contents
    remembers the name and the key used to register RRs on that name, no
    other SRP requester can add or update the information associated with
    that name.  If the SRP requester fails to renew its service
-   registration before the KEY lease (see Section 4 of [RFC9664])
-   expires, its name is no longer protected.  FCFS Naming is used to
-   protect both the Service Description and the Host Description.
+   registration before the KEY lease (described in Section 4 of the DNS
+   Update Lease specification [RFC9664]) expires, its name is no longer
+   protected.  FCFS Naming is used to protect both the Service
+   Description and the Host Description.
 
 3.2.5.  SRP Requester Behavior
 
 3.2.5.1.  Public/Private Key Pair Generation and Storage
 
-   The requester generates a public/private key pair (see Section 6.6).
+   The requester generates a public/private key pair (Section 6.6).
    This key pair MUST be stored in stable storage; if there is no
    writable stable storage on the SRP requester, the SRP requester MUST
    be preconfigured with a public/private key pair in read-only storage
@@ -575,7 +580,7 @@ Table of Contents
    record MUST contain the same public key.  The update is signed using
    SIG(0), using the private key that corresponds to the public key in
    the KEY record.  The lifetimes of the records in the update is set
-   using the EDNS(0) Update Lease option (see [RFC9664]).
+   using the EDNS(0) Update Lease option [RFC9664].
 
    The format of the KEY resource record in the SRP Update is defined in
    [RFC3445].  Because the KEY RR used in SIG(0) is not a zone-signing
@@ -589,13 +594,13 @@ Table of Contents
 
 3.2.5.2.  Name Conflict Handling
 
-   Adds for both Host Description RRs and Service Description RRs can
-   have names that result in name conflicts.  Service Discovery record
-   adds cannot have name conflicts.  If any Host Description or Service
-   Description record is found by the SRP registrar to have a conflict
-   with an existing name, the registrar will respond to the SRP Update
-   with a YXDomain RCODE (Section 2.2 of [RFC2136]).  In this case, the
-   requester MUST choose a new name or give up.
+   "Add" operations for both Host Description RRs and Service
+   Description RRs can have names that result in name conflicts.
+   Service Discovery record adds cannot have name conflicts.  If any
+   Host Description or Service Description record is found by the SRP
+   registrar to have a conflict with an existing name, the registrar
+   will respond to the SRP Update with a YXDomain RCODE [RFC2136].  In
+   this case, the requester MUST choose a new name or give up.
 
    There is no specific requirement for how this is done.  Typically,
    however, the requester will append a number to the preferred name.
@@ -607,8 +612,8 @@ Table of Contents
 
 3.2.5.3.  Record Lifetimes
 
-   The lifetime of the DNS-SD PTR, SRV, A, AAAA, and TXT records (see
-   [RFC6763]) uses the LEASE field of the Update Lease option and is
+   The lifetime of the DNS-SD PTR, SRV, A, AAAA, and TXT records
+   [RFC6763] uses the LEASE field of the Update Lease option and is
    typically set to two hours.  Thus, if a device is disconnected from
    the network, it does not continue to appear for too long in the user
    interfaces of devices looking for instances of that service type.
@@ -693,13 +698,12 @@ Table of Contents
    one of two ways:
 
    1.  To simply remove a specific service, the requester sends a valid
-       SRP Update containing Service Discovery Instructions (see
-       Section 3.3.1.1) consisting of "Delete An RR From An RRset"
-       updates (Section 2.5.4 of [RFC2136]) that delete any PTR records
-       whose target is the Service Instance Name.  In this case, the
-       Service Description Instruction (see Section 3.3.1.2) contains a
-       single "Delete All RRsets From A Name" update (Section 2.5.3 of
-       [RFC2136]) to the Service Instance Name.
+       SRP Update containing Service Discovery Instructions
+       (Section 3.3.1.1) consisting of "Delete An RR From An RRset"
+       updates [RFC2136] that delete any PTR records whose target is the
+       Service Instance Name.  In this case, the Service Description
+       Instruction (Section 3.3.1.2) contains a single "Delete All
+       RRsets From A Name" update to the Service Instance Name.
 
    2.  When deleting one service instance while simultaneously creating
        a new service instance with a different service instance name, an
@@ -720,12 +724,12 @@ Table of Contents
    will look very much like the second alternative above.  The PTR
    record in the Service Discovery Instruction will be the same for both
    the "Delete An RR From An RRset" update and the "Add To An RRset"
-   update (Section 2.5.1 of [RFC2136]).  Since the removal of the old
-   service and the addition of the new service are both valid SRP Update
-   operations, the combined operation is a valid SRP Update operation.
-   The SRP registrar does not need to include code to recognize this
-   special case, and does not need to take any special actions to handle
-   it correctly.
+   update [RFC2136].  Since the removal of the old service and the
+   addition of the new service are both valid SRP Update operations, the
+   combined operation is a valid SRP Update operation.  The SRP
+   registrar does not need to include code to recognize this special
+   case, and does not need to take any special actions to handle it
+   correctly.
 
    Whichever of these two alternatives is used, the host lease will be
    updated with the lease time provided in the SRP update.  In neither
@@ -766,9 +770,9 @@ Table of Contents
 
    An instruction is a Service Discovery Instruction if it:
 
-   *  consists of exactly one "Add To An RRSet" ([RFC2136],
-      Section 2.5.1) or exactly one "Delete An RR From An RRSet"
-      ([RFC2136], Section 2.5.4) RR update,
+   *  consists of exactly one "Add To An RRSet" or exactly one "Delete
+      An RR From An RRSet" RR update (Section 2.5 of the DNS Update
+      specification [RFC2136]),
    *  which updates a PTR RR,
    *  the target of which is a Service Instance Name
    *  for which name a Service Description Instruction is present in the
@@ -789,9 +793,9 @@ Table of Contents
    for the same service name (the owner name of the PTR record) if the
    SRP requester is advertising more than one instance of the same
    service type or is changing the target of a PTR RR.  When subtypes
-   (Section 7.1 of [RFC6763]) are being used, each subtype is a separate
-   Service Discovery Instruction.  For each such PTR RR add or delete,
-   the above constraints must be met.
+   (Section 7.1 of the DNS-SD specification [RFC6763]) are being used,
+   each subtype is a separate Service Discovery Instruction.  For each
+   such PTR RR add or delete, the above constraints must be met.
 
 3.3.1.2.  Service Description Instruction
 
@@ -799,7 +803,8 @@ Table of Contents
    Service Instance Name, all of the following are true:
 
    *  It contains exactly one "Delete All RRsets From A Name" update for
-      the Service Instance Name ([RFC2136], Section 2.5.3),
+      the Service Instance Name (Section 2.5.3 of the DNS Update
+      specification [RFC2136]),
    *  It contains zero or one "Add To An RRset" KEY RRs that, if
       present, contains the public key corresponding to the private key
       that was used to sign the message (if present, the KEY RR MUST
@@ -869,11 +874,11 @@ Table of Contents
    Description Instructions is not an SRP Update.  A DNS update that
    contains any prerequisites is not an SRP Update.
 
-   An SRP Update MUST include an EDNS(0) Update Lease option (see
-   [RFC9664]).  The LEASE time specified in the Update Lease option MUST
-   be less than or equal to the KEY-LEASE time.  A DNS update that does
-   not include the Update Lease option, or that includes a KEY-LEASE
-   value that is less than the LEASE value, is not an SRP Update.
+   An SRP Update MUST include an EDNS(0) Update Lease option [RFC9664].
+   The LEASE time specified in the Update Lease option MUST be less than
+   or equal to the KEY-LEASE time.  A DNS update that does not include
+   the Update Lease option, or that includes a KEY-LEASE value that is
+   less than the LEASE value, is not an SRP Update.
 
    When an SRP registrar receives a DNS Update message that is not an
    SRP update, it MAY process the update as regular DNS Update
@@ -969,15 +974,16 @@ Table of Contents
 
 3.3.6.  Optional Behavior
 
-   The SRP registrar MAY add a Reverse Mapping (see Section 3.5 of
-   [RFC1035] and Section 2.5 of [RFC3596]) that corresponds to the Host
-   Description.  This is not required because the reverse mapping serves
-   no protocol function, but it may be useful for debugging, for example
-   in annotating network packet traces or logs.  In order for the
-   registrar to do a reverse mapping update, it must be authoritative
-   for the zone that would need to be updated or have credentials to do
-   the update.  The SRP requester MAY also do a reverse mapping update
-   if it has credentials to do so.
+   The SRP registrar MAY add a Reverse Mapping (described for IPv4 in
+   Section 3.5 of the DNS specification [RFC1035] and for IPv6 in
+   Section 2.5 of the later document updating DNS for IPv6 [RFC3596])
+   that corresponds to the Host Description.  This is not required
+   because the reverse mapping serves no protocol function, but it may
+   be useful for debugging, for example in annotating network packet
+   traces or logs.  In order for the registrar to do a reverse mapping
+   update, it must be authoritative for the zone that would need to be
+   updated or have credentials to do the update.  The SRP requester MAY
+   also do a reverse mapping update if it has credentials to do so.
 
    The SRP registrar MAY apply additional criteria when accepting
    updates.  In some networks, it may be possible to do out-of-band
@@ -1007,10 +1013,10 @@ Table of Contents
 
 4.  TTL Consistency
 
-   All RRs within an RRset are required to have the same TTL (see
-   Section 5.2 of [RFC2181]).  In order to avoid inconsistencies, SRP
-   places restrictions on TTLs sent by requesters and requires that SRP
-   registrars enforce consistency.
+   All RRs within an RRset are required to have the same TTL (required
+   by Section 5.2 of the DNS Clarifications document [RFC2181]).  In
+   order to avoid inconsistencies, SRP places restrictions on TTLs sent
+   by requesters and requires that SRP registrars enforce consistency.
 
    Requesters sending SRP Updates MUST use consistent TTLs in all RRs
    within each RRset contained within an SRP Update.
@@ -1043,11 +1049,11 @@ Table of Contents
    Because the DNS-SD registration protocol is automatic and not managed
    by humans, some additional bookkeeping is required.  When an update
    is constructed by the SRP requester, it MUST include an EDNS(0)
-   Update Lease Option (see [RFC9664]).  The Update Lease Option
-   contains two lease times: the Lease Time and the KEY Lease Time.
+   Update Lease Option [RFC9664].  The Update Lease Option contains two
+   lease times: the Lease Time and the KEY Lease Time.
 
-   Similar to DHCP leases (see [RFC2131]), these leases are promises
-   from the SRP requester that it will send a new update for the service
+   Similar to DHCP leases [RFC2131], these leases are promises from the
+   SRP requester that it will send a new update for the service
    registration before the lease time expires.  The Lease time is chosen
    to represent the duration after the update during which the
    registered records other than the KEY record can be assumed to be
@@ -1135,21 +1141,21 @@ Table of Contents
    For TCP updates, the initial SYN-SYN+ACK handshake prevents updates
    being forged by an off-network attacker.  In order to ensure that
    this handshake happens, SRP registrars relying on three-way-handshake
-   validation MUST NOT accept TCP Fast Open payloads (see [RFC7413]).
-   If the network infrastructure allows it, an SRP registrar MAY accept
-   TCP Fast Open payloads if all such packets are validated along the
-   path, and the network is able to reject this type of spoofing at all
+   validation MUST NOT accept TCP Fast Open payloads [RFC7413].  If the
+   network infrastructure allows it, an SRP registrar MAY accept TCP
+   Fast Open payloads if all such packets are validated along the path,
+   and the network is able to reject this type of spoofing at all
    ingress points.
 
    For UDP updates from CNN devices, spoofing would have to be prevented
    with appropriate source address filtering on routers ([RFC2827]).
    This would ordinarily be accomplished by measures such as those
-   described in (Section 4.5 of [RFC7084]).  For example, a stub router
-   ([SNAC-SIMPLE]) for a CNN might only accept UDP updates from source
-   addresses known to be on-link on that stub network and might further
-   validate that the UDP update was actually received on the stub
-   network interface and not the interface connected to the adjacent
-   infrastructure link.
+   described in (Section 4.5 of the IPv6 CE Router Requirements document
+   [RFC7084]).  For example, a stub router ([SNAC-SIMPLE]) for a CNN
+   might only accept UDP updates from source addresses known to be on-
+   link on that stub network and might further validate that the UDP
+   update was actually received on the stub network interface and not
+   the interface connected to the adjacent infrastructure link.
 
 6.2.  Other DNS Updates
 
@@ -1206,14 +1212,14 @@ Table of Contents
 6.4.  Security of Local Service Discovery
 
    Local links can be protected by managed services such as RA Guard
-   (see [RFC6105]), but multicast services like DHCP, DHCPv6, and IPv6
-   Neighbor Discovery (see [RFC2131], [RFC8415], and [RFC4861],
-   respectively) are, in most cases, not authenticated and can't be
-   controlled on unmanaged networks, such as home networks and small
-   office networks where no network management staff are present.  In
-   such situations, the SRP service has comparatively fewer potential
-   security exposures and, hence, is not the weak link.  This is
-   discussed in more detail in Section 3.2.4.
+   [RFC6105], but multicast services like DHCP [RFC2131] DHCPv6
+   [RFC8415], and IPv6 Neighbor Discovery [RFC4861] are, in most cases,
+   not authenticated and can't be controlled on unmanaged networks, such
+   as home networks and small office networks where no network
+   management staff are present.  In such situations, the SRP service
+   has comparatively fewer potential security exposures and, hence, is
+   not the weak link.  This is discussed in more detail in
+   Section 3.2.4.
 
    The fundamental protection for networks of this type is the user's
    choice of what devices to add to the network.  Work is being done in
@@ -1232,22 +1238,22 @@ Table of Contents
    mechanism for determining which key to use.
 
    In addition, for DNS-over-TLS connections, out-of-band key pinning as
-   described in Section 4.2 of [RFC7858] could be used for
-   authentication of the SRP registrar, e.g., to prevent man-in-the-
-   middle attacks.  However, the use of such keys is impractical for an
-   unmanaged service registration protocol; hence, it is out of scope
-   for this document.
+   described in Section 4.2 of the DNS-over-TLS specification [RFC7858]
+   could be used for authentication of the SRP registrar, e.g., to
+   prevent man-in-the-middle attacks.  However, the use of such keys is
+   impractical for an unmanaged service registration protocol; hence, it
+   is out of scope for this document.
 
 6.6.  Required Signature Algorithm
 
    For validation, SRP registrars MUST implement the ECDSAP256SHA256
    signature algorithm.  SRP registrars SHOULD implement the algorithms
-   that are specified in Section 3.1 of [RFC8624], in the validation
-   column of the table, that are numbered 13 or higher, and that have a
-   "MUST", "RECOMMENDED", or "MAY" designation in the validation column
-   of the table.  SRP requesters MUST NOT assume that any algorithm
-   numbered lower than 13 is available for use in validating SIG(0)
-   signatures.
+   that are listed in Section 3.1 of the DNSSEC Cryptographic Algorithms
+   specification [RFC8624], in the validation column of the table, that
+   are numbered 13 or higher, and that have a "MUST", "RECOMMENDED", or
+   "MAY" designation in the validation column of the table.  SRP
+   requesters MUST NOT assume that any algorithm numbered lower than 13
+   is available for use in validating SIG(0) signatures.
 
 7.  Privacy Considerations
 
@@ -1257,7 +1263,8 @@ Table of Contents
    SRP registrar implementations MUST offer TLS support.  The use of TLS
    with DNS is described in [RFC7858].  Because there is no mechanism
    for sharing keys, validation of DNS-over-TLS keys is not possible;
-   DNS-over-TLS is used only as described in Section 4.1 of [RFC7858].
+   DNS-over-TLS is used only for Opportunistic Privacy, as documented in
+   Section 4.1 of the DNS-over-TLS specification [RFC7858].
 
    SRP requesters that are able to use TLS SHOULD NOT fall back to TCP.
    Since all SRP registrars are required to support TLS, it is entirely
@@ -1348,13 +1355,14 @@ Table of Contents
        validation.
 
    2.  Unless configured otherwise, recursive resolvers and DNS proxies
-       MUST behave as described in Locally Served Zones (Section 3 of
-       [RFC6303]).  That is, queries for "service.arpa." and subdomains
-       of "service.arpa."  MUST NOT be forwarded, with one important
-       exception: a query for a DS record with the DO bit set MUST
-       return the correct answer for that question, including correct
-       information in the authority section that proves that the record
-       is nonexistent.
+       MUST behave following the rules prescribed for Iterative
+       Resolvers in Section 3 of the IETF Locally Served DNS Zones
+       document[RFC6303]).  That is, queries for "service.arpa." and
+       subdomains of "service.arpa."  MUST NOT be forwarded, with one
+       important exception: a query for a DS record with the DO bit set
+       MUST return the correct answer for that question, including
+       correct information in the authority section that proves that the
+       record is nonexistent.
 
        So, for example, a query for the NS record for "service.arpa."
        MUST NOT result in that query being forwarded to an upstream
@@ -1398,8 +1406,8 @@ Table of Contents
 
    The owner of the 'arpa.' zone, at the time of writing the IAB
    [IAB-ARPA], has added a delegation of 'service.arpa.' in the '.arpa.'
-   zone [RFC3172], following the guidance provided in Section 7 of
-   [RFC8375].
+   zone [RFC3172], following the guidance provided in Section 7 of the
+   specification the "home.arpa."  Special-Use Domain [RFC8375].
 
 10.  IANA Considerations
 
@@ -1407,28 +1415,26 @@ Table of Contents
        Domain Name
 
    IANA has recorded the domain name "service.arpa." in the "Special-Use
-   Domain Names" registry (see [SUDN]).  IANA has implemented the
-   delegation requested in Section 9.
+   Domain Names" registry [SUDN].  IANA has implemented the delegation
+   requested in Section 9.
 
 10.2.  Addition of "service.arpa" to the Locally-Served Zones Registry
 
    IANA has also added a new entry to the "Transport-Independent
    Locally-Served Zones Registry" registry of the "Locally-Served DNS
-   Zones" group (see [LSDZ]).  The entry is for the domain
-   "SERVICE.ARPA" with the description "DNS-SD Service Registration
-   Protocol Special-Use Domain" and lists this document as the
-   reference.
+   Zones" group [LSDZ].  The entry is for the domain "SERVICE.ARPA" with
+   the description "DNS-SD Service Registration Protocol Special-Use
+   Domain" and lists this document as the reference.
 
 10.3.  Subdomains of "service.arpa."
 
    This document only makes use of the "default.service.arpa" subdomain
    of "service.arpa."  Other subdomains are reserved for future use by
    DNS-SD or related work.  IANA has created the "service.arpa
-   Subdomain" registry (see [SUB]).  The IETF has change control for
-   this registry.  New entries may be added either as a result of
-   Standards Action (Section 4.9 of [RFC8126]) or with IESG Approval
-   (Section 4.10 of [RFC8126]), provided that a specification exists
-   (Section 4.6 of [RFC8126]).
+   Subdomain" registry [SUB].  The IETF has change control for this
+   registry.  New entries may be added either as a result of Standards
+   Action or with IESG Approval, provided that a specification exists
+   [RFC8126].
 
    IANA has grouped the "service.arpa Subdomain" registry with the
    "Locally-Served DNS Zones" group.  The registry is a table with three
@@ -1450,9 +1456,9 @@ Table of Contents
 10.4.  Service Name Registrations
 
    IANA has added two new entries to the "Service Name and Transport
-   Protocol Port Number Registry" (see [PORT]).  The following
-   subsections contain tables with the fields required by Section 8.1.1
-   of [RFC6335].
+   Protocol Port Number Registry" [PORT].  The following subsections
+   contain tables with the fields required by Section 8.1.1 of IANA's
+   Procedures for Service Name allocation [RFC6335].
 
 10.4.1.  'dnssd-srp' Service Name
 
@@ -1505,12 +1511,11 @@ Table of Contents
 10.5.  Anycast Address
 
    IANA has allocated an IPv6 anycast address from the "IANA IPv6
-   Special-Purpose Address Registry" (see [IPv6]), similar to the Port
-   Control Protocol anycast address: 2001:1::1.  The purpose of this
-   allocation is to provide a fixed anycast address that can be commonly
-   used as a destination for SRP Updates when no SRP registrar is
-   explicitly configured.  The initial values for the registry are as
-   follows:
+   Special-Purpose Address Registry" [IPv6], similar to the Port Control
+   Protocol anycast address: 2001:1::1.  The purpose of this allocation
+   is to provide a fixed anycast address that can be commonly used as a
+   destination for SRP Updates when no SRP registrar is explicitly
+   configured.  The initial values for the registry are as follows:
 
           +======================+=============================+
           | Attribute            | Value                       |
