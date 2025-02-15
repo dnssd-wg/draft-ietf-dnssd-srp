@@ -51,12 +51,13 @@
 
 
     <abstract>
-      <t>The Service Registration Protocol (SRP) for DNS-based Service Discovery (DNS-SD)
-        uses the standard DNS Update mechanism to enable DNS-SD using only unicast packets.  This makes it possible to
-        deploy DNS-SD without multicast, which greatly improves
+      <t>The Service Registration Protocol (SRP) for DNS-based Service
+        Discovery (DNS&nbhy;SD) uses the standard DNS Update mechanism to
+        enable DNS&nbhy;SD using only unicast packets.  This makes it possible
+        to deploy DNS&nbhy;SD without multicast, which greatly improves
         scalability and improves performance on networks where multicast
         service is not an optimal choice, particularly IEEE 802.11
-        (Wi-Fi) and IEEE 802.15.4 networks.  DNS-SD Service
+        (Wi-Fi) and IEEE 802.15.4 networks.  DNS&nbhy;SD Service
         registration uses public keys and SIG(0) to allow services to defend
         their registrations.
       </t>
@@ -68,16 +69,18 @@
     <section>
       <name>Introduction</name>
       <t>
-        DNS-SD (see <xref target="RFC6763"></xref>) is a component of Zero Configuration Networking
+        DNS&nbhy;SD (see <xref target="RFC6763"></xref>) is a component of Zero Configuration Networking
         (see <xref target="RFC6760"/>, <xref target="ZC"/>, and <xref target="I-D.cheshire-dnssd-roadmap"/>).</t>
       <t>
-        This document describes an enhancement to DNS-SD that
+        This document describes an enhancement to DNS&nbhy;SD that
 	allows servers to register the services they offer using the DNS protocol rather than using Multicast DNS (mDNS) (see <xref target="RFC6762"></xref>).  There is already a large installed base of DNS&nbhy;SD clients that can discover services using the DNS
 	protocol (e.g., Android, Windows, Linux, Apple).</t>
       <t>
         This document is intended for three audiences: implementers of software that provides services that should be advertised
-        using DNS&nbhy;SD, implementers of authoritative DNS servers that will be used in contexts where DNS&nbhy;SD registration is needed, and
-        administrators of networks where DNS&nbhy;SD service is required.  The document is expected to provide sufficient
+        using DNS&nbhy;SD, implementers of authoritative DNS servers that will
+        be used in contexts where DNS&nbhy;SD registration is needed, and
+        administrators of networks where DNS&nbhy;SD service is required.
+        The document is expected to provide sufficient
         information to allow interoperable implementation of the registration protocol.</t>
 	<t>
 
@@ -108,9 +111,11 @@ not a server publishing a service.
 -->
 
         DNS&nbhy;SD allows servers to publish
-        the information required to access the services they provide.  DNS&nbhy;SD clients can then discover the set of services of a particular
+        the information required to access the services they provide.
+        DNS&nbhy;SD clients can then discover the set of services of a particular
         type that are available.  They can then select a service from among those that are available and obtain the information
-        required to use it.  Although DNS-SD using the DNS protocol can be more efficient and versatile than using mDNS, it is
+        required to use it.  Although DNS&nbhy;SD using the DNS protocol
+        can be more efficient and versatile than using mDNS, it is
         not common in practice because of the difficulties associated with updating authoritative DNS services with service
         information.</t>
 
@@ -203,12 +208,17 @@ not a server publishing a service.
      in this document, so I think we need to fully spell it out. -->
 
       <t>
-        The Service Registration Protocol for DNS-SD specified in this document provides a reasonably secure mechanism
-        for publishing this information.  Once published, these services can be readily discovered by DNS-SD clients using
+        The Service Registration Protocol for DNS&nbhy;SD
+        specified in this document provides a reasonably secure
+        mechanism for publishing this information.
+        Once published, these services can be readily
+        discovered by DNS&nbhy;SD clients using
         standard DNS lookups.</t>
 <!-- [Ted] The original text was unclear, but the change unfortunately guesses wrong as to the meaning and makes it even less clear. How about: -->
       <t>
-        Section 10 of the DNS-SD specification <xref target="RFC6763"/> briefly discusses ways that servers can advertise the services they provide in the DNS namespace.  In the case of
+        Section 10 of the DNS&nbhy;SD specification <xref target="RFC6763"/>
+        briefly discusses ways that servers can advertise the services
+        they provide in the DNS namespace.  In the case of
         mDNS, it allows servers to advertise their services on the local link, using names in the ".local" namespace, which makes
         their services directly discoverable by peers attached to that same local link.</t>
 <!-- [Ted] Adding a dependent clause here obscures the meaning of the second half of the compound sentence. -->
@@ -216,7 +226,8 @@ not a server publishing a service.
         RFC 6763 also allows clients to discover services using the DNS protocol (see <xref target="RFC1035"></xref>).  This can be done by
         having a system administrator manually configure service information in the DNS; however, manually populating DNS authoritative
         server databases is costly and potentially error-prone and requires a knowledgeable network administrator.  Consequently,
-        although all DNS-SD client implementations of which we are aware support DNS-SD using DNS queries, in practice it
+        although all DNS&nbhy;SD client implementations of which we are
+        aware support DNS&nbhy;SD using DNS queries, in practice it
         is used much less frequently than mDNS.</t>
       <t>
 <!-- [Ted] removing the commas here changes the meaning. We're expressing two different reasons, not one complicated reason. This is referring to the
@@ -307,7 +318,8 @@ not a server publishing a service.
             nodes with the information they need.</t>
 	  <t>
             Networks that are not CNNs can have more complicated topologies at the IP layer. Nodes connected
-            to such networks can be assumed to be able to do DNS-SD service registration domain discovery. Such networks are
+            to such networks can be assumed to be able to do DNS&nbhy;SD
+            service registration domain discovery. Such networks are
             generally able to provide registration domain discovery and routing.  This creates the possibility of off-network
 	    spoofing, where a device from a foreign network registers a service on the local network in order to attack devices
 	    on the local network. To prevent such spoofing, TCP is required for such networks.
@@ -349,10 +361,12 @@ We will discuss several parts to this process:</t>
               Service Instance Name (<xref target="RFC6763" section="4.1" sectionFormat="of"/>).</li>
             <li>
 	      For each Service Instance Name, an SRV RR, one or more
-	      TXT RRs, and a KEY RR. Although, in principle, DNS-SD Service Description records can include other record types with
+	      TXT RRs, and a KEY RR. Although, in principle, DNS&nbhy;SD
+	      Service Description records can include other record types with
 	      the same Service Instance Name, in practice, they rarely do.
 	      Currently SRP does not permit other record types. The KEY RR is used
-	      to support FCFS Naming and has no specific meaning for DNS-SD lookups. SRV records for all services described in an
+	      to support FCFS Naming and has no specific meaning for DNS&nbhy;SD
+	      lookups. SRV records for all services described in an
 	      SRP Update point to the same hostname.</li>
             <li>
 	      There is always exactly one hostname in a single SRP Update.
@@ -372,7 +386,8 @@ We will discuss several parts to this process:</t>
             the KEY RR, which is defined in <xref target="RFC2539"/>. These RFCs should be considered the definitive sources for
             information about what to publish; the reason for summarizing this here is to provide the reader with enough information
             about what will be published that the service registration process can be understood at a high level without first
-            learning the full details of DNS-SD.  Also, the "Service Instance Name" is an important aspect of FCFS
+            learning the full details of DNS&nbhy;SD.
+            Also, the "Service Instance Name" is an important aspect of FCFS
             Naming, which we describe later on in this document.</t>
 	</section>
 
@@ -381,7 +396,8 @@ We will discuss several parts to this process:</t>
 <!-- [Ted] Sentence was vague, edit didn't help, I've reworded it. -->
           <t>
             Multicast DNS (mDNS) uses a single namespace, ".local". Subdomains of ".local" are specific to the local link on which they are advertised.  This convenience is not available for
-            DNS-SD using the DNS protocol: services must exist in some specific DNS namespace that is chosen either by the
+            DNS&nbhy;SD using the DNS protocol: services must exist in
+            some specific DNS namespace that is chosen either by the
 	    network operator or automatically.</t>
           <t>
             As described above, full-featured devices are responsible for knowing the domain in which to register their services.
@@ -426,9 +442,10 @@ We will discuss several parts to this process:</t>
      the DNS Update specification. I've tightened up the wording here in a way that I think
      addresses the editor's concern without changing the meaning, but I'm not wedded to this
      approach. -->
-	    <name>How the DNS-SD Service Registration Process Differs from DNS Update</name>
+	    <name>How the DNS&nbhy;SD Service Registration Process Differs from DNS Update</name>
             <t>
-              DNS-SD Service Registration uses DNS Update <xref target="RFC2136"/>, with some additions:</t>
+              DNS&nbhy;SD Service Registration uses DNS Update <xref target="RFC2136"/>,
+              with some additions:</t>
             <ul spacing="normal">
               <li>
 		It implements FCFS Naming, protected using SIG(0) (<xref target="RFC2931"/>).</li>
@@ -471,7 +488,8 @@ We will discuss several parts to this process:</t>
             the authoritative DNS server (which authenticates it).
             This model does not work for automatic service registration.</t>
           <t>
-            The goal of securing the DNS-SD Registration Protocol is to provide the best possible security given the constraint
+            The goal of securing the DNS&nbhy;SD Registration Protocol
+            is to provide the best possible security given the constraint
             that service registration has to be automatic.  It is possible to layer more operational security on top of what we
             describe here, but FCFS Naming is already an improvement over the security of mDNS.</t>
 
@@ -558,7 +576,8 @@ Perhaps:
 	  <section anchor="lifetimes">
 	    <name>Record Lifetimes</name>
 	    <t>
-	      The lifetime of the DNS-SD PTR, SRV, A, AAAA, and TXT records (see <xref target="RFC6763"></xref>) uses the LEASE field
+	      The lifetime of the DNS&nbhy;SD PTR, SRV, A, AAAA, and TXT
+	      records (see <xref target="RFC6763"></xref>) uses the LEASE field
 	      of the Update Lease option and is typically set to two hours.  Thus, if a device is disconnected from the
 	      network, it does not continue to appear for too long in the
 	      user interfaces of devices looking for instances of that service type.</t>
@@ -1074,7 +1093,8 @@ Perhaps:
 	TTLs sent in SRP Updates are advisory: they indicate the SRP requester's guess as to what a good TTL would be.  SRP registrars may
 	override these TTLs.  SRP registrars <bcp14>SHOULD</bcp14> ensure that TTLs are reasonable: neither too long nor too short.  The TTL <bcp14>SHOULD NOT</bcp14>
 	ever be longer than the lease time (<xref target="stale"/>).  Shorter TTLs will result in more frequent data refreshes;
-	this increases latency on the DNS-SD client side, increases load on any caching resolvers and on the authoritative DNS server,
+	this increases latency on the DNS&nbhy;SD client side, increases
+	load on any caching resolvers and on the authoritative DNS server,
 	and also increases network load, which may be an issue for CNNs.  Longer TTLs will increase the likelihood
 	that data in caches will be stale.  TTL minimums and maximums <bcp14>SHOULD</bcp14> be configurable by the operator of the SRP registrar.
       </t>
@@ -1084,7 +1104,7 @@ Perhaps:
       <name>Maintenance</name>
       <section anchor="stale">
 	<name>Cleaning Up Stale Data</name>
-	<t>Because the DNS-SD registration protocol is automatic and not managed by humans,
+	<t>Because the DNS&nbhy;SD registration protocol is automatic and not managed by humans,
           some additional bookkeeping is required.  When an update is constructed by the SRP requester,
           it <bcp14>MUST</bcp14> include an EDNS(0) Update Lease Option (see <xref target="RFC9664"/>).
           The Update Lease Option contains two lease times: the Lease Time and the KEY
@@ -1219,17 +1239,21 @@ Original "'n'":
       </section>
       <section>
 	<name>Risks of Allowing Arbitrary Names to be Registered in SRP Updates</name>
-	<t>It is possible to set up SRP Updates for a zone that is used for non-DNS&nbhy;SD services. For example, imagine that you set
+	<t>It is possible to set up SRP Updates for a zone that is used
+	  for non-DNS&nbhy;SD services. For example, imagine that you set
 	  up SRP service for example.com. SRP hosts can now register names like "www" or "mail" or "smtp" in this domain. In addition,
 	  SRP Updates using FCFS Naming can insert names that are obscene or offensive into the zone. There is no simple solution to
 	  these problems. However, we have two recommendations to address this problem:</t>
 	<ul spacing="normal">
-	  <li>Do not provide SRP service in organization-level zones. Use subdomains of the organizational domain for DNS-SD.  This does not prevent registering names as mentioned above but does ensure that genuinely important names
+	  <li>Do not provide SRP service in organization-level zones.
+	    Use subdomains of the organizational domain for DNS&nbhy;SD.
+	    This does not prevent registering names as mentioned above
+	    but does ensure that genuinely important names
 	    are not accidentally claimed by SRP clients.
 	    So, for example, the zone "dnssd.example.com" could be used instead of
 	    "example.com" for SRP Updates. Because of the way that DNS-browsing domains are discovered, there is no need for the
-	  DNS&nbhy;SD discovery zone that is updated by SRP to have a user-friendly or important-sounding name.</li>
-
+	    DNS&nbhy;SD discovery zone that is updated by SRP to
+	    have a user-friendly or important-sounding name.</li>
 
 	  <li>Configure a dictionary of names that are prohibited. Dictionaries of common obscene and offensive names are no doubt
 	    available and can be augmented with a list of typical "special" names like "www", "mail", "smtp", and so on. Lists of
@@ -1282,7 +1306,8 @@ Original "'n'":
     <section>
       <name>Privacy Considerations</name>
       <t>
-	Because DNS-SD SRP Updates can be sent off-link, the privacy implications of SRP are different than for mDNS
+	Because DNS&nbhy;SD SRP Updates can be sent off-link,
+	the privacy implications of SRP are different than for mDNS
 	responses.  Host implementations that are using TCP <bcp14>SHOULD</bcp14> also use TLS if available.  SRP registrar implementations <bcp14>MUST</bcp14> offer
 	TLS support.  The use of TLS with DNS is described in <xref target="RFC7858"/>. Because there is no mechanism for sharing
 	keys, validation of DNS-over-TLS keys is not possible; DNS-over-TLS is used only as described in
@@ -1584,7 +1609,8 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 	<name>Addition of "service.arpa" to the Locally-Served Zones Registry</name>
 	<t>IANA has also added a new entry to the "Transport-Independent Locally-Served Zones Registry" registry of
 	  the "Locally-Served DNS Zones" group (see <xref target="LSDZ"/>).  The entry is for the domain "SERVICE.ARPA" with the
-	  description "DNS-SD Service Registration Protocol Special-Use Domain" and lists this document as the reference.</t>
+	  description "DNS&nbhy;SD Service Registration Protocol
+	  Special-Use Domain" and lists this document as the reference.</t>
       </section>
 
       <section anchor="subdomains">
@@ -1592,7 +1618,8 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 
 
 	<t>This document only makes use of the "default.service.arpa" subdomain of "service.arpa." Other subdomains are reserved for
-	  future use by DNS-SD or related work. IANA has created the "service.arpa Subdomain" registry (see <xref target="SUB"/>).
+	  future use by DNS&nbhy;SD or related work.
+	  IANA has created the "service.arpa Subdomain" registry (see <xref target="SUB"/>).
 	  The IETF has change control for this registry. New entries may be added either as a result of Standards Action
 	  (<xref target="RFC8126" section="4.9" sectionFormat="of"/>) or with IESG Approval (<xref target="RFC8126" section="4.10" sectionFormat="of"/>), provided that a
 	  specification exists (<xref target="RFC8126" section="4.6"/>).
@@ -1639,7 +1666,7 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 	    <tr><td>  Transport Protocol </td><td>  tcp                               </td></tr>
 	    <tr><td>  Assignee           </td><td>  IESG &lt;iesg@ietf.org&gt;        </td></tr>
 	    <tr><td>  Contact            </td><td>  IETF Chair &lt;chair@ietf.org&gt; </td></tr>
-	    <tr><td>  Description        </td><td>  DNS-SD Service Discovery          </td></tr>
+	    <tr><td>  Description        </td><td>  DNS&nbhy;SD Service Discovery     </td></tr>
 	    <tr><td>  Reference          </td><td>  RFC 9665                          </td></tr>
 	    <tr><td>  Port Number        </td><td>  None                              </td></tr>
 	    <tr><td>  Service Code       </td><td>  None                              </td></tr>
@@ -1655,7 +1682,7 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 	    <tr><td>  Transport Protocol </td><td>  tcp                               </td></tr>
 	    <tr><td>  Assignee           </td><td>  IESG &lt;iesg@ietf.org&gt;                             </td></tr>
 	    <tr><td>  Contact            </td><td>  IETF Chair&lt;chair@ietf.org&gt;                        </td></tr>
-	    <tr><td>  Description        </td><td>  DNS-SD Service Discovery (TLS) </td></tr>
+	    <tr><td>  Description        </td><td>  DNS&nbhy;SD Service Discovery (TLS) </td></tr>
 	    <tr><td>  Reference          </td><td>  RFC 9665                          </td></tr>
 	    <tr><td>  Port Number        </td><td>  None                              </td></tr>
 	    <tr><td>  Service Code       </td><td>  None                              </td></tr>
@@ -1676,7 +1703,7 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 	  </thead>
 	  <tbody>
 	    <tr><td>Address Block</td>                <td>2001:1::3/128</td></tr>
-	    <tr><td>Name</td>                         <td>DNS-SD Service Registration Protocol Anycast Address</td></tr>
+	    <tr><td>Name</td>                         <td>DNS&nbhy;SD Service Registration Protocol Anycast Address</td></tr>
 	    <tr><td>RFC</td>                          <td>RFC 9665</td></tr>
 	    <tr><td>Allocation Date</td>              <td>2024-04</td></tr>
 	    <tr><td>Termination Date</td>             <td>N/A</td></tr>
