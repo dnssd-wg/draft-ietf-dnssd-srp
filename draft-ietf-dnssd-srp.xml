@@ -406,8 +406,11 @@ We will discuss several parts to this process:</t>
      the confusion is eliminated (I hope). -->
 
           <t>
-            <xref target="RFC6763"/> describes the details of what each of these RR types mean, with the exception of
-            the KEY RR, which is defined in <xref target="RFC2539"/>. These RFCs should be considered the definitive sources for
+            The DNS-Based Service Discovery specification
+            <xref target="RFC6763"/> describes the details of
+            what each of these RR types mean, with the exception of
+            the KEY RR, which was defined previously <xref target="RFC2539"/>.
+            These RFCs should be considered the definitive sources for
             information about what to publish; the reason for summarizing this here is to provide the reader with enough information
             about what will be published that the service registration process can be understood at a high level without first
             learning the full details of DNS&nbhy;SD.
@@ -454,7 +457,8 @@ We will discuss several parts to this process:</t>
             An SRP Update takes advantage of this: it is implemented as a single DNS Update message that contains a service's Service
             Discovery records, Service Description records, and Host Description records.</t>
           <t>
-            Updates done according to this specification are somewhat different than regular DNS Updates as defined in
+            Updates done according to this specification
+            are somewhat different than normal DNS Updates
 	    <xref target="RFC2136"/> where the update process could involve many update attempts. You might first
 	    attempt to add a name if it doesn't exist; if that fails, then in a second message you might update the name if it does
 	    exist but matches certain preconditions.  Because the registration protocol described in this document uses a single transaction, some of this
@@ -497,7 +501,7 @@ We will discuss several parts to this process:</t>
 	      of the DNS specification <xref target="RFC1035"/> provides some
 	      guidance on this topic, as does
 	      Section <xref target="RFC1536" section="1" sectionFormat="bare"/>
-	      of the document describing common DNS implementation errors <xref target="RFC1536"/>.
+	      of the IETF document describing common DNS implementation errors <xref target="RFC1536"/>.
 	      Section <xref target="RFC8085" section="3.1.3" sectionFormat="bare"/>
 	      of the UDP Usage Guidelines document <xref target="RFC8085"/>
 	      also provides useful guidance that is particularly relevant to DNS.</t>
@@ -590,7 +594,9 @@ Perhaps:
 	      lifetimes of the records in the update is set using the EDNS(0) Update Lease option
 	      <xref target="RFC9664"/>.</t>
 	    <t>
-	      The format of the KEY resource record in the SRP Update is defined in <xref target="RFC3445"/>. Because the KEY RR
+	      The format of the KEY resource record in the SRP Update is
+	      defined in the IETF specification for DNSSEC Resource Records
+	      <xref target="RFC4034"/>. Because the KEY RR
 	      used in SIG(0) is not a zone-signing key, the flags field in the KEY RR <bcp14>MUST</bcp14> be all zeroes.</t>
             <t>
 	      The KEY record in Service Description updates <bcp14>MAY</bcp14> be omitted for brevity; if it is omitted, the SRP registrar <bcp14>MUST</bcp14> behave
@@ -633,12 +639,14 @@ Perhaps:
 	  <section>
 	    <name>Compression in SRV Records</name>
 	    <t>
-	      Although <xref target="RFC2782"/>
+	      Although the original SRV specification <xref target="RFC2782"/>
 	      requires that the target hostname in the rdata of an SRV record
 	      not be compressed in DNS queries and responses, an SRP requester
-	      <bcp14>MAY</bcp14> compress the target in the SRV record.
-	      The motivation for <em>not</em> compressing in <xref target="RFC2782"/>
-	      is not stated but is assumed to be because a recursive resolver
+	      <bcp14>MAY</bcp14> compress the target in the SRV record,
+	      since an SRP Update is neither a DNS query nor a DNS response.
+	      The motivation for <em>not</em> compressing
+	      is not stated in the SRV specification,
+	      but is assumed to be because a recursive resolver
 	      (caching server) that does not understand the format of the
 	      SRV record might store it as binary data without decoding a
 	      compression pointer embedded with the target hostname field,
@@ -660,14 +668,14 @@ Original:
 
 -->
 
-	      Note that this document does not update <xref target="RFC2782"/>:
+	      Note that this document does not update
+	      the SRV specification <xref target="RFC2782"/>:
 	      authoritative DNS servers still <bcp14>MUST NOT</bcp14> compress SRV record targets.
 	      The requirement to accept compressed SRV records in updates only applies to SRP
 	      registrars, and SRP registrars that are also authoritative DNS servers still
 	      <bcp14>MUST NOT</bcp14> compress SRV record targets in DNS responses.
-	      We note also that
-	      <xref target="RFC6762"/> recommends that SRV records be compressed in mDNS messages, so <xref target="RFC2782"/> does
-	      not apply to mDNS messages.</t>
+	      We note also that Multicast DNS <xref target="RFC6762"/>
+	      similarly compresses SRV records in mDNS messages.</t>
 	    <t>
 	      In addition, we note that an implementer of an SRP requester might update existing code that creates SRV records
 	      or compresses DNS messages so that it compresses the target of an SRV record. Care must be taken if such code is
@@ -764,7 +772,7 @@ Original:
 	  <name>Validation of DNS Update Add and Delete RRs</name>
           <t>
 	    The SRP registrar first validates that the DNS Update message is a syntactically and semantically valid DNS Update message according to
-	    the rules specified in <xref target="RFC2136"/>.</t>
+	    the usual DNS Update rules <xref target="RFC2136"/>.</t>
           <t>
 	    SRP Updates consist of a set of <em>instructions</em>
 	    that together add or remove one or more services.
@@ -968,8 +976,8 @@ Current:
 	    or equal to the KEY-LEASE time. A DNS update that does not include the Update Lease option, or that includes a
 	    KEY-LEASE value that is less than the LEASE value, is not an SRP Update.</t>
 	  <t>When an SRP registrar receives a DNS Update message that is not an SRP
-	  update, it <bcp14>MAY</bcp14> process the update as regular DNS Update
-	  <xref target="RFC2136" format="default"/>, including
+	  update, it <bcp14>MAY</bcp14> process the update as normal DNS Update
+	  <xref target="RFC2136"/>, including
 	  access control checks and constraint checks, if supported. Otherwise,
 	  the SRP registrar <bcp14>MUST</bcp14> reject the DNS Update with the
 	  Refused RCODE.</t>
@@ -1034,15 +1042,18 @@ Perhaps:
 	    Description Instruction.  If the validation fails,
 	    the SRP Update is malformed and the registrar
 	    <bcp14>MUST</bcp14> reject the SRP Update with the Refused RCODE.
-	    Otherwise, the SRP Update is considered valid and authentic and is processed according to the method described in
-	    <xref target="RFC2136" format="default"/>.</t>
+	    Otherwise, the SRP Update is considered valid and authentic and
+	    is processed as for a normal DNS Update <xref target="RFC2136"/>.</t>
 <!-- [Ted] The comma after KEY RR was changed to a colon, and I can't see why. How about: -->
           <t>
 	    KEY record updates omitted from Service Description Instruction(s) are processed as if they had been explicitly present.
 	    After the SRP Update has been applied, every Service Description that is updated <bcp14>MUST</bcp14> have a KEY RR, which <bcp14>MUST</bcp14> have the
 	    same valua as the KEY RR that is present in the Host Description to which the Service Description refers.</t>
 	  <t>
-	    <xref target="RFC3445"/> states that the flags field in the KEY RR <bcp14>MUST</bcp14> be zero except for bit 7, which can
+	    The IETF specification for
+	    DNSSEC Resource Records <xref target="RFC4034"/>
+	    states that the flags field in the KEY RR
+	    <bcp14>MUST</bcp14> be zero except for bit 7, which can
 	    be one in the case of a zone key.
 	    SRP requesters implementing this version of the SRP specification
 	    <bcp14>MUST</bcp14> set the flags field in the KEY RR to all zeroes.
@@ -1071,11 +1082,14 @@ Perhaps:
           <t>
 	    The status that is returned depends on the result of processing the update and can be either NoError, ServFail, Refused,
 	    or YXDomain. All other possible outcomes will already have been accounted for when applying the constraints that
-	    qualify the update as an SRP Update. The meanings of these responses are explained in <xref target="RFC2136"
-	    section="2.2"/>.</t>
+	    qualify the update as an SRP Update. The meanings of these responses are explained in
+	    Section <xref target="RFC2136" section="2.2" sectionFormat="bare"/>
+	    of the DNS Update specification <xref target="RFC2136"/>.</t>
 	  <t>
 	    In the case of a response other than NoError,
-	    <xref target="RFC2136" section="3.8"/> specifies that
+	    Section <xref target="RFC2136" section="3.8" sectionFormat="bare"/>
+	    of the DNS Update specification <xref target="RFC2136"/>
+	    specifies that
 	    the authoritative DNS server is permitted
             to respond either with no RRs or to copy the RRs sent by the client into the response. The SRP requester <bcp14>MUST NOT</bcp14> attempt
 	    to validate any RRs that are included in the response. It is possible that a future SRP extension may include per-RR
@@ -1118,7 +1132,9 @@ Perhaps:
           <t>
 	    Note that the semantics of using SRP in this way are different than for typical implementations of DNS Update. The KEY used
 	    to sign the SRP Update only allows the SRP requester to update records that refer to its Host Description.
-	    Implementations specific to <xref target="RFC2136" format="default"/> do not normally provide a way to enforce a constraint of this type.</t>
+	    Implementations of traditional DNS Update
+	    <xref target="RFC2136"/> do not normally provide
+	    a way to enforce a constraint of this type.</t>
           <t>
 	    The SRP registrar could also have a dictionary of names or name patterns that are not permitted.  If such a list is used,
 	    updates for Service Instance Names that match entries in the dictionary are rejected with a Refused RCODE.</t>
@@ -1178,8 +1194,8 @@ Perhaps:
           during which the KEY record can be assumed to be valid.</t>
 
 	<t>The reasoning behind the different lease times is discussed in
-          <xref target="fcfs" format="default"/> and
-          <xref target="lifetimes" format="default"/>.
+          <xref target="fcfs"/> and
+          <xref target="lifetimes"/>.
           SRP registrars may be configured with limits for these values.
           At the time of writing, a default limit of two hours for
           the Lease and 14 days for the SIG(0) KEY are thought to be good choices.  Devices with limited
@@ -1344,7 +1360,10 @@ Original "'n'":
 	  <xref target="how-to-secure"/>.</t>
 	<t>The fundamental protection for networks of this type is the user's choice of what devices to add to the network. Work is
 	  being done in other working groups and standards bodies to improve the state of the art for network on-boarding and device
-	  isolation (e.g., <xref target="RFC8520"/> provides a means for constraining what behaviors are allowed for a device in an
+	  isolation
+	  (e.g., Manufacturer Usage Descriptions <xref target="RFC8520"/>
+	  provide a means for constraining what
+	  behaviors are allowed for a device in an
 	  automatic way), but such work is out of scope for this document.</t>
       </section>
       <section>
@@ -1379,9 +1398,12 @@ Original "'n'":
       <t>
 	Because DNS&nbhy;SD SRP Updates can be sent off-link,
 	the privacy implications of SRP are different than for mDNS
-	responses.  Host implementations that are using TCP <bcp14>SHOULD</bcp14> also use TLS if available.  SRP registrar implementations <bcp14>MUST</bcp14> offer
-	TLS support.  The use of TLS with DNS is described in <xref target="RFC7858"/>. Because there is no mechanism for sharing
-	keys, validation of DNS-over-TLS keys is not possible;
+	responses.
+	Host implementations that are using TCP <bcp14>SHOULD</bcp14>
+	also use DNS-over-TLS <xref target="RFC7858"/> if available.
+	SRP registrar implementations <bcp14>MUST</bcp14> offer TLS support.
+	Because there is no mechanism for sharing keys,
+	validation of DNS-over-TLS keys is not possible;
 	DNS-over-TLS is used only for Opportunistic Privacy, as documented in
 	Section <xref target="RFC7858" section="4.1" sectionFormat="bare"/>
 	of the DNS-over-TLS specification <xref target="RFC7858"/>.
@@ -1533,7 +1555,7 @@ DNSSEC (see [RFC9364]) validation is a best current practice:
 	    proxies <bcp14>MUST</bcp14> behave following
 	    the rules prescribed for Iterative Resolvers in
 	    Section <xref target="RFC6303" section="3" sectionFormat="bare"/>
-	    of the IETF Locally Served DNS Zones document<xref target="RFC6303"/>).
+	    of the IETF Locally Served DNS Zones document <xref target="RFC6303"/>).
 	    That is, queries for "service.arpa." and subdomains of
 	    "service.arpa."  <bcp14>MUST NOT</bcp14> be forwarded, with one
 	    important exception: a query for a DS record with the DO bit set
@@ -1609,8 +1631,8 @@ the global DNS will configure any such servers as described in Section
       <section>
 	<name>DNS Registries/Registrars</name>
 	<t>"service.arpa." is a subdomain of the "arpa" top-level domain, which is operated by IANA under the authority of the
-	  Internet Architecture Board (IAB) according to the rules established in <xref target="RFC3172" format="default"/>.  There are no other DNS registrars for
-	  ".arpa".</t>
+	  Internet Architecture Board (IAB) <xref target="RFC3172"/>.
+	  There are no other DNS registrars for ".arpa".</t>
       </section>
     </section>
 
@@ -1621,7 +1643,7 @@ the global DNS will configure any such servers as described in Section
 	has added a delegation of 'service.arpa.' in the '.arpa.' zone <xref target="RFC3172"/>,
 	following the guidance provided in
 	Section <xref target="RFC8375" section="7" sectionFormat="bare"/>
-	of the specification the "home.arpa." Special-Use Domain <xref target="RFC8375"/>.
+	of the 'home.arpa.' specification <xref target="RFC8375"/>.
       </t>
     </section>
 
@@ -1846,15 +1868,8 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2782.xml" />
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2931.xml" />
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3172.xml"/>
-
-<!-- [rfced] Normative reference RFC 3445 has been obsoleted by
-RFC 4033.  We will update to the latter unless we hear objection.
-
-[Ted] WFM
--->
-
-      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3445.xml"/>
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3596.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4034.xml"/>
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml"/>
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6303.xml"/>
       <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6763.xml"/>
@@ -2020,21 +2035,29 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
       <name>How to Allow SRP Requesters to Update Standard Servers Compliant with RFC 2136</name>
       <t>
         Ordinarily, SRP Updates will fail when sent to an authoritative DNS server
-        compliant with <xref target="RFC2136"/> that does not implement SRP
+        that implements standard DNS Update <xref target="RFC2136"/> but not SRP
         because the zone being updated is "default.service.arpa" and because
         no authoritative DNS server that is not an SRP registrar would normally
         be configured to be authoritative for "default.service.arpa".
         Therefore, a requester that sends an SRP Update can
         tell that the receiving authoritative DNS server
-        does not support SRP but does support <xref target="RFC2136"/> because the RCODE will either be NotZone, NotAuth, or Refused or because
+        does not support SRP but does support
+        standard DNS Update <xref target="RFC2136"/>
+        because the RCODE will either be NotZone, NotAuth, or Refused or because
         there is no response to the update request (when using the anycast address).</t>
       <t>
-        In this case, a requester <bcp14>MAY</bcp14> attempt to register itself using regular DNS updates described in <xref target="RFC2136"/>. To do so, it must discover the
+        In this case, a requester <bcp14>MAY</bcp14>
+        attempt to register itself using
+        normal DNS updates <xref target="RFC2136"/>.
+        To do so, it must discover the
         default registration zone and the authoritative DNS server designated
         to receive updates for that zone, as described earlier, using the
         _dns&nbhy;update._udp SRV record.  It can then send the update to the port and host pointed to by the SRV record, and it is
         expected to use appropriate prerequisites to avoid overwriting competing records.  Such updates are out of scope for SRP,
-        and a requester that implements SRP <bcp14>MUST</bcp14> first attempt to use SRP to register itself and only attempt to use backwards capability with <xref target="RFC2136"/>
+        and a requester that implements SRP <bcp14>MUST</bcp14>
+        first attempt to use SRP to register itself and
+        only attempt to use backwards capability with
+        normal DNS Update <xref target="RFC2136"/>
         if that fails.  Although the owner name for the SRV record specifies UDP for updates,
         it is also possible to use TCP, and TCP <bcp14>SHOULD</bcp14> be required to prevent spoofing.</t>
     </section>
