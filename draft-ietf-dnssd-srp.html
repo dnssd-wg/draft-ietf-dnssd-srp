@@ -8,12 +8,13 @@
 <meta content="Ted Lemon" name="author">
 <meta content="Stuart Cheshire" name="author">
 <meta content="
-       The Service Registration Protocol (SRP) for DNS-based Service Discovery (DNS-SD)
-        uses the standard DNS Update mechanism to enable DNS-SD using only unicast packets.  This makes it possible to
-        deploy DNS-SD without multicast, which greatly improves
+       The Service Registration Protocol (SRP) for DNS-based Service
+        Discovery (DNS‑SD) uses the standard DNS Update mechanism to
+        enable DNS‑SD using only unicast packets.  This makes it possible
+        to deploy DNS‑SD without multicast, which greatly improves
         scalability and improves performance on networks where multicast
         service is not an optimal choice, particularly IEEE 802.11
-        (Wi-Fi) and IEEE 802.15.4 networks.  DNS-SD Service
+        (Wi-Fi) and IEEE 802.15.4 networks.  DNS‑SD Service
         registration uses public keys and SIG(0) to allow services to defend
         their registrations.
        
@@ -1099,12 +1100,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Service Registration Protocol for DNS-Based Service Discovery</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">The Service Registration Protocol (SRP) for DNS-based Service Discovery (DNS-SD)
-        uses the standard DNS Update mechanism to enable DNS-SD using only unicast packets.  This makes it possible to
-        deploy DNS-SD without multicast, which greatly improves
+<p id="section-abstract-1">The Service Registration Protocol (SRP) for DNS-based Service
+        Discovery (DNS‑SD) uses the standard DNS Update mechanism to
+        enable DNS‑SD using only unicast packets.  This makes it possible
+        to deploy DNS‑SD without multicast, which greatly improves
         scalability and improves performance on networks where multicast
         service is not an optimal choice, particularly IEEE 802.11
-        (Wi-Fi) and IEEE 802.15.4 networks.  DNS-SD Service
+        (Wi-Fi) and IEEE 802.15.4 networks.  DNS‑SD Service
         registration uses public keys and SIG(0) to allow services to defend
         their registrations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
@@ -1190,7 +1192,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.3.2.2.2.3.1"><a href="#section-3.2.3" class="auto internal xref">3.2.3</a>.  <a href="#name-how-to-publish-it" class="internal xref">How to Publish It</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.3.2.1">
-                        <p id="section-toc.1-1.3.2.2.2.3.2.1.1"><a href="#section-3.2.3.1" class="auto internal xref">3.2.3.1</a>.  <a href="#name-how-the-dns-sd-service-regi" class="internal xref">How the DNS-SD Service Registration Process Differs from DNS Update</a></p>
+                        <p id="section-toc.1-1.3.2.2.2.3.2.1.1"><a href="#section-3.2.3.1" class="auto internal xref">3.2.3.1</a>.  <a href="#name-how-the-dnssd-service-regis" class="internal xref">How the DNS‑SD Service Registration Process Differs from DNS Update</a></p>
 </li>
                       <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.3.2.2">
                         <p id="section-toc.1-1.3.2.2.2.3.2.2.1"><a href="#section-3.2.3.2" class="auto internal xref">3.2.3.2</a>.  <a href="#name-retransmission-strategy" class="internal xref">Retransmission Strategy</a></p>
@@ -1395,25 +1397,29 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">
-        DNS-SD (see <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>) is a component of Zero Configuration Networking
+        DNS‑SD (see <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>) is a component of Zero Configuration Networking
         (see <span>[<a href="#RFC6760" class="cite xref">RFC6760</a>]</span>, <span>[<a href="#ZC" class="cite xref">ZC</a>]</span>, and <span>[<a href="#I-D.cheshire-dnssd-roadmap" class="cite xref">ROADMAP</a>]</span>).<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">
-        This document describes an enhancement to DNS-SD that
+        This document describes an enhancement to DNS‑SD that
  allows servers to register the services they offer using the DNS protocol rather than using Multicast DNS (mDNS) (see <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span>).  There is already a large installed base of DNS‑SD clients that can discover services using the DNS
  protocol (e.g., Android, Windows, Linux, Apple).<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">
         This document is intended for three audiences: implementers of software that provides services that should be advertised
-        using DNS‑SD, implementers of authoritative DNS servers that will be used in contexts where DNS‑SD registration is needed, and
-        administrators of networks where DNS‑SD service is required.  The document is expected to provide sufficient
+        using DNS‑SD, implementers of authoritative DNS servers that will
+        be used in contexts where DNS‑SD registration is needed, and
+        administrators of networks where DNS‑SD service is required.
+        The document is expected to provide sufficient
         information to allow interoperable implementation of the registration protocol.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">
 
 
 
         DNS‑SD allows servers to publish
-        the information required to access the services they provide.  DNS‑SD clients can then discover the set of services of a particular
+        the information required to access the services they provide.
+        DNS‑SD clients can then discover the set of services of a particular
         type that are available.  They can then select a service from among those that are available and obtain the information
-        required to use it.  Although DNS-SD using the DNS protocol can be more efficient and versatile than using mDNS, it is
+        required to use it.  Although DNS‑SD using the DNS protocol
+        can be more efficient and versatile than using mDNS, it is
         not common in practice because of the difficulties associated with updating authoritative DNS services with service
         information.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">
@@ -1484,18 +1490,24 @@ svg :is([fill="white"], [fill^="#fff"]) {
  does not renew the lease before it has elapsed, the registration is removed.  The claim on the name can have a longer
  lease so that another requester cannot claim the name, even though the registration has expired.<a href="#section-1-16" class="pilcrow">¶</a></p>
 <p id="section-1-17">
-        The Service Registration Protocol for DNS-SD specified in this document provides a reasonably secure mechanism
-        for publishing this information.  Once published, these services can be readily discovered by DNS-SD clients using
+        The Service Registration Protocol for DNS‑SD
+        specified in this document provides a reasonably secure
+        mechanism for publishing this information.
+        Once published, these services can be readily
+        discovered by DNS‑SD clients using
         standard DNS lookups.<a href="#section-1-17" class="pilcrow">¶</a></p>
 <p id="section-1-18">
-        Section 10 of the DNS-SD specification <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span> briefly discusses ways that servers can advertise the services they provide in the DNS namespace.  In the case of
+        Section 10 of the DNS‑SD specification <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>
+        briefly discusses ways that servers can advertise the services
+        they provide in the DNS namespace.  In the case of
         mDNS, it allows servers to advertise their services on the local link, using names in the ".local" namespace, which makes
         their services directly discoverable by peers attached to that same local link.<a href="#section-1-18" class="pilcrow">¶</a></p>
 <p id="section-1-19">
         RFC 6763 also allows clients to discover services using the DNS protocol (see <span>[<a href="#RFC1035" class="cite xref">RFC1035</a>]</span>).  This can be done by
         having a system administrator manually configure service information in the DNS; however, manually populating DNS authoritative
         server databases is costly and potentially error-prone and requires a knowledgeable network administrator.  Consequently,
-        although all DNS-SD client implementations of which we are aware support DNS-SD using DNS queries, in practice it
+        although all DNS‑SD client implementations of which we are
+        aware support DNS‑SD using DNS queries, in practice it
         is used much less frequently than mDNS.<a href="#section-1-19" class="pilcrow">¶</a></p>
 <p id="section-1-20">
 
@@ -1595,7 +1607,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
             nodes with the information they need.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.1.3-2">
             Networks that are not CNNs can have more complicated topologies at the IP layer. Nodes connected
-            to such networks can be assumed to be able to do DNS-SD service registration domain discovery. Such networks are
+            to such networks can be assumed to be able to do DNS‑SD
+            service registration domain discovery. Such networks are
             generally able to provide registration domain discovery and routing.  This creates the possibility of off-network
      spoofing, where a device from a foreign network registers a service on the local network in order to attack devices
      on the local network. To prevent such spoofing, TCP is required for such networks.<a href="#section-3.1.3-2" class="pilcrow">¶</a></p>
@@ -1641,10 +1654,12 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 </li>
             <li class="normal" id="section-3.2.1-2.2">
        For each Service Instance Name, an SRV RR, one or more
-       TXT RRs, and a KEY RR. Although, in principle, DNS-SD Service Description records can include other record types with
+       TXT RRs, and a KEY RR. Although, in principle, DNS‑SD
+       Service Description records can include other record types with
        the same Service Instance Name, in practice, they rarely do.
        Currently SRP does not permit other record types. The KEY RR is used
-       to support FCFS Naming and has no specific meaning for DNS-SD lookups. SRV records for all services described in an
+       to support FCFS Naming and has no specific meaning for DNS‑SD
+       lookups. SRV records for all services described in an
        SRP Update point to the same hostname.<a href="#section-3.2.1-2.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3.2.1-2.3">
@@ -1662,7 +1677,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
             the KEY RR, which is defined in <span>[<a href="#RFC2539" class="cite xref">RFC2539</a>]</span>. These RFCs should be considered the definitive sources for
             information about what to publish; the reason for summarizing this here is to provide the reader with enough information
             about what will be published that the service registration process can be understood at a high level without first
-            learning the full details of DNS-SD.  Also, the "Service Instance Name" is an important aspect of FCFS
+            learning the full details of DNS‑SD.
+            Also, the "Service Instance Name" is an important aspect of FCFS
             Naming, which we describe later on in this document.<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1673,7 +1689,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
           </h4>
 <p id="section-3.2.2-1">
             Multicast DNS (mDNS) uses a single namespace, ".local". Subdomains of ".local" are specific to the local link on which they are advertised.  This convenience is not available for
-            DNS-SD using the DNS protocol: services must exist in some specific DNS namespace that is chosen either by the
+            DNS‑SD using the DNS protocol: services must exist in
+            some specific DNS namespace that is chosen either by the
      network operator or automatically.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-2">
             As described above, full-featured devices are responsible for knowing the domain in which to register their services.
@@ -1714,11 +1731,12 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
             requirements specified in <a href="#server_behavior" class="auto internal xref">Section 3.3</a> are implicit in the processing of SRP Updates; thus, there is
             no need for the SRP requester to put in any explicit prerequisites.<a href="#section-3.2.3-4" class="pilcrow">¶</a></p>
 <section id="section-3.2.3.1">
-            <h5 id="name-how-the-dns-sd-service-regi">
-<a href="#section-3.2.3.1" class="section-number selfRef">3.2.3.1. </a><a href="#name-how-the-dns-sd-service-regi" class="section-name selfRef">How the DNS-SD Service Registration Process Differs from DNS Update</a>
+            <h5 id="name-how-the-dnssd-service-regis">
+<a href="#section-3.2.3.1" class="section-number selfRef">3.2.3.1. </a><a href="#name-how-the-dnssd-service-regis" class="section-name selfRef">How the DNS‑SD Service Registration Process Differs from DNS Update</a>
             </h5>
 <p id="section-3.2.3.1-1">
-              DNS-SD Service Registration uses DNS Update <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>, with some additions:<a href="#section-3.2.3.1-1" class="pilcrow">¶</a></p>
+              DNS‑SD Service Registration uses DNS Update <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>,
+              with some additions:<a href="#section-3.2.3.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.3.1-2.1">
  It implements FCFS Naming, protected using SIG(0) (<span>[<a href="#RFC2931" class="cite xref">RFC2931</a>]</span>).<a href="#section-3.2.3.1-2.1" class="pilcrow">¶</a>
@@ -1773,7 +1791,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
             the authoritative DNS server (which authenticates it).
             This model does not work for automatic service registration.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-2">
-            The goal of securing the DNS-SD Registration Protocol is to provide the best possible security given the constraint
+            The goal of securing the DNS‑SD Registration Protocol
+            is to provide the best possible security given the constraint
             that service registration has to be automatic.  It is possible to layer more operational security on top of what we
             describe here, but FCFS Naming is already an improvement over the security of mDNS.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
 <div id="fcfs">
@@ -1852,7 +1871,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <a href="#section-3.2.5.3" class="section-number selfRef">3.2.5.3. </a><a href="#name-record-lifetimes" class="section-name selfRef">Record Lifetimes</a>
             </h5>
 <p id="section-3.2.5.3-1">
-       The lifetime of the DNS-SD PTR, SRV, A, AAAA, and TXT records (see <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>) uses the LEASE field
+       The lifetime of the DNS‑SD PTR, SRV, A, AAAA, and TXT
+       records (see <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>) uses the LEASE field
        of the Update Lease option and is typically set to two hours.  Thus, if a device is disconnected from the
        network, it does not continue to appear for too long in the
        user interfaces of devices looking for instances of that service type.<a href="#section-3.2.5.3-1" class="pilcrow">¶</a></p>
@@ -2316,7 +2336,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
  TTLs sent in SRP Updates are advisory: they indicate the SRP requester's guess as to what a good TTL would be.  SRP registrars may
  override these TTLs.  SRP registrars <span class="bcp14">SHOULD</span> ensure that TTLs are reasonable: neither too long nor too short.  The TTL <span class="bcp14">SHOULD NOT</span>
  ever be longer than the lease time (<a href="#stale" class="auto internal xref">Section 5.1</a>).  Shorter TTLs will result in more frequent data refreshes;
- this increases latency on the DNS-SD client side, increases load on any caching resolvers and on the authoritative DNS server,
+ this increases latency on the DNS‑SD client side, increases
+ load on any caching resolvers and on the authoritative DNS server,
  and also increases network load, which may be an issue for CNNs.  Longer TTLs will increase the likelihood
  that data in caches will be stale.  TTL minimums and maximums <span class="bcp14">SHOULD</span> be configurable by the operator of the SRP registrar.<a href="#section-4-5" class="pilcrow">¶</a></p>
 </section>
@@ -2330,7 +2351,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
         <h3 id="name-cleaning-up-stale-data">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-cleaning-up-stale-data" class="section-name selfRef">Cleaning Up Stale Data</a>
         </h3>
-<p id="section-5.1-1">Because the DNS-SD registration protocol is automatic and not managed by humans,
+<p id="section-5.1-1">Because the DNS‑SD registration protocol is automatic and not managed by humans,
           some additional bookkeeping is required.  When an update is constructed by the SRP requester,
           it <span class="bcp14">MUST</span> include an EDNS(0) Update Lease Option (see <span>[<a href="#RFC9664" class="cite xref">RFC9664</a>]</span>).
           The Update Lease Option contains two lease times: the Lease Time and the KEY
@@ -2447,16 +2468,21 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
         <h3 id="name-risks-of-allowing-arbitrary">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-risks-of-allowing-arbitrary" class="section-name selfRef">Risks of Allowing Arbitrary Names to be Registered in SRP Updates</a>
         </h3>
-<p id="section-6.3-1">It is possible to set up SRP Updates for a zone that is used for non-DNS‑SD services. For example, imagine that you set
+<p id="section-6.3-1">It is possible to set up SRP Updates for a zone that is used
+   for non-DNS‑SD services. For example, imagine that you set
    up SRP service for example.com. SRP hosts can now register names like "www" or "mail" or "smtp" in this domain. In addition,
    SRP Updates using FCFS Naming can insert names that are obscene or offensive into the zone. There is no simple solution to
    these problems. However, we have two recommendations to address this problem:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3-2.1">Do not provide SRP service in organization-level zones. Use subdomains of the organizational domain for DNS-SD.  This does not prevent registering names as mentioned above but does ensure that genuinely important names
+<li class="normal" id="section-6.3-2.1">Do not provide SRP service in organization-level zones.
+     Use subdomains of the organizational domain for DNS‑SD.
+     This does not prevent registering names as mentioned above
+     but does ensure that genuinely important names
      are not accidentally claimed by SRP clients.
      So, for example, the zone "dnssd.example.com" could be used instead of
      "example.com" for SRP Updates. Because of the way that DNS-browsing domains are discovered, there is no need for the
-   DNS‑SD discovery zone that is updated by SRP to have a user-friendly or important-sounding name.<a href="#section-6.3-2.1" class="pilcrow">¶</a>
+     DNS‑SD discovery zone that is updated by SRP to
+     have a user-friendly or important-sounding name.<a href="#section-6.3-2.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-6.3-2.2">Configure a dictionary of names that are prohibited. Dictionaries of common obscene and offensive names are no doubt
      available and can be augmented with a list of typical "special" names like "www", "mail", "smtp", and so on. Lists of
@@ -2519,7 +2545,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-privacy-considerations" class="section-name selfRef">Privacy Considerations</a>
       </h2>
 <p id="section-7-1">
- Because DNS-SD SRP Updates can be sent off-link, the privacy implications of SRP are different than for mDNS
+ Because DNS‑SD SRP Updates can be sent off-link,
+ the privacy implications of SRP are different than for mDNS
  responses.  Host implementations that are using TCP <span class="bcp14">SHOULD</span> also use TLS if available.  SRP registrar implementations <span class="bcp14">MUST</span> offer
  TLS support.  The use of TLS with DNS is described in <span>[<a href="#RFC7858" class="cite xref">RFC7858</a>]</span>. Because there is no mechanism for sharing
  keys, validation of DNS-over-TLS keys is not possible; DNS-over-TLS is used only as described in
@@ -2684,7 +2711,8 @@ that the record is nonexistent.<a href="#section-8.4-2.2.1" class="pilcrow">¶</
         </h3>
 <p id="section-10.2-1">IANA has also added a new entry to the "Transport-Independent Locally-Served Zones Registry" registry of
    the "Locally-Served DNS Zones" group (see <span>[<a href="#LSDZ" class="cite xref">LSDZ</a>]</span>).  The entry is for the domain "SERVICE.ARPA" with the
-   description "DNS-SD Service Registration Protocol Special-Use Domain" and lists this document as the reference.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+   description "DNS‑SD Service Registration Protocol
+   Special-Use Domain" and lists this document as the reference.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
 </section>
 <div id="subdomains">
 <section id="section-10.3">
@@ -2692,7 +2720,8 @@ that the record is nonexistent.<a href="#section-8.4-2.2.1" class="pilcrow">¶</
 <a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-subdomains-of-servicearpa" class="section-name selfRef">Subdomains of "service.arpa."</a>
         </h3>
 <p id="section-10.3-1">This document only makes use of the "default.service.arpa" subdomain of "service.arpa." Other subdomains are reserved for
-   future use by DNS-SD or related work. IANA has created the "service.arpa Subdomain" registry (see <span>[<a href="#SUB" class="cite xref">SUB</a>]</span>).
+   future use by DNS‑SD or related work.
+   IANA has created the "service.arpa Subdomain" registry (see <span>[<a href="#SUB" class="cite xref">SUB</a>]</span>).
    The IETF has change control for this registry. New entries may be added either as a result of Standards Action
    (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.9" class="relref">Section 4.9</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>) or with IESG Approval (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.10" class="relref">Section 4.10</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>), provided that a
    specification exists (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.6" class="relref">Section 4.6</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>).<a href="#section-10.3-1" class="pilcrow">¶</a></p>
@@ -2758,7 +2787,7 @@ that the record is nonexistent.<a href="#section-8.4-2.2.1" class="pilcrow">¶</
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">  Description        </td>
-                <td class="text-left" rowspan="1" colspan="1">  DNS-SD Service Discovery          </td>
+                <td class="text-left" rowspan="1" colspan="1">  DNS‑SD Service Discovery     </td>
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">  Reference          </td>
@@ -2806,7 +2835,7 @@ that the record is nonexistent.<a href="#section-8.4-2.2.1" class="pilcrow">¶</
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">  Description        </td>
-                <td class="text-left" rowspan="1" colspan="1">  DNS-SD Service Discovery (TLS) </td>
+                <td class="text-left" rowspan="1" colspan="1">  DNS‑SD Service Discovery (TLS) </td>
               </tr>
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">  Reference          </td>
@@ -2846,7 +2875,7 @@ that the record is nonexistent.<a href="#section-8.4-2.2.1" class="pilcrow">¶</
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">Name</td>
-              <td class="text-left" rowspan="1" colspan="1">DNS-SD Service Registration Protocol Anycast Address</td>
+              <td class="text-left" rowspan="1" colspan="1">DNS‑SD Service Registration Protocol Anycast Address</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">RFC</td>
