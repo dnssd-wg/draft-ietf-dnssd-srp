@@ -1456,7 +1456,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <li class="normal" id="section-1-10.1">claim a name that is
  not yet in use, and<a href="#section-1-10.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-1-10.2">using SIG(0) (<span>[<a href="#RFC2931" class="cite xref">RFC2931</a>]</span>),
+        <li class="normal" id="section-1-10.2">using SIG(0) <span>[<a href="#RFC2931" class="cite xref">RFC2931</a>]</span>,
  authenticate both the initial claim
  (to ensure it has not been modified in transit)
  and subsequent updates
@@ -1474,8 +1474,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
  of records, and the content of those records is further constrained.<a href="#section-1-12" class="pilcrow">¶</a></p>
 <p id="section-1-13">
  The reason for this is precisely that we have not established trust. So, we can only publish information that we feel safe in
- publishing even though we do not have any basis for trusting the requester. We reason that mDNS (<span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span>)
- allows arbitrary hosts on a single IP link to advertise services (<span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>), relying on whatever service is
+ publishing even though we do not have any basis for trusting the requester.
+ We reason that mDNS <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span> allows
+ arbitrary hosts on a single IP link to advertise services
+ <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>, relying on whatever service is
  advertised to provide authentication as a part of its protocol rather than in the service advertisement.<a href="#section-1-13" class="pilcrow">¶</a></p>
 <p id="section-1-14">
  This is considered reasonably safe because it requires physical presence on the network in order to advertise. An off-network
@@ -1491,8 +1493,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
  Or it might require establishment of trust, and add an authorization model
  to the authentication model we now have. But this is work for a future document.<a href="#section-1-15" class="pilcrow">¶</a></p>
 <p id="section-1-16">
- Finally, SRP adds the concept of a "lease" <span>[<a href="#RFC9664" class="cite xref">RFC9664</a>]</span>, analogous to leases in DHCP
- (<span>[<a href="#RFC8415" class="cite xref">RFC8415</a>]</span>).  The SRP registration itself has a lease that may be on the order of an hour; if the requester
+ Finally, SRP adds the concept of a "lease" <span>[<a href="#RFC9664" class="cite xref">RFC9664</a>]</span>,
+ analogous to leases in DHCP
+ <span>[<a href="#RFC2131" class="cite xref">RFC2131</a>]</span><span>[<a href="#RFC8415" class="cite xref">RFC8415</a>]</span>.
+ The SRP registration itself has a lease that
+ may be on the order of an hour; if the requester
  does not renew the lease before it has elapsed, the registration is removed.  The claim on the name can have a longer
  lease so that another requester cannot claim the name, even though the registration has expired.<a href="#section-1-16" class="pilcrow">¶</a></p>
 <p id="section-1-17">
@@ -1597,7 +1602,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-constrained-hosts" class="section-name selfRef">Constrained Hosts</a>
           </h4>
 <p id="section-3.1.2-1">
-            For devices designed for CNNs (<span>[<a href="#RFC7228" class="cite xref">RFC7228</a>]</span>), some simplifications are available.  Instead of
+            For devices designed for CNNs <span>[<a href="#RFC7228" class="cite xref">RFC7228</a>]</span>,
+            some simplifications are available.  Instead of
             being configured with (or discovering) the service registration domain,
             the special-use domain name <span>[<a href="#RFC6761" class="cite xref">RFC6761</a>]</span> "default.service.arpa" is used.
             The details of how SRP registrars are discovered will be specific
@@ -1717,7 +1723,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
      Section <a href="https://rfc-editor.org/rfc/rfc6763#section-11" class="relref">11</a>
      of the DNS‑SD specification <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-3">
-            Devices made for CNNs register in the special-use domain name (<span>[<a href="#RFC6761" class="cite xref">RFC6761</a>]</span>)
+            Devices made for CNNs register in the
+            special-use domain name <span>[<a href="#RFC6761" class="cite xref">RFC6761</a>]</span>
             "default.service.arpa" and let the SRP registrar handle
             rewriting that to a different domain if necessary,
             using the rewriting techniques described in the
@@ -1759,7 +1766,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
               with some additions:<a href="#section-3.2.3.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.3.1-2.1">
- It implements FCFS Naming, protected using SIG(0) (<span>[<a href="#RFC2931" class="cite xref">RFC2931</a>]</span>).<a href="#section-3.2.3.1-2.1" class="pilcrow">¶</a>
+ It implements FCFS Naming, protected using SIG(0) <span>[<a href="#RFC2931" class="cite xref">RFC2931</a>]</span>.<a href="#section-3.2.3.1-2.1" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-3.2.3.1-2.2">
  It enforces policy about what updates are allowed.<a href="#section-3.2.3.1-2.2" class="pilcrow">¶</a>
@@ -1812,7 +1819,9 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
           </h4>
 <p id="section-3.2.4-1">
             DNS Update messages can be secured using secret key transaction signatures (TSIG)
-            (<span>[<a href="#RFC8945" class="cite xref">RFC8945</a>]</span>). This approach uses a secret key shared between the DNS Update requester (which issues the update) and
+            <span>[<a href="#RFC8945" class="cite xref">RFC8945</a>]</span>.
+            This approach uses a secret key shared between
+            the DNS Update requester (which issues the update) and
             the authoritative DNS server (which authenticates it).
             This model does not work for automatic service registration.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-2">
@@ -1853,7 +1862,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <a href="#section-3.2.5.1" class="section-number selfRef">3.2.5.1. </a><a href="#name-public-private-key-pair-gen" class="section-name selfRef">Public/Private Key Pair Generation and Storage</a>
             </h5>
 <p id="section-3.2.5.1-1">
-       The requester generates a public/private key pair (<a href="#rsa" class="auto internal xref">Section 6.6</a>).  This key pair <span class="bcp14">MUST</span> be stored in stable
+       The requester generates a public/private key pair (<a href="#rsa" class="auto internal xref">Section 6.6</a>).
+       This key pair <span class="bcp14">MUST</span> be stored in stable
        storage; if there is no writable stable storage on the SRP requester, the SRP requester <span class="bcp14">MUST</span> be preconfigured with a
        public/private key pair in read-only storage that can be used.  This key pair <span class="bcp14">MUST</span> be unique to the device. A device
        with rewritable storage <span class="bcp14">SHOULD</span> retain this key indefinitely.  When the device changes ownership, it may be appropriate
@@ -2252,7 +2262,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <a href="#section-3.3.3" class="section-number selfRef">3.3.3. </a><a href="#name-fcfs-name-and-signature-val" class="section-name selfRef">FCFS Name and Signature Validation</a>
           </h4>
 <p id="section-3.3.3-1">
-     Assuming that the SRP registrar has confirmed (as described in <a href="#validation" class="auto internal xref">Section 3.3.2</a>) that a DNS Update message is a valid SRP Update, it
+     Assuming that the SRP registrar has confirmed that a DNS Update message
+     is a valid SRP Update (<a href="#validation" class="auto internal xref">Section 3.3.2</a>), it
      then checks that the name in the Host Description Instruction exists in the zone being updated.  If so, then the registrar checks to see if the KEY
      record on that name is the same as the KEY record in the Host Description Instruction.  The registrar performs the same
      check for the KEY records in any Service Description Instructions.  For KEY records that were omitted from Service
@@ -2491,10 +2502,11 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
    <span class="bcp14">MAY</span> accept TCP Fast Open payloads if all such packets
    are validated along the path, and the network is able to reject this type of spoofing at all ingress points.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.1-3">For UDP updates from CNN devices, spoofing would have to be prevented with appropriate source address filtering
-   on routers (<span>[<a href="#RFC2827" class="cite xref">RFC2827</a>]</span>). This would ordinarily be accomplished by measures such as those described in
-   (Section <a href="https://rfc-editor.org/rfc/rfc7084#section-4.5" class="relref">4.5</a>
-   of the IPv6 CE Router Requirements document <span>[<a href="#RFC7084" class="cite xref">RFC7084</a>]</span>).
-   For example, a stub router (<span>[<a href="#I-D.ietf-snac-simple" class="cite xref">SNAC-SIMPLE</a>]</span>)
+   on routers <span>[<a href="#RFC2827" class="cite xref">RFC2827</a>]</span>.
+   This would ordinarily be accomplished by measures such as those described in
+   Section <a href="https://rfc-editor.org/rfc/rfc7084#section-4.5" class="relref">4.5</a>
+   of the IPv6 CE Router Requirements document <span>[<a href="#RFC7084" class="cite xref">RFC7084</a>]</span>.
+   For example, a stub router <span>[<a href="#I-D.ietf-snac-simple" class="cite xref">SNAC-SIMPLE</a>]</span>
    for a CNN might only accept UDP updates from source addresses known to be on-link on that stub network and might
    further validate that the UDP update was actually received on the stub network interface and not the interface connected to
    the adjacent infrastructure link.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
@@ -2631,7 +2643,10 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
       </h2>
 <p id="section-8-1">This section specifies considerations for systems involved in domain name resolution when resolving queries for names
  ending with ".service.arpa.".  Each item in this section addresses some aspect of the DNS or the process of resolving domain
- names that would be affected by this special-use allocation.  Detailed explanations of these items can be found in <span><a href="https://rfc-editor.org/rfc/rfc6761#section-5" class="relref">Section 5</a> of [<a href="#RFC6761" class="cite xref">RFC6761</a>]</span>.<a href="#section-8-1" class="pilcrow">¶</a></p>
+ names that would be affected by this special-use allocation.
+ Detailed explanations of these items can be found in
+ Section <a href="https://rfc-editor.org/rfc/rfc6761#section-5" class="relref">5</a>
+ of the DNS‑SD specification <span>[<a href="#RFC6761" class="cite xref">RFC6761</a>]</span>.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <section id="section-8.1">
         <h3 id="name-users">
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-users" class="section-name selfRef">Users</a>
@@ -2684,7 +2699,11 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
    <li id="section-8.4-2.1">For correctness, recursive resolvers at sites using
    'service.arpa.' must, in practice, transparently support DNSSEC
    queries: queries for DNSSEC records and queries with the DNSSEC OK
-   (DO) bit set (<span><a href="https://rfc-editor.org/rfc/rfc4035#section-3.2.1" class="relref">Section 3.2.1</a> of [<a href="#RFC4035" class="cite xref">RFC4035</a>]</span>).  DNSSEC (<span>[<a href="#RFC9364" class="cite xref">RFC9364</a>]</span>) validation
+   (DO) bit set
+   (Section <a href="https://rfc-editor.org/rfc/rfc4035#section-3.2.1" class="relref">3.2.1</a>
+   of the DNSSEC specification <span>[<a href="#RFC4035" class="cite xref">RFC4035</a>]</span>).
+
+   DNSSEC validation <span>[<a href="#RFC9364" class="cite xref">RFC9364</a>]</span>
    is a best current practice: although validation is not required, a
    caching recursive resolver that does not validate answers that can
    be validated may cache invalid data.  In turn, this would prevent

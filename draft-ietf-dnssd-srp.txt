@@ -184,7 +184,7 @@ Table of Contents
 
    *  claim a name that is not yet in use, and
 
-   *  using SIG(0) ([RFC2931]), authenticate both the initial claim (to
+   *  using SIG(0) [RFC2931], authenticate both the initial claim (to
       ensure it has not been modified in transit) and subsequent updates
       (to ensure they come from the same entity that performed the
       initial claim).
@@ -206,10 +206,10 @@ Table of Contents
    The reason for this is precisely that we have not established trust.
    So, we can only publish information that we feel safe in publishing
    even though we do not have any basis for trusting the requester.  We
-   reason that mDNS ([RFC6762]) allows arbitrary hosts on a single IP
-   link to advertise services ([RFC6763]), relying on whatever service
-   is advertised to provide authentication as a part of its protocol
-   rather than in the service advertisement.
+   reason that mDNS [RFC6762] allows arbitrary hosts on a single IP link
+   to advertise services [RFC6763], relying on whatever service is
+   advertised to provide authentication as a part of its protocol rather
+   than in the service advertisement.
 
    This is considered reasonably safe because it requires physical
    presence on the network in order to advertise.  An off-network mDNS
@@ -232,11 +232,12 @@ Table of Contents
    document.
 
    Finally, SRP adds the concept of a "lease" [RFC9664], analogous to
-   leases in DHCP ([RFC8415]).  The SRP registration itself has a lease
-   that may be on the order of an hour; if the requester does not renew
-   the lease before it has elapsed, the registration is removed.  The
-   claim on the name can have a longer lease so that another requester
-   cannot claim the name, even though the registration has expired.
+   leases in DHCP [RFC2131][RFC8415].  The SRP registration itself has a
+   lease that may be on the order of an hour; if the requester does not
+   renew the lease before it has elapsed, the registration is removed.
+   The claim on the name can have a longer lease so that another
+   requester cannot claim the name, even though the registration has
+   expired.
 
    The Service Registration Protocol for DNS-SD specified in this
    document provides a reasonably secure mechanism for publishing this
@@ -330,7 +331,7 @@ Table of Contents
 
 3.1.2.  Constrained Hosts
 
-   For devices designed for CNNs ([RFC7228]), some simplifications are
+   For devices designed for CNNs [RFC7228], some simplifications are
    available.  Instead of being configured with (or discovering) the
    service registration domain, the special-use domain name [RFC6761]
    "default.service.arpa" is used.  The details of how SRP registrars
@@ -446,7 +447,7 @@ Table of Contents
    DNS-SD specification [RFC6763].
 
    Devices made for CNNs register in the special-use domain name
-   ([RFC6761]) "default.service.arpa" and let the SRP registrar handle
+   [RFC6761] "default.service.arpa" and let the SRP registrar handle
    rewriting that to a different domain if necessary, using the
    rewriting techniques described in the Discovery Proxy specification
    [RFC8766].
@@ -486,7 +487,7 @@ Table of Contents
    DNS-SD Service Registration uses DNS Update [RFC2136], with some
    additions:
 
-   *  It implements FCFS Naming, protected using SIG(0) ([RFC2931]).
+   *  It implements FCFS Naming, protected using SIG(0) [RFC2931].
 
    *  It enforces policy about what updates are allowed.
 
@@ -524,10 +525,10 @@ Table of Contents
 3.2.4.  How to Secure It
 
    DNS Update messages can be secured using secret key transaction
-   signatures (TSIG) ([RFC8945]).  This approach uses a secret key
-   shared between the DNS Update requester (which issues the update) and
-   the authoritative DNS server (which authenticates it).  This model
-   does not work for automatic service registration.
+   signatures (TSIG) [RFC8945].  This approach uses a secret key shared
+   between the DNS Update requester (which issues the update) and the
+   authoritative DNS server (which authenticates it).  This model does
+   not work for automatic service registration.
 
    The goal of securing the DNS-SD Registration Protocol is to provide
    the best possible security given the constraint that service
@@ -897,20 +898,20 @@ Table of Contents
 
 3.3.3.  FCFS Name and Signature Validation
 
-   Assuming that the SRP registrar has confirmed (as described in
-   Section 3.3.2) that a DNS Update message is a valid SRP Update, it
-   then checks that the name in the Host Description Instruction exists
-   in the zone being updated.  If so, then the registrar checks to see
-   if the KEY record on that name is the same as the KEY record in the
-   Host Description Instruction.  The registrar performs the same check
-   for the KEY records in any Service Description Instructions.  For KEY
-   records that were omitted from Service Description Instructions, the
-   KEY from the Host Description Instruction is used.  If any existing
-   KEY record corresponding to a KEY record in the SRP Update does not
-   match the KEY record in the SRP Update (whether provided or taken
-   from the Host Description Instruction), then the SRP registrar MUST
-   reject the SRP Update with the YXDomain RCODE.  This informs the SRP
-   requester that it should select a different name and try again.
+   Assuming that the SRP registrar has confirmed that a DNS Update
+   message is a valid SRP Update (Section 3.3.2), it then checks that
+   the name in the Host Description Instruction exists in the zone being
+   updated.  If so, then the registrar checks to see if the KEY record
+   on that name is the same as the KEY record in the Host Description
+   Instruction.  The registrar performs the same check for the KEY
+   records in any Service Description Instructions.  For KEY records
+   that were omitted from Service Description Instructions, the KEY from
+   the Host Description Instruction is used.  If any existing KEY record
+   corresponding to a KEY record in the SRP Update does not match the
+   KEY record in the SRP Update (whether provided or taken from the Host
+   Description Instruction), then the SRP registrar MUST reject the SRP
+   Update with the YXDomain RCODE.  This informs the SRP requester that
+   it should select a different name and try again.
 
    If the SRP Update is not in conflict with existing data in the zone
    being updated, the SRP registrar validates the SRP Update using
@@ -1148,14 +1149,14 @@ Table of Contents
    ingress points.
 
    For UDP updates from CNN devices, spoofing would have to be prevented
-   with appropriate source address filtering on routers ([RFC2827]).
-   This would ordinarily be accomplished by measures such as those
-   described in (Section 4.5 of the IPv6 CE Router Requirements document
-   [RFC7084]).  For example, a stub router ([SNAC-SIMPLE]) for a CNN
-   might only accept UDP updates from source addresses known to be on-
-   link on that stub network and might further validate that the UDP
-   update was actually received on the stub network interface and not
-   the interface connected to the adjacent infrastructure link.
+   with appropriate source address filtering on routers [RFC2827].  This
+   would ordinarily be accomplished by measures such as those described
+   in Section 4.5 of the IPv6 CE Router Requirements document [RFC7084].
+   For example, a stub router [SNAC-SIMPLE] for a CNN might only accept
+   UDP updates from source addresses known to be on-link on that stub
+   network and might further validate that the UDP update was actually
+   received on the stub network interface and not the interface
+   connected to the adjacent infrastructure link.
 
 6.2.  Other DNS Updates
 
@@ -1287,7 +1288,8 @@ Table of Contents
    ".service.arpa.".  Each item in this section addresses some aspect of
    the DNS or the process of resolving domain names that would be
    affected by this special-use allocation.  Detailed explanations of
-   these items can be found in Section 5 of [RFC6761].
+   these items can be found in Section 5 of the DNS-SD specification
+   [RFC6761].
 
 8.1.  Users
 
@@ -1345,14 +1347,14 @@ Table of Contents
    1.  For correctness, recursive resolvers at sites using
        'service.arpa.' must, in practice, transparently support DNSSEC
        queries: queries for DNSSEC records and queries with the DNSSEC
-       OK (DO) bit set (Section 3.2.1 of [RFC4035]).  DNSSEC ([RFC9364])
-       validation is a best current practice: although validation is not
-       required, a caching recursive resolver that does not validate
-       answers that can be validated may cache invalid data.  In turn,
-       this would prevent validating stub resolvers from successfully
-       validating answers.  Hence, as a practical matter, recursive
-       resolvers at sites using "service.arpa" should do DNSSEC
-       validation.
+       OK (DO) bit set (Section 3.2.1 of the DNSSEC specification
+       [RFC4035]).  DNSSEC validation [RFC9364] is a best current
+       practice: although validation is not required, a caching
+       recursive resolver that does not validate answers that can be
+       validated may cache invalid data.  In turn, this would prevent
+       validating stub resolvers from successfully validating answers.
+       Hence, as a practical matter, recursive resolvers at sites using
+       "service.arpa" should do DNSSEC validation.
 
    2.  Unless configured otherwise, recursive resolvers and DNS proxies
        MUST behave following the rules prescribed for Iterative
