@@ -163,7 +163,7 @@ not a server publishing a service.
      these references, or choose "(see ...)". As I move through the document I'm seeing more of these gratuitous parentheses,
      which definitely isn't an improvement. -->
 
-	<li>using SIG(0) (<xref target="RFC2931"/>),
+	<li>using SIG(0) <xref target="RFC2931"/>,
 	authenticate both the initial claim
 	(to ensure it has not been modified in transit)
 	and subsequent updates
@@ -184,8 +184,10 @@ not a server publishing a service.
 
       <t>
 	The reason for this is precisely that we have not established trust. So, we can only publish information that we feel safe in
-	publishing even though we do not have any basis for trusting the requester. We reason that mDNS (<xref target="RFC6762"/>)
-	allows arbitrary hosts on a single IP link to advertise services (<xref target="RFC6763"/>), relying on whatever service is
+	publishing even though we do not have any basis for trusting the requester.
+	We reason that mDNS <xref target="RFC6762"/> allows
+	arbitrary hosts on a single IP link to advertise services
+	<xref target="RFC6763"/>, relying on whatever service is
 	advertised to provide authentication as a part of its protocol rather than in the service advertisement.</t>
 
       <t>
@@ -204,8 +206,11 @@ not a server publishing a service.
 	to the authentication model we now have. But this is work for a future document.</t>
 
       <t>
-	Finally, SRP adds the concept of a "lease" <xref target="RFC9664"/>, analogous to leases in DHCP
-	(<xref target="RFC8415"/>).  The SRP registration itself has a lease that may be on the order of an hour; if the requester
+	Finally, SRP adds the concept of a "lease" <xref target="RFC9664"/>,
+	analogous to leases in DHCP
+	<xref target="RFC2131"/><xref target="RFC8415"/>.
+	The SRP registration itself has a lease that
+	may be on the order of an hour; if the requester
 	does not renew the lease before it has elapsed, the registration is removed.  The claim on the name can have a longer
 	lease so that another requester cannot claim the name, even though the registration has expired.</t>
 
@@ -310,7 +315,8 @@ not a server publishing a service.
 	<section>
 	  <name>Constrained Hosts</name>
 	  <t>
-            For devices designed for CNNs (<xref target="RFC7228"/>), some simplifications are available.  Instead of
+            For devices designed for CNNs <xref target="RFC7228"/>,
+            some simplifications are available.  Instead of
             being configured with (or discovering) the service registration domain,
             the special-use domain name <xref target="RFC6761"/> "default.service.arpa" is used.
             The details of how SRP registrars are discovered will be specific
@@ -425,7 +431,8 @@ We will discuss several parts to this process:</t>
 	    of the DNS&nbhy;SD specification <xref target="RFC6763"/>.
 	  </t>
 	  <t>
-            Devices made for CNNs register in the special-use domain name (<xref target="RFC6761"/>)
+            Devices made for CNNs register in the
+            special-use domain name <xref target="RFC6761"/>
             "default.service.arpa" and let the SRP registrar handle
             rewriting that to a different domain if necessary,
             using the rewriting techniques described in the
@@ -468,7 +475,7 @@ We will discuss several parts to this process:</t>
               with some additions:</t>
             <ul spacing="normal">
               <li>
-		It implements FCFS Naming, protected using SIG(0) (<xref target="RFC2931"/>).</li>
+		It implements FCFS Naming, protected using SIG(0) <xref target="RFC2931"/>.</li>
               <li>
 		It enforces policy about what updates are allowed.</li>
               <li>
@@ -509,7 +516,9 @@ We will discuss several parts to this process:</t>
 	  <name>How to Secure It</name>
           <t>
             DNS Update messages can be secured using secret key transaction signatures (TSIG)
-            (<xref target="RFC8945"/>). This approach uses a secret key shared between the DNS Update requester (which issues the update) and
+            <xref target="RFC8945"/>.
+            This approach uses a secret key shared between
+            the DNS Update requester (which issues the update) and
             the authoritative DNS server (which authenticates it).
             This model does not work for automatic service registration.</t>
           <t>
@@ -561,7 +570,8 @@ Perhaps:
 	  <section>
 	    <name>Public/Private Key Pair Generation and Storage</name>
             <t>
-	      The requester generates a public/private key pair (<xref target="rsa"/>).  This key pair <bcp14>MUST</bcp14> be stored in stable
+	      The requester generates a public/private key pair (<xref target="rsa"/>).
+	      This key pair <bcp14>MUST</bcp14> be stored in stable
 	      storage; if there is no writable stable storage on the SRP requester, the SRP requester <bcp14>MUST</bcp14> be preconfigured with a
 	      public/private key pair in read-only storage that can be used.  This key pair <bcp14>MUST</bcp14> be unique to the device. A device
 	      with rewritable storage <bcp14>SHOULD</bcp14> retain this key indefinitely.  When the device changes ownership, it may be appropriate
@@ -991,7 +1001,8 @@ Perhaps:
 -->
 
           <t>
-	    Assuming that the SRP registrar has confirmed (as described in <xref target="validation"/>) that a DNS Update message is a valid SRP Update, it
+	    Assuming that the SRP registrar has confirmed that a DNS Update message
+	    is a valid SRP Update (<xref target="validation"/>), it
 	    then checks that the name in the Host Description Instruction exists in the zone being updated.  If so, then the registrar checks to see if the KEY
 	    record on that name is the same as the KEY record in the Host Description Instruction.  The registrar performs the same
 	    check for the KEY records in any Service Description Instructions.  For KEY records that were omitted from Service
@@ -1265,10 +1276,11 @@ Original "'n'":
 	  are validated along the path, and the network is able to reject this type of spoofing at all ingress points.</t>
 
 	<t>For UDP updates from CNN devices, spoofing would have to be prevented with appropriate source address filtering
-	  on routers (<xref target="RFC2827"/>). This would ordinarily be accomplished by measures such as those described in
-	  (Section <xref target="RFC7084" section="4.5" sectionFormat="bare"/>
-	  of the IPv6 CE Router Requirements document <xref target="RFC7084"/>).
-	  For example, a stub router (<xref target="I-D.ietf-snac-simple"/>)
+	  on routers <xref target="RFC2827"/>.
+	  This would ordinarily be accomplished by measures such as those described in
+	  Section <xref target="RFC7084" section="4.5" sectionFormat="bare"/>
+	  of the IPv6 CE Router Requirements document <xref target="RFC7084"/>.
+	  For example, a stub router <xref target="I-D.ietf-snac-simple"/>
 	  for a CNN might only accept UDP updates from source addresses known to be on-link on that stub network and might
 	  further validate that the UDP update was actually received on the stub network interface and not the interface connected to
 	  the adjacent infrastructure link.</t>
@@ -1393,7 +1405,11 @@ Original "'n'":
       <name>Domain Name Reservation Considerations</name>
       <t>This section specifies considerations for systems involved in domain name resolution when resolving queries for names
 	ending with ".service.arpa.".  Each item in this section addresses some aspect of the DNS or the process of resolving domain
-	names that would be affected by this special-use allocation.  Detailed explanations of these items can be found in <xref target="RFC6761" sectionFormat="of" section="5"/>.</t>
+	names that would be affected by this special-use allocation.
+	Detailed explanations of these items can be found in
+	Section <xref target="RFC6761" section="5" sectionFormat="bare"/>
+	of the DNS&nbhy;SD specification <xref target="RFC6761"/>.
+	</t>
       <section>
 	<name>Users</name>
 	<t>The current proposed use for "service.arpa" does not require special knowledge on the part of the user. While the
@@ -1501,8 +1517,11 @@ DNSSEC (see [RFC9364]) validation is a best current practice:
 	  <li>For correctness, recursive resolvers at sites using
 	  'service.arpa.' must, in practice, transparently support DNSSEC
 	  queries: queries for DNSSEC records and queries with the DNSSEC OK
-	  (DO) bit set (<xref target="RFC4035" section="3.2.1"
-	  sectionFormat="of"/>).  DNSSEC (<xref target="RFC9364"/>) validation
+	  (DO) bit set
+	  (Section <xref target="RFC4035" section="3.2.1" sectionFormat="bare"/>
+	  of the DNSSEC specification <xref target="RFC4035"/>).
+
+	  DNSSEC validation <xref target="RFC9364"/>
 	  is a best current practice: although validation is not required, a
 	  caching recursive resolver that does not validate answers that can
 	  be validated may cache invalid data.  In turn, this would prevent
