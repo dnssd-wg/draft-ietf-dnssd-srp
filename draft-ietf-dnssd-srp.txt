@@ -767,7 +767,7 @@ Table of Contents
 
    Because the SRP Update is a DNS update, it MUST contain a single
    entry in the Zone Section (what would be the Question Section in a
-   traditional DNS messages) that indicates the zone to be updated.
+   traditional DNS message) that indicates the zone to be updated.
    Every delete and update in an SRP Update MUST be within the zone that
    is specified for the SRP Update.
 
@@ -798,7 +798,7 @@ Table of Contents
    for the same service name (the owner name of the PTR record) if the
    SRP requester is advertising more than one instance of the same
    service type or is changing the target of a PTR RR.  When subtypes
-   (Section 7.1 of the DNS-SD specification [RFC6763]) are being used,
+   are being used (Section 7.1 of the DNS-SD specification [RFC6763])
    each subtype is a separate Service Discovery Instruction.  For each
    such PTR RR add or delete, the above constraints must be met.
 
@@ -828,8 +828,9 @@ Table of Contents
 
       -  there is an existing KEY RR on that name that matches the key
          with which the SRP Update was signed.
-   *  No other resource records on the Service Instance Name are
-      modified.
+
+   Service Description Instructions do not modify any other resource
+   records.
 
    An SRP registrar MUST correctly handle compressed names in the SRV
    target.
@@ -995,9 +996,10 @@ Table of Contents
    updates.  In some networks, it may be possible to do out-of-band
    registration of keys and only accept updates from preregistered keys.
    In this case, an update for a key that has not been registered SHOULD
-   be rejected with the Refused RCODE.  There are at least two benefits
-   to using SRP with managed keys, rather than simply performing
-   traditional DNS Updates using SIG(0) keys:
+   be rejected with the Refused RCODE.  When use of managed keys is
+   desired, there are at least two benefits to doing this in conjunction
+   with SRP rather than simply performing traditional DNS Updates using
+   SIG(0) keys:
 
    1.  The same over-the-air registration protocol is used in both
        cases, so both use cases can be addressed by the same SRP
@@ -1116,7 +1118,12 @@ Table of Contents
    registrar will always receive the update after the SRP requester sent
    it, this avoids the possibility of a race condition where the SRP
    registrar prematurely removes a service when the SRP requester thinks
-   the lease has not yet expired.
+   the lease has not yet expired.  In addition, the SRP requester MUST
+   begin attempting to renew its lease in advance of the expected
+   expiration time, as required by the DNS Update Lease specification
+   [RFC9664], to accomodate the situation where the clocks on the SRP
+   requester and the SRP registrar to not run at precisely the same
+   rate.
 
    SRP registrars MUST reject updates that do not include an EDNS(0)
    Update Lease option.  DNS authoritative servers that allow both SRP
