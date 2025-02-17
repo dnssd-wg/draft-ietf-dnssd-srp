@@ -788,7 +788,7 @@ Original:
           <t>
 	    Because the SRP Update is a DNS update, it <bcp14>MUST</bcp14> contain
 	    a single entry in the Zone Section (what would be the Question Section
-	    in a traditional DNS messages) that indicates the zone to be updated.
+	    in a traditional DNS message) that indicates the zone to be updated.
 	    Every delete and update in an SRP Update <bcp14>MUST</bcp14> be within the zone that is specified for the SRP Update.</t>
 
 	  <section anchor="servdis">
@@ -878,10 +878,10 @@ Current:
 	      (the owner name of the PTR record)
 	      if the SRP requester is advertising more than one instance
 	      of the same service type or is changing the target of a PTR RR.
-	      When subtypes
+	      When subtypes are being used
 	      (Section <xref target="RFC6763" section="7.1" sectionFormat="bare"/>
 	      of the DNS&nbhy;SD specification <xref target="RFC6763"/>)
-	      are being used, each subtype is a separate Service Discovery Instruction.
+	      each subtype is a separate Service Discovery Instruction.
 	      For each such PTR RR add or delete, the above constraints must be met.</t>
 	  </section>
 
@@ -914,9 +914,8 @@ Current:
 		<li>the name to which the "Delete All RRsets From A Name" applies does not exist, or</li>
 		<li>there is an existing KEY RR on that name that matches the key with which the SRP Update was
 		  signed.</li></ul></li>
-	      <li>
-		No other resource records on the Service Instance Name are modified.</li>
             </ul>
+	    <t>Service Description Instructions do not modify any other resource records.</t>
 	    <t>An SRP registrar <bcp14>MUST</bcp14> correctly handle compressed names in the SRV target.</t>
 	  </section>
 
@@ -1121,7 +1120,8 @@ Perhaps:
 	    The SRP registrar <bcp14>MAY</bcp14> apply additional criteria when accepting updates.  In some networks, it may be possible to do
 	    out-of-band registration of keys and only accept updates from preregistered keys.  In this case, an update for a key
 	    that has not been registered <bcp14>SHOULD</bcp14> be rejected with the Refused RCODE.
-	    There are at least two benefits to using SRP with managed keys,
+	    When use of managed keys is desired,
+	    there are at least two benefits to doing this in conjunction with SRP
 	    rather than simply performing traditional DNS Updates using SIG(0) keys:</t>
 	  <ol><li>The same
 	    over-the-air registration protocol is used in both cases,
@@ -1252,7 +1252,12 @@ Original "'n'":
 	received.  Because the registrar will always receive the update after
 	the SRP requester sent it, this avoids the possibility of
 	a race condition where the SRP registrar prematurely removes
-	a service when the SRP requester thinks the lease has not yet expired.</t>
+	a service when the SRP requester thinks the lease has not yet expired.
+	In addition, the SRP requester MUST begin attempting to renew
+	its lease in advance of the expected expiration time, as required
+	by the DNS Update Lease specification <xref target="RFC9664"/>,
+	to accomodate the situation where the clocks on the SRP requester
+	and the SRP registrar to not run at precisely the same rate.</t>
 
 	<t>SRP registrars <bcp14>MUST</bcp14> reject updates that do not
 	include an EDNS(0) Update Lease option.  DNS authoritative servers
