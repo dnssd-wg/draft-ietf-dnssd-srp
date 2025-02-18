@@ -146,7 +146,7 @@ Table of Contents
    in contexts where DNS-SD registration is needed, and administrators
    of networks where DNS-SD service is required.  The document is
    expected to provide sufficient information to allow interoperable
-   implementation of the registration protocol.
+   implementation of the Service Registration Protocol.
 
    DNS-SD allows servers to publish the information required to access
    the services they provide.  DNS-SD clients can then discover the set
@@ -468,9 +468,9 @@ Table of Contents
    involve many update attempts.  You might first attempt to add a name
    if it doesn't exist; if that fails, then in a second message you
    might update the name if it does exist but matches certain
-   preconditions.  Because the registration protocol described in this
-   document uses a single transaction, some of this adaptability is
-   lost.
+   preconditions.  Because the Service Registration Protocol described
+   in this document uses a single transaction, some of this adaptability
+   is lost.
 
    In order to allow updates to happen in a single transaction, SRP
    Updates do not include update prerequisites.  The requirements
@@ -1019,8 +1019,8 @@ Table of Contents
        cases, so both use cases can be addressed by the same SRP
        requester implementation.
 
-   2.  The registration protocol includes maintenance functionality not
-       present with normal DNS updates.
+   2.  The Service Registration Protocol includes maintenance
+       functionality not present with normal DNS updates.
 
    Note that the semantics of using SRP in this way are different from
    the semantics of typical implementations of DNS Update.  The KEY used
@@ -1069,11 +1069,11 @@ Table of Contents
 
 5.1.  Cleaning Up Stale Data
 
-   Because the DNS-SD registration protocol is automatic and not managed
-   by humans, some additional bookkeeping is required.  When an update
-   is constructed by the SRP requester, it MUST include an EDNS(0)
-   Update Lease Option [RFC9664].  The Update Lease Option contains two
-   lease times: the Lease Time and the KEY Lease Time.
+   Because the DNS-SD Service Registration Protocol is automatic and not
+   managed by humans, some additional bookkeeping is required.  When an
+   update is constructed by the SRP requester, it MUST include an
+   EDNS(0) Update Lease Option [RFC9664].  The Update Lease Option
+   contains two lease times: the Lease Time and the KEY Lease Time.
 
    Similar to DHCP leases [RFC2131], these leases are promises from the
    SRP requester that it will send a new update for the service
