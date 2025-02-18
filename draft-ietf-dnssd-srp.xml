@@ -231,7 +231,8 @@ not a server publishing a service.
         standard DNS lookups.</t>
 <!-- [Ted] The original text was unclear, but the change unfortunately guesses wrong as to the meaning and makes it even less clear. How about: -->
       <t>
-        Section 10 of the DNS&nbhy;SD specification <xref target="RFC6763"/>
+        Section <xref target="RFC6763" section="10" sectionFormat="bare"/>
+        of the DNS&nbhy;SD specification <xref target="RFC6763"/>
         briefly discusses ways that servers can advertise the services
         they provide in the DNS namespace.  In the case of
         mDNS, it allows servers to advertise their services on the local link, using names in the ".local" namespace, which makes
