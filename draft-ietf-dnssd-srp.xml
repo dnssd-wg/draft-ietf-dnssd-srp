@@ -515,12 +515,14 @@ We will discuss several parts to this process:</t>
 	    <t>SRP does not require that every update contain the same information.
 	      When an SRP requester needs to send more than one
 	      SRP Update to the SRP registrar, it SHOULD combine
-	      these into a single SRP Update message,
-	      when possible, subject to DNS message size limits.
-	      If the updates do not fit into a single SRP Update message
+	      these into a single SRP Update,
+	      when possible, subject to DNS message size limits and link-specific
+          size limits (e.g. an 802.15.4 network will perform poorly when asked
+          to deliver a packet larger than about 500 bytes).
+	      If the updates do not fit into a single SRP Update
 	      then the SRP requester <bcp14>MUST</bcp14>
-	      send subsequent SRP Update messages sequentially:
-	      until an earlier update has completed,
+	      send subsequent SRP Update sequentially:
+	      until an earlier SRP Update has been acknowledged,
 	      the requester <bcp14>MUST NOT</bcp14>
 	      send any subsequent SRP Update.
 	      If a configuration change occurs while an outstanding
@@ -756,7 +758,7 @@ Original:
 		consisting of "Delete An RR From An RRset" updates <xref target="RFC2136"/>
 		that delete any PTR records whose target is
 		the Service Instance Name.
-		However, even in the absense of such Service Discovery Instructions,
+		However, even in the absence of such Service Discovery Instructions,
 		the SRP registrar MUST delete any Service Discovery PTR records
 		that point to the deleted Service Instance Name.
 		</li>
@@ -1174,7 +1176,7 @@ Perhaps:
 	    updates.</li></ol>
           <t>
 	    Note that the semantics of using SRP in this way
-	    are different from the semantics for typical
+	    are different from the semantics of typical
 	    implementations of DNS Update. The KEY used
 	    to sign the SRP Update only allows the SRP requester to update records that refer to its Host Description.
 	    Implementations of traditional DNS Update
@@ -1880,7 +1882,7 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 	  "IANA IPv6 Special-Purpose Address Registry" <xref target="IPv6"/>,
 	  similar to the Port
 	  Control Protocol <xref target="RFC6887"/>
-	  anycast address: 2001:1::1 <xref target="RFC7723"/>.
+	  anycast address <xref target="RFC7723"/>.
 	  The purpose of this allocation is to provide a fixed anycast
 	  address that can be commonly used as a destination for
 	  SRP Updates when no SRP registrar is explicitly configured. The initial values for the registry are as follows:</t>
