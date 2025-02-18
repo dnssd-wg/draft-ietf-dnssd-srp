@@ -601,8 +601,14 @@ Perhaps:
 	      A device
 	      with rewritable storage <bcp14>SHOULD</bcp14> retain this key indefinitely.  When the device changes ownership, it may be appropriate
 	      for the former owner to erase the old key pair, which would then require the new owner to install a new
-	      one. Therefore, the SRP requester on the device <bcp14>SHOULD</bcp14> provide a mechanism to erase the key (for example, as the
-	      result of a "factory reset") and to generate a new key.</t>
+              one. Therefore, the SRP requester on the device <bcp14>SHOULD</bcp14> provide a mechanism to erase the key (for example, as the
+              result of a "factory reset") and to generate a new key.</t>
+	    </t>
+	    <t>
+	      Note that when a new key is generated, this will prevent the device from registering with the name associated with the old key in the
+	      same domain where it had previously registered. So implicit in the generation of a new key is the generation of a new name; this can
+	      either be done proactively when regenerating a key, or can be done when the SRP update produces a name conflict.
+            </t>
 	    <t>
 	      The policy described here for managing keys assumes that the keys are only used for SRP. If a key that is used for SRP
 	      is also used for other purposes, the policy described here is likely to be insufficient. The policy stated here is <bcp14>NOT
