@@ -3401,7 +3401,7 @@ that the record is nonexistent.<a href="#section-8.4-2.2.1" class="pilcrow">¶</
 <a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-sample-bind-9-configuration" class="section-name selfRef">Sample BIND 9 Configuration for "default.service.arpa."</a>
       </h2>
 <span id="name-zone-configuration-in-named"></span><figure id="figure-1">
-        <div class="alignLeft art-text artwork" id="appendix-C-1.1">
+        <div class="alignCenter art-text artwork" id="appendix-C-1.1">
 <pre>
 zone "default.service.arpa." {
   type primary;
@@ -3413,41 +3413,38 @@ zone "default.service.arpa." {
 <a href="#name-zone-configuration-in-named" class="selfRef">Zone Configuration in named.conf</a>
         </figcaption></figure>
 <span id="name-example-zone-file"></span><figure id="figure-2">
-        <div class="alignLeft art-text artwork" id="appendix-C-2.1">
+        <div class="alignCenter art-text artwork" id="appendix-C-2.1">
 <pre>
-$ORIGIN .
 $TTL 57600  ; 16 hours
-default.service.arpa IN SOA          ns3.default.service.arpa.
-                                     postmaster.default.service.arpa. (
-                2951053287 ; serial
-                3600       ; refresh (1 hour)
-                1800       ; retry (30 minutes)
-                604800     ; expire (1 week)
-                3600       ; minimum (1 hour)
-)
-                        NS           ns3.default.service.arpa.
-                        SRV 0 0 53   ns3.default.service.arpa.
-$ORIGIN default.service.arpa.
+@                   IN SOA       ns postmaster (
+                      2951053287 ; serial
+                      3600       ; refresh (1 hour)
+                      1800       ; retry   (30 minutes)
+                      604800     ; expire  (1 week)
+                      3600       ; minimum (1 hour)
+                      )
+                    NS           ns
+ns                  AAAA         2001:db8:0:2::1
+
 $TTL 3600   ; 1 hour
-_ipps._tcp              PTR          demo._ipps._tcp
-$ORIGIN _ipps._tcp.default.service.arpa.
-demo                    TXT          "0"
-                        SRV 0 0 9992 demo.default.service.arpa.
-$ORIGIN _udp.default.service.arpa.
-$TTL 3600   ; 1 hour
-_dns-update             PTR          ns3.default.service.arpa.
-$ORIGIN _tcp.default.service.arpa.
-_dnssd-srp              PTR          ns3.default.service.arpa.
-$ORIGIN default.service.arpa.
-$TTL 300    ; 5 minutes
-ns3                     AAAA         2001:db8:0:1::1
-$TTL 3600   ; 1 hour
-demo                    AAAA         2001:db8:0:2::1
-                        KEY 0 3 13 (
-                           qweEmaaq0FAWok5//ftuQtZgiZoiFSUsm0srWREdywQU
-                           9dpvtOhrdKWUuPT3uEFF5TZU6B4q1z1I662GdaUwqg==
-                        ); alg = ECDSAP256SHA256 ; key id = 15008
-                        AAAA    ::1
+
+; Autoconguration bootstrap records
+_dnssd-srp._tcp     SRV 0 0 53   ns
+_dnssd-srp-tls._tcp SRV 0 0 853  ns
+
+; Service Discovery Instruction
+_ipps._tcp          PTR          demo._ipps._tcp
+
+; Service Description Instruction
+demo._ipps._tcp     SRV 0 0 631  demohost
+                    TXT          ""
+
+; Host Description Instruction
+demohost            AAAA         2001:db8:0:2::2
+                    KEY 0 3 13 (
+                      qweEmaaq0FAWok5//ftuQtZgiZoiFSUsm0srWREdywQU
+                      9dpvtOhrdKWUuPT3uEFF5TZU6B4q1z1I662GdaUwqg==
+                      ); alg = ECDSAP256SHA256 ; key id = 15008
 </pre>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:

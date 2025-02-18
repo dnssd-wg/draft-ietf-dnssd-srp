@@ -1877,49 +1877,46 @@ Appendix B.  How to Allow SRP Requesters to Update Standard Servers
 
 Appendix C.  Sample BIND 9 Configuration for "default.service.arpa."
 
-   zone "default.service.arpa." {
-     type primary;
-     file "/etc/bind/primary/service.db";
-     allow-update { key demo.default.service.arpa.; };
-   };
+            zone "default.service.arpa." {
+              type primary;
+              file "/etc/bind/primary/service.db";
+              allow-update { key demo.default.service.arpa.; };
+            };
 
                  Figure 1: Zone Configuration in named.conf
 
- $ORIGIN .
- $TTL 57600  ; 16 hours
- default.service.arpa IN SOA          ns3.default.service.arpa.
-                                      postmaster.default.service.arpa. (
-                 2951053287 ; serial
-                 3600       ; refresh (1 hour)
-                 1800       ; retry (30 minutes)
-                 604800     ; expire (1 week)
-                 3600       ; minimum (1 hour)
- )
-                         NS           ns3.default.service.arpa.
-                         SRV 0 0 53   ns3.default.service.arpa.
- $ORIGIN default.service.arpa.
- $TTL 3600   ; 1 hour
- _ipps._tcp              PTR          demo._ipps._tcp
- $ORIGIN _ipps._tcp.default.service.arpa.
- demo                    TXT          "0"
-                         SRV 0 0 9992 demo.default.service.arpa.
- $ORIGIN _udp.default.service.arpa.
- $TTL 3600   ; 1 hour
- _dns-update             PTR          ns3.default.service.arpa.
- $ORIGIN _tcp.default.service.arpa.
- _dnssd-srp              PTR          ns3.default.service.arpa.
- $ORIGIN default.service.arpa.
- $TTL 300    ; 5 minutes
- ns3                     AAAA         2001:db8:0:1::1
- $TTL 3600   ; 1 hour
- demo                    AAAA         2001:db8:0:2::1
-                         KEY 0 3 13 (
-                            qweEmaaq0FAWok5//ftuQtZgiZoiFSUsm0srWREdywQU
-                            9dpvtOhrdKWUuPT3uEFF5TZU6B4q1z1I662GdaUwqg==
-                         ); alg = ECDSAP256SHA256 ; key id = 15008
-                         AAAA    ::1
+    $TTL 57600  ; 16 hours
+    @                   IN SOA       ns postmaster (
+                          2951053287 ; serial
+                          3600       ; refresh (1 hour)
+                          1800       ; retry   (30 minutes)
+                          604800     ; expire  (1 week)
+                          3600       ; minimum (1 hour)
+                          )
+                        NS           ns
+    ns                  AAAA         2001:db8:0:2::1
 
-                      Figure 2: Example Zone File
+    $TTL 3600   ; 1 hour
+
+    ; Autoconguration bootstrap records
+    _dnssd-srp._tcp     SRV 0 0 53   ns
+    _dnssd-srp-tls._tcp SRV 0 0 853  ns
+
+    ; Service Discovery Instruction
+    _ipps._tcp          PTR          demo._ipps._tcp
+
+    ; Service Description Instruction
+    demo._ipps._tcp     SRV 0 0 631  demohost
+                        TXT          ""
+
+    ; Host Description Instruction
+    demohost            AAAA         2001:db8:0:2::2
+                        KEY 0 3 13 (
+                          qweEmaaq0FAWok5//ftuQtZgiZoiFSUsm0srWREdywQU
+                          9dpvtOhrdKWUuPT3uEFF5TZU6B4q1z1I662GdaUwqg==
+                          ); alg = ECDSAP256SHA256 ; key id = 15008
+
+                        Figure 2: Example Zone File
 
 Acknowledgments
 
