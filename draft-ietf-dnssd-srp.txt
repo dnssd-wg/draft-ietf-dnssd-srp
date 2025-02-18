@@ -706,12 +706,15 @@ Table of Contents
    one of two ways:
 
    1.  To simply remove a specific service, the requester sends a valid
-       SRP Update containing Service Discovery Instructions
-       (Section 3.3.1.1) consisting of "Delete An RR From An RRset"
-       updates [RFC2136] that delete any PTR records whose target is the
-       Service Instance Name.  In this case, the Service Description
-       Instruction (Section 3.3.1.2) contains a single "Delete All
-       RRsets From A Name" update to the Service Instance Name.
+       SRP Update with a Service Description Instruction
+       (Section 3.3.1.2) containing a single "Delete All RRsets From A
+       Name" update to the Service Instance Name.  The SRP Update SHOULD
+       include Service Discovery Instructions (Section 3.3.1.1)
+       consisting of "Delete An RR From An RRset" updates [RFC2136] that
+       delete any PTR records whose target is the Service Instance Name.
+       However, even in the absense of such Service Discovery
+       Instructions, the SRP registrar MUST delete any Service Discovery
+       PTR records that point to the deleted Service Instance Name.
 
    2.  When deleting one service instance while simultaneously creating
        a new service instance with a different service instance name, an
@@ -1101,11 +1104,11 @@ Table of Contents
    different set of services and not remember that some different
    service instance had previously been registered.  In this case, when
    that service instance lease expires, the SRP registrar MUST remove
-   the service instance (although the KEY record for the service
-   instance SHOULD be retained until the KEY lease on that service
-   expires).  This is beneficial because it avoids stale services
-   continuing to be advertised after the SRP requester has forgotten
-   about them.
+   the service instance, and any associated PTR records pointing to that
+   service instance, (although the KEY record for the service instance
+   SHOULD be retained until the KEY lease on that service expires).
+   This is beneficial because it avoids stale services continuing to be
+   advertised after the SRP requester has forgotten about them.
 
    The SRP registrar MUST include an EDNS(0) Update Lease option in the
    response.  The requester MUST check for the EDNS(0) Update Lease

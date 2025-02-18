@@ -2048,14 +2048,18 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
  This can be accomplished in one of two ways:<a href="#section-3.2.5.5.2-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.2.5.5.2-2">
 <li id="section-3.2.5.5.2-2.1">To simply remove a specific service, the requester sends a
- valid SRP Update containing Service Discovery Instructions
- (<a href="#servdis" class="auto internal xref">Section 3.3.1.1</a>)
+ valid SRP Update with a
+ Service Description Instruction (<a href="#servdesc" class="auto internal xref">Section 3.3.1.2</a>)
+ containing a single "Delete All RRsets From A Name" update
+ to the Service Instance Name.
+ The SRP Update SHOULD include
+ Service Discovery Instructions (<a href="#servdis" class="auto internal xref">Section 3.3.1.1</a>)
  consisting of "Delete An RR From An RRset" updates <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>
  that delete any PTR records whose target is
- the Service Instance Name. In this case, the
- Service Description Instruction (<a href="#servdesc" class="auto internal xref">Section 3.3.1.2</a>) contains
- a single "Delete All RRsets From A Name" update
- to the Service Instance Name.<a href="#section-3.2.5.5.2-2.1" class="pilcrow">¶</a>
+ the Service Instance Name.
+ However, even in the absense of such Service Discovery Instructions,
+ the SRP registrar MUST delete any Service Discovery PTR records
+ that point to the deleted Service Instance Name.<a href="#section-3.2.5.5.2-2.1" class="pilcrow">¶</a>
 </li>
                 <li id="section-3.2.5.5.2-2.2">
  When deleting one service instance while simultaneously creating
@@ -2511,7 +2515,11 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
    re-register a hostname with a different set of services and
    not remember that some different service instance had previously
    been registered. In this case, when that service instance lease expires, the SRP registrar <span class="bcp14">MUST</span> remove the service
-   instance (although the KEY record for the service instance <span class="bcp14">SHOULD</span> be retained until the KEY lease on that service
+   instance,
+   and any associated PTR records pointing to that service instance,
+   (although the KEY record for the service instance
+   <span class="bcp14">SHOULD</span> be retained until the
+   KEY lease on that service
    expires).
    This is beneficial because it avoids stale services continuing
    to be advertised after the SRP requester has forgotten about them.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
