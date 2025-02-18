@@ -379,7 +379,7 @@ We will discuss several parts to this process:</t>
           <ul spacing="normal">
 
             <li>
-              PTR RR(s) for service(s), which map from a
+              Service Discovery PTR RR(s) for service(s), which map from a
               generic service type (or subtype(s)) to a specific
               Service Instance Name <xref target="RFC6763"/>.</li>
             <li>
@@ -742,7 +742,7 @@ Original:
 		To support this, when removing a hostname
 		an SRP registrar <bcp14>MUST</bcp14> remove all service
 		instances pointing to that hostname,
-		and all PTR records pointing to those service instances,
+		and all Service Discovery PTR records pointing to those service instances,
 		even if the SRP requester doesn't list them explicitly. If the
 		KEY lease time is nonzero, the SRP registrar <bcp14>MUST NOT</bcp14> delete the KEY records for these SRP requesters.
 	      </t>
@@ -764,7 +764,7 @@ Original:
 		The SRP Update SHOULD include
 		Service Discovery Instructions (<xref target="servdis"/>)
 		consisting of "Delete An RR From An RRset" updates <xref target="RFC2136"/>
-		that delete any PTR records whose target is
+		that delete any Service Discovery PTR records whose target is
 		the Service Instance Name.
 		However, even in the absence of such Service Discovery Instructions,
 		the SRP registrar MUST delete any Service Discovery PTR records
@@ -922,7 +922,7 @@ Current:
 	    <t>
 	      Note that there can be more than one Service Discovery
 	      Instruction for the same service name
-	      (the owner name of the PTR record)
+	      (the owner name of the Service Discovery PTR record)
 	      if the SRP requester is advertising more than one instance
 	      of the same service type or is changing the target of a PTR RR.
 	      When subtypes are being used
@@ -1156,7 +1156,7 @@ Perhaps:
      is being used, it's being used like this: If we use foo, for example, then BAR. But here debugging
      isn't the example, so the extra comma changes the meaning. -->
           <t>
-	    The SRP registrar <bcp14>MAY</bcp14> add a Reverse Mapping
+	    The SRP registrar <bcp14>MAY</bcp14> add a Reverse Mapping PTR record
 	    (described for IPv4 in
 	    Section <xref target="RFC1035" section="3.5" sectionFormat="bare"/>
 	    of the DNS specification <xref target="RFC1035"/>
@@ -1164,7 +1164,7 @@ Perhaps:
 	    Section <xref target="RFC3596" section="2.5" sectionFormat="bare"/>
 	    of the later document updating DNS for IPv6 <xref target="RFC3596"/>)
 	    that corresponds to the Host Description.
-	    This is optional because the reverse mapping
+	    This is optional because the reverse mapping PTR record
 	    serves no essential protocol function,
 	    but it may be useful for debugging, for example in annotating network packet traces or logs.  In order for the registrar to do
 	    a reverse mapping update, it must be authoritative for the zone that would need to be updated or have credentials to do
@@ -1273,8 +1273,10 @@ Perhaps:
 	  when the hostname it references has been removed.
 	  If the KEY record for the hostname is to remain, the KEY record
 	  for any services that reference it <bcp14>MUST</bcp14> also
-	  remain. However, the service PTR record <bcp14>MUST</bcp14> be removed since it has no key associated with it and since it is never
-	  valid to have a service PTR record for which there is no service instance on the target of the PTR record.
+	  remain. However, the Service Discovery PTR record <bcp14>MUST</bcp14>
+	  be removed since it has no key associated with it and since it
+	  is never valid to have a Service Discovery PTR record for which
+	  there is no service instance on the target of the PTR record.
 	</t>
 
 	<t>
@@ -1283,7 +1285,7 @@ Perhaps:
 	  not remember that some different service instance had previously
 	  been registered. In this case, when that service instance lease expires, the SRP registrar <bcp14>MUST</bcp14> remove the service
 	  instance,
-	  and any associated PTR records pointing to that service instance,
+	  and any associated Service Discovery PTR records pointing to that service instance,
 	  (although the KEY record for the service instance
 	  <bcp14>SHOULD</bcp14> be retained until the
 	  KEY lease on that service
