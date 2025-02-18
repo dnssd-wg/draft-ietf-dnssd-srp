@@ -1896,28 +1896,32 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
        A device
        with rewritable storage <span class="bcp14">SHOULD</span> retain this key indefinitely.  When the device changes ownership, it may be appropriate
        for the former owner to erase the old key pair, which would then require the new owner to install a new
-       one. Therefore, the SRP requester on the device <span class="bcp14">SHOULD</span> provide a mechanism to erase the key (for example, as the
-       result of a "factory reset") and to generate a new key.<a href="#section-3.2.5.1-1" class="pilcrow">¶</a></p>
+              one. Therefore, the SRP requester on the device <span class="bcp14">SHOULD</span> provide a mechanism to erase the key (for example, as the
+              result of a "factory reset") and to generate a new key.<a href="#section-3.2.5.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.5.1-2">
+       Note that when a new key is generated, this will prevent the device from registering with the name associated with the old key in the
+       same domain where it had previously registered. So implicit in the generation of a new key is the generation of a new name; this can
+       either be done proactively when regenerating a key, or can be done when the SRP update produces a name conflict.<a href="#section-3.2.5.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.5.1-3">
        The policy described here for managing keys assumes that the keys are only used for SRP. If a key that is used for SRP
        is also used for other purposes, the policy described here is likely to be insufficient. The policy stated here is <span class="bcp14">NOT RECOMMENDED</span> in such a situation: a policy appropriate to the full set of uses for the key must be chosen. Specifying
-       such a policy is out of scope for this document.<a href="#section-3.2.5.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.5.1-3">
+       such a policy is out of scope for this document.<a href="#section-3.2.5.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.5.1-4">
        When sending DNS updates, the requester includes a KEY record containing the public portion of the key in each Host
        Description Instruction and each Service Description Instruction.  Each KEY record <span class="bcp14">MUST</span> contain the same public key.
        The update is signed using SIG(0), using the private key that corresponds to the public key in the KEY record.  The
        lifetimes of the records in the update are
        set using the EDNS(0) Update Lease option
-       <span>[<a href="#RFC9664" class="cite xref">RFC9664</a>]</span>.<a href="#section-3.2.5.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.2.5.1-4">
+       <span>[<a href="#RFC9664" class="cite xref">RFC9664</a>]</span>.<a href="#section-3.2.5.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.5.1-5">
        The format of the KEY resource record in the SRP Update is
        defined in the IETF specification for DNSSEC Resource Records
        <span>[<a href="#RFC4034" class="cite xref">RFC4034</a>]</span>. Because the KEY RR
-       used in SIG(0) is not a zone-signing key, the flags field in the KEY RR <span class="bcp14">MUST</span> be all zeroes.<a href="#section-3.2.5.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.2.5.1-5">
+       used in SIG(0) is not a zone-signing key, the flags field in the KEY RR <span class="bcp14">MUST</span> be all zeroes.<a href="#section-3.2.5.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.2.5.1-6">
        The KEY record in Service Description updates <span class="bcp14">MAY</span> be omitted for brevity; if it is omitted, the SRP registrar <span class="bcp14">MUST</span> behave
        as if the same KEY record that is given for the Host Description is also given for each Service Description for which
-       no KEY record is provided.  Omitted KEY records are not used when computing the SIG(0) signature.<a href="#section-3.2.5.1-5" class="pilcrow">¶</a></p>
+       no KEY record is provided.  Omitted KEY records are not used when computing the SIG(0) signature.<a href="#section-3.2.5.1-6" class="pilcrow">¶</a></p>
 </section>
 <section id="section-3.2.5.2">
             <h5 id="name-name-conflict-handling">

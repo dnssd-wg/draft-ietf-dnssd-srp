@@ -572,6 +572,13 @@ Table of Contents
    mechanism to erase the key (for example, as the result of a "factory
    reset") and to generate a new key.
 
+   Note that when a new key is generated, this will prevent the device
+   from registering with the name associated with the old key in the
+   same domain where it had previously registered.  So implicit in the
+   generation of a new key is the generation of a new name; this can
+   either be done proactively when regenerating a key, or can be done
+   when the SRP update produces a name conflict.
+
    The policy described here for managing keys assumes that the keys are
    only used for SRP.  If a key that is used for SRP is also used for
    other purposes, the policy described here is likely to be
