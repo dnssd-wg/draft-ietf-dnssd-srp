@@ -19,15 +19,15 @@
         their registrations.
        
     " name="description">
-<meta content="xml2rfc 3.26.0" name="generator">
+<meta content="xml2rfc 3.27.0" name="generator">
 <meta content="Multicast DNS" name="keyword">
 <meta content="DNS-Based Service Discovery" name="keyword">
 <meta content="DNS Update" name="keyword">
 <meta content="SIG(0)" name="keyword">
 <meta content="9665" name="rfc.number">
 <!-- Generator version information:
-  xml2rfc 3.26.0
-    Python 3.12.8
+  xml2rfc 3.27.0
+    Python 3.12.9
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
@@ -1470,7 +1470,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1-12">
  It is important to understand that "authenticate" here just means that we can tell that an update came from the same source
  as the original registration. We have not established trust. This has important implications for what we can and can't do
- with data the client sends us. You will notice as you read this document that we only support adding a very restricted set
+ with data the SRP requester sends us.
+ You will notice as you read this document that
+ we only support adding a very restricted set
  of records, and the content of those records is further constrained.<a href="#section-1-12" class="pilcrow">¶</a></p>
 <p id="section-1-13">
  The reason for this is precisely that we have not established trust. So, we can only publish information that we feel safe in
@@ -1904,7 +1906,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
        Service Discovery record adds cannot have name conflicts. If any Host Description or Service Description record
        is found by the SRP registrar to have a conflict with an existing name, the registrar will respond to the SRP Update
        with a YXDomain RCODE <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>. In this case, the
-       requester <span class="bcp14">MUST</span> choose a new name or give up.<a href="#section-3.2.5.2-1" class="pilcrow">¶</a></p>
+       SRP requester <span class="bcp14">MUST</span> choose a new name or give up.<a href="#section-3.2.5.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.5.2-2">
        There is no specific requirement for how this is done. Typically, however, the requester will append a number to the
        preferred name. This number could be sequentially increasing or could be chosen randomly. One existing implementation
@@ -1952,7 +1954,9 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
        and thus return nonsensical rdata in response to a query.
        This does not apply in the
        case of SRP. An SRP registrar needs to understand SRV records in order to validate the SRP Update. Compression of the
-       target can save space in the SRP Update, so we want clients to be able to assume that the registrar will handle
+       target can save space in the SRP Update,
+       so we want SRP requesters to be able to
+       assume that the registrar will handle
        this. Therefore, SRP registrars <span class="bcp14">MUST</span> support compression of SRV RR targets.<a href="#section-3.2.5.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.5.4-2">
 
@@ -1983,9 +1987,11 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <a href="#section-3.2.5.5.1" class="section-number selfRef">3.2.5.5.1. </a><a href="#name-removing-all-published-serv" class="section-name selfRef">Removing All Published Services</a>
               </h6>
 <p id="section-3.2.5.5.1-1">
- To remove all the services registered to a particular host, the SRP requester transmits an SRP Update for that host
+ To remove all the services registered to a particular hostname,
+ the SRP requester transmits an SRP Update for that hostname
  with an Update Lease option that has a LEASE value of zero.
- The SRP Update <span class="bcp14">MUST</span> contain exactly one Host Instruction,
+ The SRP Update <span class="bcp14">MUST</span> contain
+ exactly one Host Description Instruction,
  containing exactly one "Delete All RRsets From A Name" instruction for the hostname,
  and no "Add to an RRSet" instructions for that hostname.
  If the registration is to be permanently removed,
@@ -1996,9 +2002,9 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
  where the requester is going offline and does not want
  any of its services to continue being advertised.<a href="#section-3.2.5.5.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.5.5.1-3">
- To support this, when removing a host
+ To support this, when removing a hostname
  an SRP registrar <span class="bcp14">MUST</span> remove all service
- instances pointing to that host,
+ instances pointing to that hostname,
  and all PTR records pointing to those service instances,
  even if the SRP requester doesn't list them explicitly. If the
  KEY lease time is nonzero, the SRP registrar <span class="bcp14">MUST NOT</span> delete the KEY records for these SRP requesters.<a href="#section-3.2.5.5.1-3" class="pilcrow">¶</a></p>
@@ -2053,10 +2059,13 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
  recognize this special case, and does not need to
  take any special actions to handle it correctly.<a href="#section-3.2.5.5.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2.5.5.2-4">
- Whichever of these two alternatives is used, the host lease will be updated with the lease time provided in the SRP
- update. In neither of these cases is it permissible to delete the host. All services must point to a host. If a host
- is to be deleted, this must be done using the method described in <a href="#zero-lease" class="auto internal xref">Section 3.2.5.5.1</a>, which deletes the
- host and all services that have that host as their target.<a href="#section-3.2.5.5.2-4" class="pilcrow">¶</a></p>
+ Whichever of these two alternatives is used, the hostname lease
+ will be updated with the lease time provided in the SRP update.
+ In neither of these cases is it permissible to delete the hostname.
+ All services must point to a hostname. If a hostname
+ is to be deleted, this must be done using the method
+ described in <a href="#zero-lease" class="auto internal xref">Section 3.2.5.5.1</a>, which deletes the
+ hostname and all services that have that hostname as their target.<a href="#section-3.2.5.5.2-4" class="pilcrow">¶</a></p>
 </section>
 </section>
 </div>
@@ -2332,9 +2341,13 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
      of the DNS Update specification <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>
      specifies that
      the authoritative DNS server is permitted
-            to respond either with no RRs or to copy the RRs sent by the client into the response. The SRP requester <span class="bcp14">MUST NOT</span> attempt
+            to respond either with no RRs or to copy the RRs
+            sent by the DNS Update client into the response.
+            The SRP requester <span class="bcp14">MUST NOT</span> attempt
      to validate any RRs that are included in the response. It is possible that a future SRP extension may include per-RR
-     indications as to why the update failed, but at the time of writing this is not specified. So, if a client were to attempt to validate
+     indications as to why the update failed, but
+     at the time of writing this is not specified.
+     So, if an SRP requester were to attempt to validate
             the RRs in the response, it might reject such a response since it would contain RRs but probably not a set of RRs
      identical to what was sent in the SRP Update.<a href="#section-3.3.5-2" class="pilcrow">¶</a></p>
 </section>
@@ -2449,15 +2462,21 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
           higher limits.  SRP requesters that are going to continue to use names on which they hold leases <span class="bcp14">SHOULD</span> update well before
           the lease ends in case the registrar is unavailable or under heavy load.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1-4">
-   The lease time applies specifically to the host. All service instances, and all service entries for such service
-   instances, depend on the host. When the lease on a host expires, the host and all services that reference it <span class="bcp14">MUST</span> be
-   removed at the same time: it is never valid for a service instance to remain when the host it references has been
-   removed. If the KEY record for the host is to remain, the KEY record for any services that reference it <span class="bcp14">MUST</span> also
+   The lease time applies specifically to the hostname.
+   All service instances, and all service entries for such service
+   instances, depend on the hostname. When the lease on a
+   hostname expires, the hostname and all services that
+   reference it <span class="bcp14">MUST</span> be removed at the same
+   time: it is never valid for a service instance to remain
+   when the hostname it references has been removed.
+   If the KEY record for the hostname is to remain, the KEY record
+   for any services that reference it <span class="bcp14">MUST</span> also
    remain. However, the service PTR record <span class="bcp14">MUST</span> be removed since it has no key associated with it and since it is never
    valid to have a service PTR record for which there is no service instance on the target of the PTR record.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <p id="section-5.1-5">
    SRP registrars <span class="bcp14">MUST</span> also track a lease time per service instance. The reason being that a requester may
-   re-register a host with a different set of services and not remember that some different service instance had previously
+   re-register a hostname with a different set of services and
+   not remember that some different service instance had previously
    been registered. In this case, when that service instance lease expires, the SRP registrar <span class="bcp14">MUST</span> remove the service
    instance (although the KEY record for the service instance <span class="bcp14">SHOULD</span> be retained until the KEY lease on that service
    expires).
@@ -2554,9 +2573,12 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
         <h3 id="name-risks-of-allowing-arbitrary">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-risks-of-allowing-arbitrary" class="section-name selfRef">Risks of Allowing Arbitrary Names to be Registered in SRP Updates</a>
         </h3>
-<p id="section-6.3-1">It is possible to set up SRP Updates for a zone that is used
-   for non-DNS‑SD services. For example, imagine that you set
-   up SRP service for example.com. SRP hosts can now register names like "www" or "mail" or "smtp" in this domain. In addition,
+<p id="section-6.3-1">It is possible to set up SRP Updates for a zone
+   that is also used for non-DNS‑SD records.
+   For example, imagine that you set
+   up SRP service for example.com.
+   SRP requesters can now register names like "www"
+   or "mail" or "smtp" in this domain. In addition,
    SRP Updates using FCFS Naming can insert names that are obscene or offensive into the zone. There is no simple solution to
    these problems. However, we have two recommendations to address this problem:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2564,7 +2586,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
      Use subdomains of the organizational domain for DNS‑SD.
      This does not prevent registering names as mentioned above
      but does ensure that genuinely important names
-     are not accidentally claimed by SRP clients.
+     are not accidentally claimed by SRP requesters.
      So, for example, the zone "dnssd.example.com" could be used instead of
      "example.com" for SRP Updates. Because of the way that DNS-browsing domains are discovered, there is no need for the
      DNS‑SD discovery zone that is updated by SRP to
@@ -2644,7 +2666,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
  Because DNS‑SD SRP Updates can be sent off-link,
  the privacy implications of SRP are different than for mDNS
  responses.
- Host implementations that are using TCP <span class="bcp14">SHOULD</span>
+ SRP Requester implementations that are using TCP <span class="bcp14">SHOULD</span>
  also use DNS-over-TLS <span>[<a href="#RFC7858" class="cite xref">RFC7858</a>]</span> if available.
  SRP registrar implementations <span class="bcp14">MUST</span> offer TLS support.
  Because there is no mechanism for sharing keys,
@@ -2705,7 +2727,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
    necessary that such APIs not bypass the locally discovered
    recursive resolvers.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.3-2">One or more IP addresses for recursive resolvers will usually
-   be supplied to the client through router advertisements
+   be supplied to the SRP requester through router advertisements
    or DHCP.  For an administrative domain that uses subdomains of "service.arpa.", the recursive resolvers provided by that
    domain will be able to answer queries for subdomains of "service.arpa.". Other (non-local) resolvers will not, or they
    will provide answers that are not correct within that administrative domain.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
