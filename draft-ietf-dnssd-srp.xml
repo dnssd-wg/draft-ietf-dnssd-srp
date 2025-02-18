@@ -87,7 +87,8 @@
         be used in contexts where DNS&nbhy;SD registration is needed, and
         administrators of networks where DNS&nbhy;SD service is required.
         The document is expected to provide sufficient
-        information to allow interoperable implementation of the registration protocol.</t>
+        information to allow interoperable implementation
+        of the Service Registration Protocol.</t>
 	<t>
 
 <!--[rfced] Should "services" be "servers" here to match previous,
@@ -464,7 +465,9 @@ We will discuss several parts to this process:</t>
             are somewhat different from normal DNS Updates
 	    <xref target="RFC2136"/> where the update process could involve many update attempts. You might first
 	    attempt to add a name if it doesn't exist; if that fails, then in a second message you might update the name if it does
-	    exist but matches certain preconditions.  Because the registration protocol described in this document uses a single transaction, some of this
+	    exist but matches certain preconditions.
+	    Because the Service Registration Protocol described in
+	    this document uses a single transaction, some of this
 	    adaptability is lost.</t>
           <t>
             In order to allow updates to happen in a single transaction, SRP Updates do not include update prerequisites.  The
@@ -1177,7 +1180,8 @@ Perhaps:
 	    over-the-air registration protocol is used in both cases,
 	    so both use cases can be addressed by the same SRP requester
 	    implementation.</li>
-	    <li>The registration protocol includes maintenance functionality not present with normal DNS
+	    <li>The Service Registration Protocol includes
+	    maintenance functionality not present with normal DNS
 	    updates.</li></ol>
           <t>
 	    Note that the semantics of using SRP in this way
@@ -1229,7 +1233,8 @@ Perhaps:
       <name>Maintenance</name>
       <section anchor="stale">
 	<name>Cleaning Up Stale Data</name>
-	<t>Because the DNS&nbhy;SD registration protocol is automatic and not managed by humans,
+	<t>Because the DNS&nbhy;SD Service Registration Protocol
+          is automatic and not managed by humans,
           some additional bookkeeping is required.  When an update is constructed by the SRP requester,
           it <bcp14>MUST</bcp14> include an EDNS(0) Update Lease Option <xref target="RFC9664"/>.
           The Update Lease Option contains two lease times: the Lease Time and the KEY
