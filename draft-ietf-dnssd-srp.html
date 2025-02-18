@@ -1674,7 +1674,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
      following is a brief overview of what is included in a typical SRP Update:<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2.1-2.1">
-              PTR RR(s) for service(s), which map from a
+              Service Discovery PTR RR(s) for service(s), which map from a
               generic service type (or subtype(s)) to a specific
               Service Instance Name <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>.<a href="#section-3.2.1-2.1" class="pilcrow">¶</a>
 </li>
@@ -2039,7 +2039,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
  To support this, when removing a hostname
  an SRP registrar <span class="bcp14">MUST</span> remove all service
  instances pointing to that hostname,
- and all PTR records pointing to those service instances,
+ and all Service Discovery PTR records pointing to those service instances,
  even if the SRP requester doesn't list them explicitly. If the
  KEY lease time is nonzero, the SRP registrar <span class="bcp14">MUST NOT</span> delete the KEY records for these SRP requesters.<a href="#section-3.2.5.5.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -2064,7 +2064,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
  The SRP Update SHOULD include
  Service Discovery Instructions (<a href="#servdis" class="auto internal xref">Section 3.3.1.1</a>)
  consisting of "Delete An RR From An RRset" updates <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>
- that delete any PTR records whose target is
+ that delete any Service Discovery PTR records whose target is
  the Service Instance Name.
  However, even in the absence of such Service Discovery Instructions,
  the SRP registrar MUST delete any Service Discovery PTR records
@@ -2178,7 +2178,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <p id="section-3.3.1.1-3">
        Note that there can be more than one Service Discovery
        Instruction for the same service name
-       (the owner name of the PTR record)
+       (the owner name of the Service Discovery PTR record)
        if the SRP requester is advertising more than one instance
        of the same service type or is changing the target of a PTR RR.
        When subtypes are being used
@@ -2395,7 +2395,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <a href="#section-3.3.6" class="section-number selfRef">3.3.6. </a><a href="#name-optional-behavior" class="section-name selfRef">Optional Behavior</a>
           </h4>
 <p id="section-3.3.6-1">
-     The SRP registrar <span class="bcp14">MAY</span> add a Reverse Mapping
+     The SRP registrar <span class="bcp14">MAY</span> add a Reverse Mapping PTR record
      (described for IPv4 in
      Section <a href="https://rfc-editor.org/rfc/rfc1035#section-3.5" class="relref">3.5</a>
      of the DNS specification <span>[<a href="#RFC1035" class="cite xref">RFC1035</a>]</span>
@@ -2403,7 +2403,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
      Section <a href="https://rfc-editor.org/rfc/rfc3596#section-2.5" class="relref">2.5</a>
      of the later document updating DNS for IPv6 <span>[<a href="#RFC3596" class="cite xref">RFC3596</a>]</span>)
      that corresponds to the Host Description.
-     This is optional because the reverse mapping
+     This is optional because the reverse mapping PTR record
      serves no essential protocol function,
      but it may be useful for debugging, for example in annotating network packet traces or logs.  In order for the registrar to do
      a reverse mapping update, it must be authoritative for the zone that would need to be updated or have credentials to do
@@ -2519,15 +2519,17 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
    when the hostname it references has been removed.
    If the KEY record for the hostname is to remain, the KEY record
    for any services that reference it <span class="bcp14">MUST</span> also
-   remain. However, the service PTR record <span class="bcp14">MUST</span> be removed since it has no key associated with it and since it is never
-   valid to have a service PTR record for which there is no service instance on the target of the PTR record.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+   remain. However, the Service Discovery PTR record <span class="bcp14">MUST</span>
+   be removed since it has no key associated with it and since it
+   is never valid to have a Service Discovery PTR record for which
+   there is no service instance on the target of the PTR record.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <p id="section-5.1-5">
    SRP registrars <span class="bcp14">MUST</span> also track a lease time per service instance. The reason being that a requester may
    re-register a hostname with a different set of services and
    not remember that some different service instance had previously
    been registered. In this case, when that service instance lease expires, the SRP registrar <span class="bcp14">MUST</span> remove the service
    instance,
-   and any associated PTR records pointing to that service instance,
+   and any associated Service Discovery PTR records pointing to that service instance,
    (although the KEY record for the service instance
    <span class="bcp14">SHOULD</span> be retained until the
    KEY lease on that service

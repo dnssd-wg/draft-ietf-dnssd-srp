@@ -394,8 +394,9 @@ Table of Contents
    The following is a brief overview of what is included in a typical
    SRP Update:
 
-   *  PTR RR(s) for service(s), which map from a generic service type
-      (or subtype(s)) to a specific Service Instance Name [RFC6763].
+   *  Service Discovery PTR RR(s) for service(s), which map from a
+      generic service type (or subtype(s)) to a specific Service
+      Instance Name [RFC6763].
 
    *  For each Service Instance Name, an SRV RR, one or more TXT RRs,
       and a KEY RR.  Although, in principle, DNS-SD Service Description
@@ -699,11 +700,11 @@ Table of Contents
    continue being advertised.
 
    To support this, when removing a hostname an SRP registrar MUST
-   remove all service instances pointing to that hostname, and all PTR
-   records pointing to those service instances, even if the SRP
-   requester doesn't list them explicitly.  If the KEY lease time is
-   nonzero, the SRP registrar MUST NOT delete the KEY records for these
-   SRP requesters.
+   remove all service instances pointing to that hostname, and all
+   Service Discovery PTR records pointing to those service instances,
+   even if the SRP requester doesn't list them explicitly.  If the KEY
+   lease time is nonzero, the SRP registrar MUST NOT delete the KEY
+   records for these SRP requesters.
 
 3.2.5.5.2.  Removing Some Published Services
 
@@ -719,10 +720,11 @@ Table of Contents
        Name" update to the Service Instance Name.  The SRP Update SHOULD
        include Service Discovery Instructions (Section 3.3.1.1)
        consisting of "Delete An RR From An RRset" updates [RFC2136] that
-       delete any PTR records whose target is the Service Instance Name.
-       However, even in the absence of such Service Discovery
-       Instructions, the SRP registrar MUST delete any Service Discovery
-       PTR records that point to the deleted Service Instance Name.
+       delete any Service Discovery PTR records whose target is the
+       Service Instance Name.  However, even in the absence of such
+       Service Discovery Instructions, the SRP registrar MUST delete any
+       Service Discovery PTR records that point to the deleted Service
+       Instance Name.
 
    2.  When deleting one service instance while simultaneously creating
        a new service instance with a different service instance name, an
@@ -810,12 +812,13 @@ Table of Contents
          service.
 
    Note that there can be more than one Service Discovery Instruction
-   for the same service name (the owner name of the PTR record) if the
-   SRP requester is advertising more than one instance of the same
-   service type or is changing the target of a PTR RR.  When subtypes
-   are being used (Section 7.1 of the DNS-SD specification [RFC6763])
-   each subtype is a separate Service Discovery Instruction.  For each
-   such PTR RR add or delete, the above constraints must be met.
+   for the same service name (the owner name of the Service Discovery
+   PTR record) if the SRP requester is advertising more than one
+   instance of the same service type or is changing the target of a PTR
+   RR.  When subtypes are being used (Section 7.1 of the DNS-SD
+   specification [RFC6763]) each subtype is a separate Service Discovery
+   Instruction.  For each such PTR RR add or delete, the above
+   constraints must be met.
 
 3.3.1.2.  Service Description Instruction
 
@@ -995,16 +998,17 @@ Table of Contents
 
 3.3.6.  Optional Behavior
 
-   The SRP registrar MAY add a Reverse Mapping (described for IPv4 in
-   Section 3.5 of the DNS specification [RFC1035] and for IPv6 in
-   Section 2.5 of the later document updating DNS for IPv6 [RFC3596])
+   The SRP registrar MAY add a Reverse Mapping PTR record (described for
+   IPv4 in Section 3.5 of the DNS specification [RFC1035] and for IPv6
+   in Section 2.5 of the later document updating DNS for IPv6 [RFC3596])
    that corresponds to the Host Description.  This is optional because
-   the reverse mapping serves no essential protocol function, but it may
-   be useful for debugging, for example in annotating network packet
-   traces or logs.  In order for the registrar to do a reverse mapping
-   update, it must be authoritative for the zone that would need to be
-   updated or have credentials to do the update.  The SRP requester MAY
-   also do a reverse mapping update if it has credentials to do so.
+   the reverse mapping PTR record serves no essential protocol function,
+   but it may be useful for debugging, for example in annotating network
+   packet traces or logs.  In order for the registrar to do a reverse
+   mapping update, it must be authoritative for the zone that would need
+   to be updated or have credentials to do the update.  The SRP
+   requester MAY also do a reverse mapping update if it has credentials
+   to do so.
 
    The SRP registrar MAY apply additional criteria when accepting
    updates.  In some networks, it may be possible to do out-of-band
@@ -1102,21 +1106,22 @@ Table of Contents
    it is never valid for a service instance to remain when the hostname
    it references has been removed.  If the KEY record for the hostname
    is to remain, the KEY record for any services that reference it MUST
-   also remain.  However, the service PTR record MUST be removed since
-   it has no key associated with it and since it is never valid to have
-   a service PTR record for which there is no service instance on the
-   target of the PTR record.
+   also remain.  However, the Service Discovery PTR record MUST be
+   removed since it has no key associated with it and since it is never
+   valid to have a Service Discovery PTR record for which there is no
+   service instance on the target of the PTR record.
 
    SRP registrars MUST also track a lease time per service instance.
    The reason being that a requester may re-register a hostname with a
    different set of services and not remember that some different
    service instance had previously been registered.  In this case, when
    that service instance lease expires, the SRP registrar MUST remove
-   the service instance, and any associated PTR records pointing to that
-   service instance, (although the KEY record for the service instance
-   SHOULD be retained until the KEY lease on that service expires).
-   This is beneficial because it avoids stale services continuing to be
-   advertised after the SRP requester has forgotten about them.
+   the service instance, and any associated Service Discovery PTR
+   records pointing to that service instance, (although the KEY record
+   for the service instance SHOULD be retained until the KEY lease on
+   that service expires).  This is beneficial because it avoids stale
+   services continuing to be advertised after the SRP requester has
+   forgotten about them.
 
    The SRP registrar MUST include an EDNS(0) Update Lease option in the
    response.  The requester MUST check for the EDNS(0) Update Lease
