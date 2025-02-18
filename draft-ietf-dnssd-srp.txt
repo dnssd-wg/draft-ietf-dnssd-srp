@@ -1536,10 +1536,11 @@ Table of Contents
 
    IANA has allocated an IPv6 anycast address from the "IANA IPv6
    Special-Purpose Address Registry" [IPv6], similar to the Port Control
-   Protocol anycast address: 2001:1::1.  The purpose of this allocation
-   is to provide a fixed anycast address that can be commonly used as a
-   destination for SRP Updates when no SRP registrar is explicitly
-   configured.  The initial values for the registry are as follows:
+   Protocol [RFC6887] anycast address: 2001:1::1 [RFC7723].  The purpose
+   of this allocation is to provide a fixed anycast address that can be
+   commonly used as a destination for SRP Updates when no SRP registrar
+   is explicitly configured.  The initial values for the registry are as
+   follows:
 
           +======================+=============================+
           | Attribute            | Value                       |
@@ -1748,6 +1749,11 @@ Table of Contents
               DOI 10.17487/RFC6762, February 2013,
               <https://www.rfc-editor.org/info/rfc6762>.
 
+   [RFC6887]  Wing, D., Ed., Cheshire, S., Boucadair, M., Penno, R., and
+              P. Selkirk, "Port Control Protocol (PCP)", RFC 6887,
+              DOI 10.17487/RFC6887, April 2013,
+              <https://www.rfc-editor.org/info/rfc6887>.
+
    [RFC7084]  Singh, H., Beebee, W., Donley, C., and B. Stark, "Basic
               Requirements for IPv6 Customer Edge Routers", RFC 7084,
               DOI 10.17487/RFC7084, November 2013,
@@ -1761,6 +1767,10 @@ Table of Contents
    [RFC7413]  Cheng, Y., Chu, J., Radhakrishnan, S., and A. Jain, "TCP
               Fast Open", RFC 7413, DOI 10.17487/RFC7413, December 2014,
               <https://www.rfc-editor.org/info/rfc7413>.
+
+   [RFC7723]  Kiesel, S. and R. Penno, "Port Control Protocol (PCP)
+              Anycast Addresses", RFC 7723, DOI 10.17487/RFC7723,
+              January 2016, <https://www.rfc-editor.org/info/rfc7723>.
 
    [RFC8415]  Mrugalski, T., Siodelski, M., Volz, B., Yourtchenko, A.,
               Richardson, M., Jiang, S., Lemon, T., and T. Winters,
