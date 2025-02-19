@@ -622,9 +622,9 @@ Table of Contents
    number to the preferred name.  This number could be sequentially
    increasing or could be chosen randomly.  One existing implementation
    attempts several sequential numbers before choosing randomly.  For
-   instance, it might try host.default.service.arpa, then host-
-   1.default.service.arpa, then host-2.default.service.arpa, then host-
-   31773.default.service.arpa.
+   instance, it might try host.default.service.arpa, then
+   host-1.default.service.arpa, then host-2.default.service.arpa, then
+   host-31773.default.service.arpa.
 
 3.2.5.3.  Record Lifetimes
 
