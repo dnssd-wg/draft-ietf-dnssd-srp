@@ -7,10 +7,9 @@
  <!ENTITY wj     "&#8288;">
 ]>
 
-<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-latest" number="9665" ipr="trust200902" xmlns:xi="http://www.w3.org/2001/XInclude" obsoletes="" updates="" version="3" sortRefs="true" consensus="true" symRefs="true" tocDepth="4" tocInclude="true" xml:lang="en">
+<rfc category="std" submissionType="IETF" docName="draft-ietf-dnssd-srp-27" ipr="trust200902" xmlns:xi="http://www.w3.org/2001/XInclude" obsoletes="" updates="" version="3" sortRefs="true" consensus="true" symRefs="true" tocDepth="4" tocInclude="true" xml:lang="en">
   <front>
     <title abbrev="Service Registration Protocol">Service Registration Protocol for DNS-Based Service Discovery</title>
-    <seriesInfo name="RFC" value="9665"/>
     <author initials="T." surname="Lemon" fullname="Ted Lemon">
       <organization>Apple Inc.</organization>
       <address>
@@ -40,7 +39,7 @@
       </address>
     </author>
 
-    <date month="October" year="2024"/>
+    <date month="February" year="2025"/>
     <area>INT</area>
     <workgroup>dnssd</workgroup>
     <keyword>Multicast DNS</keyword>
@@ -62,6 +61,21 @@
         their registrations.
       </t>
     </abstract>
+    <note removeInRFC="true">
+      <name>About This Document</name>
+      <t>
+        The latest revision of this draft can be found at <eref target="https://dnssd-wg.github.io/draft-ietf-dnssd-srp/draft-ietf-dnssd-srp.html"/>.
+        Status information for this document may be found at <eref target="https://datatracker.ietf.org/doc/draft-ietf-dnssd-srp/"/>.
+      </t>
+      <t>
+        Discussion of this document takes place on the
+        DNS-SD Working Group mailing list (<eref target="mailto:dnssd@ietf.org"/>),
+        which is archived at <eref target="https://mailarchive.ietf.org/arch/browse/dnssd/"/>.
+        Subscribe at <eref target="https://www.ietf.org/mailman/listinfo/dnssd/"/>.
+      </t>
+      <t>Source for this draft and an issue tracker can be found at
+        <eref target="https://github.com/dnssd-wg/draft-ietf-dnssd-srp"/>.</t>
+    </note>
   </front>
 
   <middle>
