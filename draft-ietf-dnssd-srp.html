@@ -3357,8 +3357,8 @@ that the record is nonexistent.<a href="#section-8.4-2.2.1" class="pilcrow">¶</
         authoritative DNS server that does not implement SRP.
         This can be done by configuring the
         authoritative DNS server to listen on the anycast address or by
-        advertising it in the :_dnssd‑srp._tcp.&lt;zone&gt;: SRV and
-        "_dnssd‑srp‑tls._tcp.&lt;zone&gt;" records.
+        advertising it in the "_dnssd‑srp._tcp.&lt;zone&gt;" and
+        "_dnssd‑srp‑tls._tcp.&lt;zone&gt;" SRV records.
         It must be configured to be authoritative for
         "default.service.arpa" and to accept updates from hosts on local networks for names under "default.service.arpa"
         without authentication since such authoritative DNS servers will not

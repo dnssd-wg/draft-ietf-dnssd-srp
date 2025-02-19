@@ -1836,10 +1836,10 @@ Appendix A.  Using Standard Authoritative DNS Servers Compliant with RFC
    For testing it may be useful to set up an authoritative DNS server
    that does not implement SRP.  This can be done by configuring the
    authoritative DNS server to listen on the anycast address or by
-   advertising it in the :_dnssd-srp._tcp.<zone>: SRV and
-   "_dnssd-srp-tls._tcp.<zone>" records.  It must be configured to be
-   authoritative for "default.service.arpa" and to accept updates from
-   hosts on local networks for names under "default.service.arpa"
+   advertising it in the "_dnssd-srp._tcp.<zone>" and
+   "_dnssd-srp-tls._tcp.<zone>" SRV records.  It must be configured to
+   be authoritative for "default.service.arpa" and to accept updates
+   from hosts on local networks for names under "default.service.arpa"
    without authentication since such authoritative DNS servers will not
    have support for FCFS authentication (Section 3.2.4.1).
 
