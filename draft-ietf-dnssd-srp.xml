@@ -2108,8 +2108,8 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
         authoritative DNS server that does not implement SRP.
         This can be done by configuring the
         authoritative DNS server to listen on the anycast address or by
-        advertising it in the :_dnssd&nbhy;srp._tcp.&lt;zone&gt;: SRV and
-        "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" records.
+        advertising it in the "_dnssd&nbhy;srp._tcp.&lt;zone&gt;" and
+        "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" SRV records.
         It must be configured to be authoritative for
         "default.service.arpa" and to accept updates from hosts on local networks for names under "default.service.arpa"
         without authentication since such authoritative DNS servers will not
