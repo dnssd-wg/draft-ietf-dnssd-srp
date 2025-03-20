@@ -2205,7 +2205,7 @@ demohost            AAAA         2001:db8:0:2::2
                     KEY 0 3 13 (
                       qweEmaaq0FAWok5//ftuQtZgiZoiFSUsm0srWREdywQU
                       9dpvtOhrdKWUuPT3uEFF5TZU6B4q1z1I662GdaUwqg==
-                      ); alg = ECDSAP256SHA256 ; key id = 15008
+                      ); alg = ECDSAP256SHA256 ; key id = 14495
 ]]></artwork>
 </figure>
 
