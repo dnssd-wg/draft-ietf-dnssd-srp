@@ -80,7 +80,7 @@
 	over unicast rather than using Multicast DNS (mDNS) <xref target="RFC6762"/>.
 	There is already a large installed base of DNS&nbhy;SD
 	clients that can discover services using the DNS
-	protocol (e.g., Android, Windows, Linux, Apple).</t>
+	protocol (e.g., Android, Windows, Linux, Apple operating systems).</t>
       <t>
         This document is intended for three audiences: implementers of software that provides services that should be advertised
         using DNS&nbhy;SD, implementers of authoritative DNS servers that will
