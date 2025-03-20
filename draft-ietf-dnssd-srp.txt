@@ -549,13 +549,13 @@ Table of Contents
    extended period of time based on a lease specific to the key used to
    authenticate the SRP Update, which may be longer than the lease
    associated with the registered RRs.  As long as the registrar
-   remembers the name and does not reveal the key used to register RRs
-   on that name, no other SRP requester can add or update the
-   information associated with that name.  If the SRP requester fails to
-   renew its service registration before the KEY lease expires
-   (Section 4 of the DNS Update Lease specification [RFC9664]) its name
-   is no longer protected.  FCFS Naming is used to protect both the
-   Service Description and the Host Description.
+   remembers the name, and the public key corresponding to the private
+   key used to register RRs on that name, no other SRP requester can add
+   or update the information associated with that name.  If the SRP
+   requester fails to renew its service registration before the KEY
+   lease expires (Section 4 of the DNS Update Lease specification
+   [RFC9664]) its name is no longer protected.  FCFS Naming is used to
+   protect both the Service Description and the Host Description.
 
 3.2.5.  SRP Requester Behavior
 
