@@ -578,8 +578,8 @@ Perhaps:
               FCFS Naming provides a limited degree of security. A server that registers its service using SRP
               is given ownership of a name for an extended period of time based on a lease
               specific to the key used to authenticate the SRP Update, which may be longer than the lease associated with the
-              registered RRs.  As long as the registrar remembers the name and
-              does not reveal the key used to register RRs on that name,
+              registered RRs.  As long as the registrar remembers the name,
+              and the public key corresponding to the private key used to register RRs on that name,
               no other SRP requester can add or update the
               information associated with that name.
               If the SRP requester fails to renew its
