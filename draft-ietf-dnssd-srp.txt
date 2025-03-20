@@ -137,8 +137,8 @@ Table of Contents
    to register the services they offer using the DNS protocol over
    unicast rather than using Multicast DNS (mDNS) [RFC6762].  There is
    already a large installed base of DNS-SD clients that can discover
-   services using the DNS protocol (e.g., Android, Windows, Linux,
-   Apple).
+   services using the DNS protocol (e.g., Android, Windows, Linux, Apple
+   operating systems).
 
    This document is intended for three audiences: implementers of
    software that provides services that should be advertised using
