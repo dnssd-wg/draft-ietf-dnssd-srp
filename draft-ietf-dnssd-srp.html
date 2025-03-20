@@ -1824,11 +1824,11 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
        SRP Update to the SRP registrar, it SHOULD combine
        these into a single SRP Update,
        when possible, subject to DNS message size limits and link-specific
-          size limits (e.g. an 802.15.4 network will perform poorly when asked
+          size limits (e.g. an IEEE 802.15.4 network will perform poorly when asked
           to deliver a packet larger than about 500 bytes).
        If the updates do not fit into a single SRP Update
        then the SRP requester <span class="bcp14">MUST</span>
-       send subsequent SRP Update sequentially:
+       send subsequent SRP Updates sequentially:
        until an earlier SRP Update has been acknowledged,
        the requester <span class="bcp14">MUST NOT</span>
        send any subsequent SRP Update.
@@ -2128,7 +2128,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
 <p id="section-3.3.1-2">
      SRP Updates consist of a set of <em>instructions</em>
      that together add or remove one or more services.
-     Each SRP Update consists of
+     Each <em>instruction</em> consists of
      one or more delete update(s), or one or more add update(s),
      or some combination of both delete updates and add updates.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.3.1-3">

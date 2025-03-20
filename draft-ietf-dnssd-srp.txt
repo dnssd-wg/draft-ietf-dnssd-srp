@@ -519,10 +519,10 @@ Table of Contents
    When an SRP requester needs to send more than one SRP Update to the
    SRP registrar, it SHOULD combine these into a single SRP Update, when
    possible, subject to DNS message size limits and link-specific size
-   limits (e.g. an 802.15.4 network will perform poorly when asked to
-   deliver a packet larger than about 500 bytes).  If the updates do not
-   fit into a single SRP Update then the SRP requester MUST send
-   subsequent SRP Update sequentially: until an earlier SRP Update has
+   limits (e.g. an IEEE 802.15.4 network will perform poorly when asked
+   to deliver a packet larger than about 500 bytes).  If the updates do
+   not fit into a single SRP Update then the SRP requester MUST send
+   subsequent SRP Updates sequentially: until an earlier SRP Update has
    been acknowledged, the requester MUST NOT send any subsequent SRP
    Update.  If a configuration change occurs while an outstanding SRP
    Update is in flight, the SRP registrar MUST defer sending a new SRP
@@ -769,9 +769,9 @@ Table of Contents
    the usual DNS Update rules [RFC2136].
 
    SRP Updates consist of a set of _instructions_ that together add or
-   remove one or more services.  Each SRP Update consists of one or more
-   delete update(s), or one or more add update(s), or some combination
-   of both delete updates and add updates.
+   remove one or more services.  Each _instruction_ consists of one or
+   more delete update(s), or one or more add update(s), or some
+   combination of both delete updates and add updates.
 
    The SRP registrar checks each instruction in the SRP Update to see
    that it is either a Service Discovery Instruction, a Service
