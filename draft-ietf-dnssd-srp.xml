@@ -317,7 +317,7 @@ not a server publishing a service.
 	    long battery lives.
 	  </t>
 	</section>
-	<section>
+	<section anchor="constrained_hosts">
 	  <name>Constrained Hosts</name>
 	  <t>
             For devices designed for CNNs <xref target="RFC7228"/>,
@@ -332,7 +332,15 @@ not a server publishing a service.
             the responsibility of the registrar supporting a CNN to handle the updates appropriately.  In some
             network environments, updates may be accepted directly into a local "default.service.arpa" zone, which has only local
             visibility.  In other network environments, updates for names ending in "default.service.arpa" may be rewritten by the registrar
-            to names with broader visibility <xref target="RFC8766"/>.</t>
+            to names with broader visibility.
+            Domain name rewriting should be performed as appropriate
+            for the network environment in question.
+            Some suggested techniques for how domain names can be
+            translated from a locally scoped name to a domain name
+            with larger scope can be found in the discussion of
+            data translation for names in Multicast DNS answers in
+            Section <xref target="RFC8766" section="5.5" sectionFormat="bare"/>
+            of the Discovery Proxy specification <xref target="RFC8766"/>.</t>
 	</section>
 	<section>
 	  <name>Why two variants?</name>
@@ -399,7 +407,7 @@ We will discuss several parts to this process:</t>
               a KEY RR (used for FCFS Naming). Depending on the use case, an SRP requester may be required to suppress some
               addresses that would not be usable by hosts discovering the service through the SRP registrar. The exact address
               record suppression behavior required may vary for different types of SRP requesters.
-              Guidance for suppressing unusable records can be found in
+              Some suggested policies for suppressing unusable records can be found in
               Section <xref target="RFC8766" section="5.5.2" sectionFormat="bare"/>
               of the Discovery Proxy specification <xref target="RFC8766"/>.
 	    </li>
@@ -443,8 +451,7 @@ We will discuss several parts to this process:</t>
             special-use domain name <xref target="RFC6761"/>
             "default.service.arpa" and let the SRP registrar handle
             rewriting that to a different domain if necessary,
-            using the same techniques as
-            Discovery Proxies <xref target="RFC8766"/>.</t>
+            as described in <xref target="constrained_hosts"/>.</t>
 	</section>
 
 	<section anchor="how">
@@ -643,7 +650,8 @@ Perhaps:
 	      cannot have name conflicts.
 	      If any Host Description or Service Description record
 	      is found by the SRP registrar to have a conflict with an existing name, the registrar will respond to the SRP Update
-	      with a YXDomain RCODE <xref target="RFC2136"/>. In this case, the
+	      with a YXDomain RCODE <xref target="RFC2136"/> indicating that the
+	      desired name is already owned by a different SIG(0) key. In this case, the
 	      SRP requester <bcp14>MUST</bcp14> choose a new name or give up.</t>
 	    <t>
 	      There is no specific requirement for how the SRP
@@ -730,8 +738,8 @@ Original:
 		the SRP requester transmits an SRP Update for that hostname
 		with an Update Lease option that has a LEASE value of zero.
 		The SRP Update <bcp14>MUST</bcp14> contain
-		exactly one Host Description Instruction,
-		containing exactly one "Delete All RRsets From A Name" instruction for the hostname,
+		exactly one Host Description Instruction
+		that contains exactly one "Delete All RRsets From A Name" instruction for the hostname
 		and no "Add to an RRSet" instructions for that hostname.
 		If the registration is to be permanently removed,
 		KEY-LEASE <bcp14>SHOULD</bcp14> also be zero. Otherwise, it <bcp14>SHOULD</bcp14> be set to the same value it had previously; this holds the name
@@ -1065,8 +1073,10 @@ Perhaps:
 	    check for the KEY records in any Service Description Instructions.  For KEY records that were omitted from Service
 	    Description Instructions, the KEY from the Host Description Instruction is used.  If any existing KEY record
 	    corresponding to a KEY record in the SRP Update does not match the KEY record in the SRP Update (whether provided
-	    or taken from the Host Description Instruction), then the SRP registrar <bcp14>MUST</bcp14> reject the SRP Update with the YXDomain
-	    RCODE. This informs the SRP requester that it should select a different name and try again.</t>
+	    or taken from the Host Description Instruction), then the SRP registrar
+	    <bcp14>MUST</bcp14> reject the SRP Update with a YXDomain
+	    RCODE indicating that the desired name is already owned by a different SIG(0) key.
+	    This informs the SRP requester that it should select a different name and try again.</t>
 
 <!--[rfced] Please review this transition sentence. Because it is
      placed at the beginning of a new paragraph, the "Otherwise" might
@@ -1430,10 +1440,11 @@ Original "'n'":
 	    Names rejected due to this should return a Refused
 	    RCODE, indicating to the SRP requester that it
 	    should not append or increment a number at the
-	    end of the name and try again in an infinite loop.
+	    end of the name and then try again, since this
+	    would be likely to result in an infinite loop.
 	    If a name is considered unacceptable because it is
 	    obscene or offensive, adding a number on the end is
-	    unlikely to make the name become acceptable.</li>
+	    unlikely to make the name acceptable.</li>
 	</ul>
       </section>
       <section>
@@ -2376,7 +2387,7 @@ Example:
    same KEY record that is given for the Host Description is also given
    for each Service Description for which no KEY record is provided.
 
-[Ted] Please just leave this text alone. The working group reviewed it and beleives it is correct. Making editorial changes for consistency here might in some cases have merit, but our cache is blown on this work and I do not want to open this can of worms.
+[Ted] Please just leave this text alone. The working group reviewed it and believes it is correct. Making editorial changes for consistency here might in some cases have merit, but our cache is blown on this work and I do not want to open this can of worms.
 
 g) Please review the following similar terms and let us know if/how
 they should be made uniform with regard to quotes and ending with a
