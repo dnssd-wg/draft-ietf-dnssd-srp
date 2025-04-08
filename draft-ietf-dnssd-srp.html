@@ -19,21 +19,21 @@
         their registrations.
        
     " name="description">
-<meta content="xml2rfc 3.28.0" name="generator">
+<meta content="xml2rfc 3.28.1" name="generator">
 <meta content="Multicast DNS" name="keyword">
 <meta content="DNS-Based Service Discovery" name="keyword">
 <meta content="DNS Update" name="keyword">
 <meta content="SIG(0)" name="keyword">
 <meta content="9665" name="rfc.number">
 <!-- Generator version information:
-  xml2rfc 3.28.0
+  xml2rfc 3.28.1
     Python 3.12.9
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.0
-    platformdirs 4.3.6
+    platformdirs 4.3.7
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.3
@@ -1602,6 +1602,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
      connections (such as printers and home routers), and even battery-operated devices such as mobile phones that have
      long battery lives.<a href="#section-3.1.1-5" class="pilcrow">¶</a></p>
 </section>
+<div id="constrained_hosts">
 <section id="section-3.1.2">
           <h4 id="name-constrained-hosts">
 <a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-constrained-hosts" class="section-name selfRef">Constrained Hosts</a>
@@ -1619,8 +1620,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
             the responsibility of the registrar supporting a CNN to handle the updates appropriately.  In some
             network environments, updates may be accepted directly into a local "default.service.arpa" zone, which has only local
             visibility.  In other network environments, updates for names ending in "default.service.arpa" may be rewritten by the registrar
-            to names with broader visibility <span>[<a href="#RFC8766" class="cite xref">RFC8766</a>]</span>.<a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
+            to names with broader visibility.
+            Domain name rewriting should be performed as appropriate
+            for the network environment in question.
+            Some suggested techniques for how domain names can be
+            translated from a locally scoped name to a domain name
+            with larger scope can be found in the discussion of
+            data translation for names in Multicast DNS answers in
+            Section <a href="https://rfc-editor.org/rfc/rfc8766#section-5.5" class="relref">5.5</a>
+            of the Discovery Proxy specification <span>[<a href="#RFC8766" class="cite xref">RFC8766</a>]</span>.<a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
 </section>
+</div>
 <section id="section-3.1.3">
           <h4 id="name-why-two-variants">
 <a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-why-two-variants" class="section-name selfRef">Why two variants?</a>
@@ -1696,7 +1706,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
               a KEY RR (used for FCFS Naming). Depending on the use case, an SRP requester may be required to suppress some
               addresses that would not be usable by hosts discovering the service through the SRP registrar. The exact address
               record suppression behavior required may vary for different types of SRP requesters.
-              Guidance for suppressing unusable records can be found in
+              Some suggested policies for suppressing unusable records can be found in
               Section <a href="https://rfc-editor.org/rfc/rfc8766#section-5.5.2" class="relref">5.5.2</a>
               of the Discovery Proxy specification <span>[<a href="#RFC8766" class="cite xref">RFC8766</a>]</span>.<a href="#section-3.2.1-2.3" class="pilcrow">¶</a>
 </li>
@@ -1738,8 +1748,7 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
             special-use domain name <span>[<a href="#RFC6761" class="cite xref">RFC6761</a>]</span>
             "default.service.arpa" and let the SRP registrar handle
             rewriting that to a different domain if necessary,
-            using the same techniques as
-            Discovery Proxies <span>[<a href="#RFC8766" class="cite xref">RFC8766</a>]</span>.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
+            as described in <a href="#constrained_hosts" class="auto internal xref">Section 3.1.2</a>.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="how">
@@ -1938,7 +1947,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
        cannot have name conflicts.
        If any Host Description or Service Description record
        is found by the SRP registrar to have a conflict with an existing name, the registrar will respond to the SRP Update
-       with a YXDomain RCODE <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span>. In this case, the
+       with a YXDomain RCODE <span>[<a href="#RFC2136" class="cite xref">RFC2136</a>]</span> indicating that the
+       desired name is already owned by a different SIG(0) key. In this case, the
        SRP requester <span class="bcp14">MUST</span> choose a new name or give up.<a href="#section-3.2.5.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.5.2-2">
        There is no specific requirement for how the SRP
@@ -2028,8 +2038,8 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
  the SRP requester transmits an SRP Update for that hostname
  with an Update Lease option that has a LEASE value of zero.
  The SRP Update <span class="bcp14">MUST</span> contain
- exactly one Host Description Instruction,
- containing exactly one "Delete All RRsets From A Name" instruction for the hostname,
+ exactly one Host Description Instruction
+ that contains exactly one "Delete All RRsets From A Name" instruction for the hostname
  and no "Add to an RRSet" instructions for that hostname.
  If the registration is to be permanently removed,
  KEY-LEASE <span class="bcp14">SHOULD</span> also be zero. Otherwise, it <span class="bcp14">SHOULD</span> be set to the same value it had previously; this holds the name
@@ -2326,8 +2336,10 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
      check for the KEY records in any Service Description Instructions.  For KEY records that were omitted from Service
      Description Instructions, the KEY from the Host Description Instruction is used.  If any existing KEY record
      corresponding to a KEY record in the SRP Update does not match the KEY record in the SRP Update (whether provided
-     or taken from the Host Description Instruction), then the SRP registrar <span class="bcp14">MUST</span> reject the SRP Update with the YXDomain
-     RCODE. This informs the SRP requester that it should select a different name and try again.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+     or taken from the Host Description Instruction), then the SRP registrar
+     <span class="bcp14">MUST</span> reject the SRP Update with a YXDomain
+     RCODE indicating that the desired name is already owned by a different SIG(0) key.
+     This informs the SRP requester that it should select a different name and try again.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.3-2">
      If the SRP Update is not in conflict with existing data in the zone being updated, the SRP registrar validates the SRP Update using SIG(0) against the public key in the KEY record of the Host
      Description Instruction.  If the validation fails,
@@ -2661,10 +2673,11 @@ We will discuss several parts to this process:<a href="#section-3.2-1" class="pi
      Names rejected due to this should return a Refused
      RCODE, indicating to the SRP requester that it
      should not append or increment a number at the
-     end of the name and try again in an infinite loop.
+     end of the name and then try again, since this
+     would be likely to result in an infinite loop.
      If a name is considered unacceptable because it is
      obscene or offensive, adding a number on the end is
-     unlikely to make the name become acceptable.<a href="#section-6.3-2.2" class="pilcrow">¶</a>
+     unlikely to make the name acceptable.<a href="#section-6.3-2.2" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>

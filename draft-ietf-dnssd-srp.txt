@@ -347,7 +347,13 @@ Table of Contents
    "default.service.arpa" zone, which has only local visibility.  In
    other network environments, updates for names ending in
    "default.service.arpa" may be rewritten by the registrar to names
-   with broader visibility [RFC8766].
+   with broader visibility.  Domain name rewriting should be performed
+   as appropriate for the network environment in question.  Some
+   suggested techniques for how domain names can be translated from a
+   locally scoped name to a domain name with larger scope can be found
+   in the discussion of data translation for names in Multicast DNS
+   answers in Section 5.5 of the Discovery Proxy specification
+   [RFC8766].
 
 3.1.3.  Why two variants?
 
@@ -414,9 +420,9 @@ Table of Contents
       requester may be required to suppress some addresses that would
       not be usable by hosts discovering the service through the SRP
       registrar.  The exact address record suppression behavior required
-      may vary for different types of SRP requesters.  Guidance for
-      suppressing unusable records can be found in Section 5.5.2 of the
-      Discovery Proxy specification [RFC8766].
+      may vary for different types of SRP requesters.  Some suggested
+      policies for suppressing unusable records can be found in
+      Section 5.5.2 of the Discovery Proxy specification [RFC8766].
 
    The DNS-Based Service Discovery specification [RFC6763] describes the
    details of what each of these RR types mean, with the exception of
@@ -447,8 +453,8 @@ Table of Contents
 
    Devices made for CNNs register in the special-use domain name
    [RFC6761] "default.service.arpa" and let the SRP registrar handle
-   rewriting that to a different domain if necessary, using the same
-   techniques as Discovery Proxies [RFC8766].
+   rewriting that to a different domain if necessary, as described in
+   Section 3.1.2.
 
 3.2.3.  How to Publish It
 
@@ -614,8 +620,10 @@ Table of Contents
    Service Discovery record "Add" operations cannot have name conflicts.
    If any Host Description or Service Description record is found by the
    SRP registrar to have a conflict with an existing name, the registrar
-   will respond to the SRP Update with a YXDomain RCODE [RFC2136].  In
-   this case, the SRP requester MUST choose a new name or give up.
+   will respond to the SRP Update with a YXDomain RCODE [RFC2136]
+   indicating that the desired name is already owned by a different
+   SIG(0) key.  In this case, the SRP requester MUST choose a new name
+   or give up.
 
    There is no specific requirement for how the SRP requester should
    choose a new name.  Typically, however, the requester will append a
@@ -687,11 +695,11 @@ Table of Contents
    To remove all the services registered to a particular hostname, the
    SRP requester transmits an SRP Update for that hostname with an
    Update Lease option that has a LEASE value of zero.  The SRP Update
-   MUST contain exactly one Host Description Instruction, containing
+   MUST contain exactly one Host Description Instruction that contains
    exactly one "Delete All RRsets From A Name" instruction for the
-   hostname, and no "Add to an RRSet" instructions for that hostname.
-   If the registration is to be permanently removed, KEY-LEASE SHOULD
-   also be zero.  Otherwise, it SHOULD be set to the same value it had
+   hostname and no "Add to an RRSet" instructions for that hostname.  If
+   the registration is to be permanently removed, KEY-LEASE SHOULD also
+   be zero.  Otherwise, it SHOULD be set to the same value it had
    previously; this holds the name in reserve for when the SRP requester
    is once again able to provide the service.
 
@@ -932,8 +940,9 @@ Table of Contents
    corresponding to a KEY record in the SRP Update does not match the
    KEY record in the SRP Update (whether provided or taken from the Host
    Description Instruction), then the SRP registrar MUST reject the SRP
-   Update with the YXDomain RCODE.  This informs the SRP requester that
-   it should select a different name and try again.
+   Update with a YXDomain RCODE indicating that the desired name is
+   already owned by a different SIG(0) key.  This informs the SRP
+   requester that it should select a different name and try again.
 
    If the SRP Update is not in conflict with existing data in the zone
    being updated, the SRP registrar validates the SRP Update using
@@ -1240,10 +1249,10 @@ Table of Contents
       available or can be constructed manually.  Names rejected due to
       this should return a Refused RCODE, indicating to the SRP
       requester that it should not append or increment a number at the
-      end of the name and try again in an infinite loop.  If a name is
-      considered unacceptable because it is obscene or offensive, adding
-      a number on the end is unlikely to make the name become
-      acceptable.
+      end of the name and then try again, since this would be likely to
+      result in an infinite loop.  If a name is considered unacceptable
+      because it is obscene or offensive, adding a number on the end is
+      unlikely to make the name acceptable.
 
 6.4.  Security of Local Service Discovery
 
