@@ -107,9 +107,9 @@ Table of Contents
      8.7.  DNS Registries/Registrars
    9.  Delegation of "service.arpa."
    10. IANA Considerations
-     10.1.  Registration and Delegation of "service.arpa" as a
+     10.1.  Registration and Delegation of "service.arpa." as a
             Special-Use Domain Name
-     10.2.  Addition of "service.arpa" to the Locally-Served Zones
+     10.2.  Addition of "service.arpa." to the Locally-Served Zones
             Registry
      10.3.  Subdomains of "service.arpa."
      10.4.  Service Name Registrations
@@ -247,7 +247,7 @@ Table of Contents
    Section 10 of the DNS-SD specification [RFC6763] briefly discusses
    ways that servers can advertise the services they provide in the DNS
    namespace.  In the case of mDNS, it allows servers to advertise their
-   services on the local link, using names in the ".local" namespace,
+   services on the local link, using names in the "local." namespace,
    which makes their services directly discoverable by peers attached to
    that same local link.
 
@@ -276,6 +276,15 @@ Table of Contents
    "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
+
+   Strictly speaking, fully qualified domain names end with a dot.  In
+   DNS zone files and other similar contexts if the final dot is omitted
+   then a name may be treated incorrectly as relative to some other
+   parent domain.  This document follows the formal DNS convention,
+   ending fully qualified domain names with a dot.  When this document
+   mentions domain names such as "local." and "default.service.arpa."
+   the final dot is part of the domain name and does not indicate the
+   end of a sentence as it would in normal prose.
 
 3.  Service Registration Protocol
 
@@ -334,7 +343,7 @@ Table of Contents
    For devices designed for CNNs [RFC7228], some simplifications are
    available.  Instead of being configured with (or discovering) the
    service registration domain, the special-use domain name [RFC6761]
-   "default.service.arpa" is used.  The details of how SRP registrars
+   "default.service.arpa." is used.  The details of how SRP registrars
    are discovered will be specific to the constrained network;
    therefore, we do not suggest a specific mechanism here.
 
@@ -344,9 +353,9 @@ Table of Contents
    registrar addresses.  It is the responsibility of the registrar
    supporting a CNN to handle the updates appropriately.  In some
    network environments, updates may be accepted directly into a local
-   "default.service.arpa" zone, which has only local visibility.  In
+   "default.service.arpa." zone, which has only local visibility.  In
    other network environments, updates for names ending in
-   "default.service.arpa" may be rewritten by the registrar to names
+   "default.service.arpa." may be rewritten by the registrar to names
    with broader visibility.  Domain name rewriting should be performed
    as appropriate for the network environment in question.  Some
    suggested techniques for how domain names can be translated from a
@@ -438,8 +447,8 @@ Table of Contents
 
 3.2.2.  Where to Publish It
 
-   Multicast DNS (mDNS) uses a single namespace, ".local".  Subdomains
-   of ".local" are specific to the local link on which they are
+   Multicast DNS (mDNS) uses a single namespace, "local.".  Subdomains
+   of "local." are specific to the local link on which they are
    advertised.  This convenience is not available for DNS-SD using the
    DNS protocol: services must exist in some specific DNS namespace that
    is chosen either by the network operator or automatically.
@@ -452,7 +461,7 @@ Table of Contents
    DNS-SD specification [RFC6763].
 
    Devices made for CNNs register in the special-use domain name
-   [RFC6761] "default.service.arpa" and let the SRP registrar handle
+   [RFC6761] "default.service.arpa." and let the SRP registrar handle
    rewriting that to a different domain if necessary, as described in
    Section 3.1.2.
 
@@ -495,8 +504,8 @@ Table of Contents
 
    *  It enforces policy about what updates are allowed.
 
-   *  It optionally performs rewriting of "default.service.arpa" to some
-      other domain.
+   *  It optionally performs rewriting of "default.service.arpa." to
+      some other domain.
 
    *  It optionally performs automatic population of the address-to-name
       reverse mapping domains.
@@ -630,8 +639,8 @@ Table of Contents
    number to the preferred name.  This number could be sequentially
    increasing or could be chosen randomly.  One existing implementation
    attempts several sequential numbers before choosing randomly.  For
-   instance, it might try host.default.service.arpa, then
-   host-1.default.service.arpa, then host-2.default.service.arpa, then
+   instance, it might try host.default.service.arpa., then
+   host-1.default.service.arpa., then host-2.default.service.arpa., then
    host-31773.default.service.arpa.
 
 3.2.5.3.  Record Lifetimes
@@ -1236,8 +1245,8 @@ Table of Contents
       subdomains of the organizational domain for DNS-SD.  This does not
       prevent registering names as mentioned above but does ensure that
       genuinely important names are not accidentally claimed by SRP
-      requesters.  So, for example, the zone "dnssd.example.com" could
-      be used instead of "example.com" for SRP Updates.  Because of the
+      requesters.  So, for example, the zone "dnssd.example.com." could
+      be used instead of "example.com." for SRP Updates.  Because of the
       way that DNS-browsing domains are discovered, there is no need for
       the DNS-SD discovery zone that is updated by SRP to have a user-
       friendly or important-sounding name.
@@ -1337,7 +1346,7 @@ Table of Contents
 
 8.1.  Users
 
-   The current proposed use for "service.arpa" does not require special
+   The current proposed use for "service.arpa." does not require special
    knowledge on the part of the user.  While the "default.service.arpa."
    subdomain is used as a generic name for registration, users are not
    expected to see this name in user interfaces.  In the event that it
@@ -1347,7 +1356,7 @@ Table of Contents
 8.2.  Application Software
 
    Application software does not need to handle subdomains of
-   "service.arpa" specially.  "service.arpa" SHOULD NOT be treated as
+   "service.arpa." specially.  "service.arpa."  SHOULD NOT be treated as
    more trustworthy than any other insecure DNS domain, simply because
    it is locally served (or for any other reason).  It is not possible
    to register a PKI certificate for a subdomain of "service.arpa."
@@ -1398,7 +1407,7 @@ Table of Contents
        validated may cache invalid data.  In turn, this would prevent
        validating stub resolvers from successfully validating answers.
        Hence, as a practical matter, recursive resolvers at sites using
-       "service.arpa" should do DNSSEC validation.
+       "service.arpa." should do DNSSEC validation.
 
    2.  Unless configured otherwise, recursive resolvers and DNS proxies
        MUST behave following the rules prescribed for Iterative
@@ -1443,46 +1452,46 @@ Table of Contents
 
 8.7.  DNS Registries/Registrars
 
-   "service.arpa." is a subdomain of the "arpa" top-level domain, which
+   "service.arpa." is a subdomain of the "arpa." top-level domain, which
    is operated by IANA under the authority of the Internet Architecture
    Board (IAB) [RFC3172].  There are no other DNS registrars for
-   ".arpa".
+   "arpa.".
 
 9.  Delegation of "service.arpa."
 
    The owner of the 'arpa.' zone, at the time of writing the IAB
-   [IAB-ARPA], has added a delegation of 'service.arpa.' in the '.arpa.'
+   [IAB-ARPA], has added a delegation of 'service.arpa.' in the 'arpa.'
    zone [RFC3172], following the guidance provided in Section 7 of the
    'home.arpa.' specification [RFC8375].
 
 10.  IANA Considerations
 
-10.1.  Registration and Delegation of "service.arpa" as a Special-Use
+10.1.  Registration and Delegation of "service.arpa." as a Special-Use
        Domain Name
 
    IANA has recorded the domain name "service.arpa." in the "Special-Use
    Domain Names" registry [SUDN].  IANA has implemented the delegation
    requested in Section 9.
 
-10.2.  Addition of "service.arpa" to the Locally-Served Zones Registry
+10.2.  Addition of "service.arpa." to the Locally-Served Zones Registry
 
    IANA has also added a new entry to the "Transport-Independent
    Locally-Served Zones Registry" registry of the "Locally-Served DNS
-   Zones" group [LSDZ].  The entry is for the domain "SERVICE.ARPA" with
-   the description "DNS-SD Service Registration Protocol Special-Use
-   Domain" and lists this document as the reference.
+   Zones" group [LSDZ].  The entry is for the domain "SERVICE.ARPA."
+   with the description "DNS-SD Service Registration Protocol Special-
+   Use Domain" and lists this document as the reference.
 
 10.3.  Subdomains of "service.arpa."
 
-   This document only makes use of the "default.service.arpa" subdomain
+   This document only makes use of the "default.service.arpa." subdomain
    of "service.arpa."  Other subdomains are reserved for future use by
-   DNS-SD or related work.  IANA has created the "service.arpa
+   DNS-SD or related work.  IANA has created the "service.arpa.
    Subdomain" registry [SUB].  The IETF has change control for this
    registry.  New entries may be added either as a result of Standards
    Action or with IESG Approval, provided that a specification exists
    [RFC8126].
 
-   IANA has grouped the "service.arpa Subdomain" registry with the
+   IANA has grouped the "service.arpa.  Subdomain" registry with the
    "Locally-Served DNS Zones" group.  The registry is a table with three
    columns: the subdomain name (expressed as a fully qualified domain
    name), a brief description of how it is used, and a reference to the
@@ -1847,8 +1856,8 @@ Appendix A.  Using Standard Authoritative DNS Servers Compliant with RFC
    authoritative DNS server to listen on the anycast address or by
    advertising it in the "_dnssd-srp._tcp.<zone>" and
    "_dnssd-srp-tls._tcp.<zone>" SRV records.  It must be configured to
-   be authoritative for "default.service.arpa" and to accept updates
-   from hosts on local networks for names under "default.service.arpa"
+   be authoritative for "default.service.arpa." and to accept updates
+   from hosts on local networks for names under "default.service.arpa."
    without authentication since such authoritative DNS servers will not
    have support for FCFS authentication (Section 3.2.4.1).
 
@@ -1873,10 +1882,10 @@ Appendix B.  How to Allow SRP Requesters to Update Standard Servers
 
    Ordinarily, CNN SRP Updates sent to an authoritative DNS server that
    implements standard DNS Update [RFC2136] but not SRP will fail
-   because the zone being updated is "default.service.arpa" and because
+   because the zone being updated is "default.service.arpa." and because
    no authoritative DNS server that is not an SRP registrar would
    normally be configured to be authoritative for
-   "default.service.arpa".  Therefore, a requester that sends an SRP
+   "default.service.arpa.".  Therefore, a requester that sends an SRP
    Update can tell that the receiving authoritative DNS server does not
    support SRP but does support standard DNS Update [RFC2136] because
    the RCODE will either be NotZone, NotAuth, or Refused or because
