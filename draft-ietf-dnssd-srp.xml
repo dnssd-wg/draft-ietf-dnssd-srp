@@ -235,7 +235,8 @@ not a server publishing a service.
         of the DNS&nbhy;SD specification <xref target="RFC6763"/>
         briefly discusses ways that servers can advertise the services
         they provide in the DNS namespace.  In the case of
-        mDNS, it allows servers to advertise their services on the local link, using names in the ".local" namespace, which makes
+        mDNS, it allows servers to advertise their services on the local link,
+        using names in the "local." namespace, which makes
         their services directly discoverable by peers attached to that same local link.</t>
 <!-- [Ted] Adding a dependent clause here obscures the meaning of the second half of the compound sentence. -->
       <t>
@@ -266,7 +267,16 @@ not a server publishing a service.
     described in BCP&nbsp;14 <xref target="RFC2119"/> <xref target="RFC8174"/>
     when, and only when, they appear in all capitals, as shown here.
         </t>
-
+        <t>
+        Strictly speaking, fully qualified domain names end with a dot.
+        In DNS zone files and other similar contexts if the final dot
+        is omitted then a name may be treated incorrectly as relative
+        to some other parent domain. This document follows the formal
+        DNS convention, ending fully qualified domain names with a dot.
+        When this document mentions domain names such as "local." and
+        "default.service.arpa." the final dot is part of the domain name and
+        does not indicate the end of a sentence as it would in normal prose.
+        </t>
     </section>
 
     <section>
@@ -323,15 +333,17 @@ not a server publishing a service.
             For devices designed for CNNs <xref target="RFC7228"/>,
             some simplifications are available.  Instead of
             being configured with (or discovering) the service registration domain,
-            the special-use domain name <xref target="RFC6761"/> "default.service.arpa" is used.
+            the special-use domain name <xref target="RFC6761"/> "default.service.arpa." is used.
             The details of how SRP registrars are discovered will be specific
             to the constrained network; therefore, we do not suggest a specific mechanism here.</t>
 	  <t>
             SRP requesters on CNNs are expected to receive, from the network, a list of SRP registrars with which to register.
             It is the responsibility of a CNN supporting SRP to provide one or more registrar addresses.  It is
             the responsibility of the registrar supporting a CNN to handle the updates appropriately.  In some
-            network environments, updates may be accepted directly into a local "default.service.arpa" zone, which has only local
-            visibility.  In other network environments, updates for names ending in "default.service.arpa" may be rewritten by the registrar
+            network environments, updates may be accepted directly into
+            a local "default.service.arpa." zone, which has only local
+            visibility.  In other network environments, updates for names
+            ending in "default.service.arpa." may be rewritten by the registrar
             to names with broader visibility.
             Domain name rewriting should be performed as appropriate
             for the network environment in question.
@@ -435,7 +447,9 @@ We will discuss several parts to this process:</t>
 	  <name>Where to Publish It</name>
 <!-- [Ted] Sentence was vague, edit didn't help, I've reworded it. -->
           <t>
-            Multicast DNS (mDNS) uses a single namespace, ".local". Subdomains of ".local" are specific to the local link on which they are advertised.  This convenience is not available for
+            Multicast DNS (mDNS) uses a single namespace, "local.".
+            Subdomains of "local." are specific to the local link on which they are advertised.
+            This convenience is not available for
             DNS&nbhy;SD using the DNS protocol: services must exist in
             some specific DNS namespace that is chosen either by the
 	    network operator or automatically.</t>
@@ -449,7 +463,7 @@ We will discuss several parts to this process:</t>
 	  <t>
             Devices made for CNNs register in the
             special-use domain name <xref target="RFC6761"/>
-            "default.service.arpa" and let the SRP registrar handle
+            "default.service.arpa." and let the SRP registrar handle
             rewriting that to a different domain if necessary,
             as described in <xref target="constrained_hosts"/>.</t>
 	</section>
@@ -497,7 +511,7 @@ We will discuss several parts to this process:</t>
               <li>
 		It enforces policy about what updates are allowed.</li>
               <li>
-		It optionally performs rewriting of "default.service.arpa" to some other domain.</li>
+		It optionally performs rewriting of "default.service.arpa." to some other domain.</li>
               <li>
 		It optionally performs automatic population of the address-to-name reverse mapping domains.</li>
               <li>
@@ -658,9 +672,10 @@ Perhaps:
 	      requester should choose a new name. Typically,
 	      however, the requester will append a number to the
 	      preferred name. This number could be sequentially increasing or could be chosen randomly. One existing implementation
-	      attempts several sequential numbers before choosing randomly. For instance, it might try host.default.service.arpa,
-	      then host&nbhy;1.default.service.arpa,
-	      then host&nbhy;2.default.service.arpa,
+	      attempts several sequential numbers before choosing randomly.
+	      For instance, it might try host.default.service.arpa.,
+	      then host&nbhy;1.default.service.arpa.,
+	      then host&nbhy;2.default.service.arpa.,
 	      then host&nbhy;31773.default.service.arpa.</t>
 	  </section>
 	  <section anchor="lifetimes">
@@ -1429,8 +1444,9 @@ Original "'n'":
 	    This does not prevent registering names as mentioned above
 	    but does ensure that genuinely important names
 	    are not accidentally claimed by SRP requesters.
-	    So, for example, the zone "dnssd.example.com" could be used instead of
-	    "example.com" for SRP Updates. Because of the way that DNS-browsing domains are discovered, there is no need for the
+	    So, for example, the zone "dnssd.example.com." could be used
+	    instead of "example.com." for SRP Updates. Because of the way that
+	    DNS-browsing domains are discovered, there is no need for the
 	    DNS&nbhy;SD discovery zone that is updated by SRP to
 	    have a user-friendly or important-sounding name.</li>
 
@@ -1534,7 +1550,8 @@ Original "'n'":
 	</t>
       <section>
 	<name>Users</name>
-	<t>The current proposed use for "service.arpa" does not require special knowledge on the part of the user. While the
+	<t>The current proposed use for "service.arpa." does not
+	require special knowledge on the part of the user. While the
 	  "default.service.arpa." subdomain is used as a generic name for registration, users are not expected to see this name in
 	  user interfaces. In the event that it does show up in a user interface, it is just a domain name and requires no special
 	  treatment by the user.</t>
@@ -1542,7 +1559,9 @@ Original "'n'":
       <section>
 	<name>Application Software</name>
 	<t>
-	  Application software does not need to handle subdomains of "service.arpa" specially.  "service.arpa" <bcp14>SHOULD NOT</bcp14> be treated
+	  Application software does not need to handle
+	  subdomains of "service.arpa." specially.
+	  "service.arpa." <bcp14>SHOULD NOT</bcp14> be treated
 	  as more trustworthy than any other insecure DNS domain, simply because it is locally served (or for any other reason). It
 	  is not possible to register a PKI certificate for a subdomain of "service.arpa." because it is a locally served domain
 	  name. So, no such subdomain can be considered to be uniquely identifying a particular host, as would be required for such a
@@ -1649,7 +1668,7 @@ DNSSEC (see [RFC9364]) validation is a best current practice:
 	  be validated may cache invalid data.  In turn, this would prevent
 	  validating stub resolvers from successfully validating
 	  answers. Hence, as a practical matter, recursive resolvers at sites
-	  using "service.arpa" should do DNSSEC validation.</li>
+	  using "service.arpa." should do DNSSEC validation.</li>
 	  <li>
 	    <t>Unless configured otherwise, recursive resolvers and DNS
 	    proxies <bcp14>MUST</bcp14> behave following
@@ -1730,9 +1749,10 @@ the global DNS will configure any such servers as described in Section
       </section>
       <section>
 	<name>DNS Registries/Registrars</name>
-	<t>"service.arpa." is a subdomain of the "arpa" top-level domain, which is operated by IANA under the authority of the
+	<t>"service.arpa." is a subdomain of the "arpa." top-level domain,
+	  which is operated by IANA under the authority of the
 	  Internet Architecture Board (IAB) <xref target="RFC3172"/>.
-	  There are no other DNS registrars for ".arpa".</t>
+	  There are no other DNS registrars for "arpa.".</t>
       </section>
     </section>
 
@@ -1740,7 +1760,8 @@ the global DNS will configure any such servers as described in Section
       <name>Delegation of "service.arpa."</name>
       <t>
 	The owner of the 'arpa.' zone, at the time of writing the IAB <xref target="IAB-ARPA"/>,
-	has added a delegation of 'service.arpa.' in the '.arpa.' zone <xref target="RFC3172"/>,
+	has added a delegation of 'service.arpa.'
+	in the 'arpa.' zone <xref target="RFC3172"/>,
 	following the guidance provided in
 	Section <xref target="RFC8375" section="7" sectionFormat="bare"/>
 	of the 'home.arpa.' specification <xref target="RFC8375"/>.
@@ -1805,17 +1826,17 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 -->
 
 
-	<name>Registration and Delegation of "service.arpa" as a Special-Use Domain Name</name>
+	<name>Registration and Delegation of "service.arpa." as a Special-Use Domain Name</name>
 	<t>IANA has recorded the domain name "service.arpa." in the "Special-Use Domain Names" registry
 	  <xref target="SUDN"/>. IANA has implemented the delegation requested in
 	  <xref target="delegation"/>.</t>
 
       </section>
       <section>
-	<name>Addition of "service.arpa" to the Locally-Served Zones Registry</name>
+	<name>Addition of "service.arpa." to the Locally-Served Zones Registry</name>
 	<t>IANA has also added a new entry to the "Transport-Independent Locally-Served Zones Registry" registry of
 	  the "Locally-Served DNS Zones" group <xref target="LSDZ"/>.
-	  The entry is for the domain "SERVICE.ARPA" with the
+	  The entry is for the domain "SERVICE.ARPA." with the
 	  description "DNS&nbhy;SD Service Registration Protocol
 	  Special-Use Domain" and lists this document as the reference.</t>
       </section>
@@ -1824,16 +1845,18 @@ has added a delegation of 'service.arpa.' in the '.arpa.' zone
 <name>Subdomains of "service.arpa."</name>
 
 
-	<t>This document only makes use of the "default.service.arpa" subdomain of "service.arpa." Other subdomains are reserved for
+	<t>This document only makes use of the "default.service.arpa."
+	  subdomain of "service.arpa." Other subdomains are reserved for
 	  future use by DNS&nbhy;SD or related work.
-	  IANA has created the "service.arpa Subdomain" registry <xref target="SUB"/>.
+	  IANA has created the "service.arpa. Subdomain" registry <xref target="SUB"/>.
 	  The IETF has change control for this registry.
 	  New entries may be added either as a result of
 	  Standards Action or with IESG Approval,
 	  provided that a specification exists <xref target="RFC8126"/>.
 	</t>
         <t>
-	  IANA has grouped the "service.arpa Subdomain" registry with the "Locally-Served DNS Zones" group.
+	  IANA has grouped the "service.arpa. Subdomain" registry
+	  with the "Locally-Served DNS Zones" group.
           The registry is a table with three columns: the subdomain name (expressed as a fully qualified domain
 	  name), a brief description of how it is used, and a reference to the document that describes its use in detail.
 	</t>
@@ -2122,7 +2145,8 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
         advertising it in the "_dnssd&nbhy;srp._tcp.&lt;zone&gt;" and
         "_dnssd&nbhy;srp&nbhy;tls._tcp.&lt;zone&gt;" SRV records.
         It must be configured to be authoritative for
-        "default.service.arpa" and to accept updates from hosts on local networks for names under "default.service.arpa"
+        "default.service.arpa." and to accept updates from hosts
+        on local networks for names under "default.service.arpa."
         without authentication since such authoritative DNS servers will not
         have support for FCFS authentication (<xref target="fcfs"/>).</t>
       <t>
@@ -2145,9 +2169,9 @@ Appendix A.  Testing Standard DNS Servers Compliant with RFC 2136
         Ordinarily, CNN SRP Updates sent to an authoritative DNS server
         that implements standard DNS Update <xref target="RFC2136"/> but not SRP
         will fail
-        because the zone being updated is "default.service.arpa" and because
+        because the zone being updated is "default.service.arpa." and because
         no authoritative DNS server that is not an SRP registrar would normally
-        be configured to be authoritative for "default.service.arpa".
+        be configured to be authoritative for "default.service.arpa.".
         Therefore, a requester that sends an SRP Update can
         tell that the receiving authoritative DNS server
         does not support SRP but does support
